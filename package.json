@@ -1,0 +1,22 @@
+{
+  "name": "down-check",
+  "private": true,
+  "type": "module",
+  "description": "Is ChatGPT, GitHub, Discord or Cloudflare down right now? An hourly check from our own server in Tokyo, with the last 7 days of interruptions and each service's official status page.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/build.mjs && node --test \"test/*.test.mjs\"",
+    "dev": "node scripts/build.mjs && node scripts/dev.mjs",
+    "assets": "node scripts/assets.mjs"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yt1988/down-check"
+  },
+  "homepage": "https://down.1ms.dog",
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "esbuild": "0.25.10"
+  }
+}
