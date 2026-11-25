@@ -84,7 +84,7 @@ The upstream data address never appears in a page (a test checks it). A 403/429 
 
 ## Deployment
 
-- Worker `down`, `workers_dev = false`, `preview_urls = false`, no custom domain (the shell routes it).
+- Worker `down-check`, `workers_dev = false`, `preview_urls = false`, no custom domain (the shell routes it).
 - `wrangler.toml` has assets + `main` only: no cron, no KV, no bindings.
 - `public/` is generated and git-ignored (2,320 pages). Do not commit it.
 - After deploying: the shell's `npm run check -- down`, `npm run mobile -- down`; check the live `/api/status.json`

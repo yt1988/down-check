@@ -2,7 +2,7 @@
 # A request for a file in public/ is served without running the Worker (free and not metered); the Worker only sees
 # /api/status.json and unknown paths. No routes or custom domain here: on 1ms.dog the shell routes the domain to this
 # Worker. To self-host, bind your own domain in the dashboard (see README).
-name = "down"
+name = "down-check"
 main = "src/worker.js"
 compatibility_date = "2025-10-01"
 workers_dev = false
