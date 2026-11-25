@@ -45,7 +45,7 @@ const RUNTIME = new Set(["name", "lang_label", "a_lang", "a_theme", "a_help", "a
   "loc_tokyo", "loc_shanghai",
   "official_none", "official_no_api",
   "incidents_none", "incidents_unknown", "incidents_ongoing", "incidents_checks",
-  "err_challenge", "err_timeout", "err_reset", "err_http", "err_eof", "err_dns", "err_tls", "err_refused", "err_unreachable", "err_cancel", "err_other",
+  "err_challenge", "err_timeout", "err_reset", "err_http", "err_eof", "err_dns", "err_tls", "err_refused", "err_unreachable", "err_cancel", "err_other", "chip_official",
   "report_result", "report_prefill", "cross_home", "cross_unlock", "cross_check"]);
 
 async function loadI18n() {
@@ -101,40 +101,42 @@ function catDesc(Tt, cat) {
   return fill(Tt("cat_desc_region"), { region: catName(Tt, cat), list: list.join(Tt("sep")) });
 }
 const searchOf = s => [s.name, s.id, ...(s.names ? Object.values(s.names) : [])].join(" ").toLowerCase();
+let ICONS = new Set();
+const initials = (s, lang) => {
+  const n = nameOf(s, lang), latin = n.replace(/[^A-Za-z0-9]/g, "");
+  return latin ? latin.slice(0, 2).toUpperCase() : [...n].slice(0, 1).join("");
+};
+const iconHtml = (s, lang, extra = "") => ICONS.has(s.id)
+  ? `<img class="svc-img ${extra}" src="/icons/${s.id}.png" alt="" width="18" height="18" loading="lazy">`
+  : `<span class="svc-mono ${extra}" aria-hidden="true">${esc(initials(s, lang))}</span>`;
+
+const nameOf = (s, lang) => (s.names && s.names[lang]) || s.name;
+const crumbs = items => `<nav class="dn-crumbs">${items.map((x, i) => (i ? '<span class="dn-sep" aria-hidden="true">›</span>' : "") + x).join("")}</nav>`;
+
 
 function legend(Tt) {
   return `<div class="dn-legend">
-      <span><i class="dot ok"></i>${esc(Tt("legend_ok"))}</span>
-      <span><i class="dot warn"></i>${esc(Tt("legend_warn"))}</span>
-      <span><i class="dot bad"></i>${esc(Tt("legend_bad"))}</span>
-      <span><i class="dot"></i>${esc(Tt("legend_unknown"))}</span>
+      <span><i class="ic ok"></i>${esc(Tt("legend_ok"))}</span>
+      <span><i class="ic warn"></i>${esc(Tt("legend_warn"))}</span>
+      <span><i class="ic bad"></i>${esc(Tt("legend_bad"))}</span>
+      <span><i class="ic unknown"></i>${esc(Tt("legend_unknown"))}</span>
     </div>`;
-}
-function summaryBox(Tt) {
-  return `<div class="dn-summary" id="summary"><span class="dot" id="sumDot"></span><b id="sumText">${esc(Tt("st_loading"))}</b><span class="dn-counts" id="sumCounts"></span><span class="dn-age" id="sumAge"></span></div>`;
 }
 
 function homeMain(Tt, lang) {
   const cats = CATS.map(cat => {
     const list = byCat(cat.id);
-    const tiles = list.map(s => `<li><a class="dn-tile" href="${svcPath(lang, s)}" data-s="${s.id}" data-name="${esc(searchOf(s))}" data-state="loading">
-        <span class="dot"></span><span class="dn-tile-n">${esc(s.name)}</span><span class="sr" data-st>${esc(Tt("st_loading"))}</span>
-        <span class="dn-spark" aria-hidden="true"></span><span class="dn-tile-s"></span></a></li>`).join("");
-    return `<section class="dn-cat" data-cat="${cat.id}">
-      <header class="dn-cat-h"><h2><a href="${catPath(lang, cat.id)}">${esc(catName(Tt, cat))}</a></h2><span class="dn-cat-sum" id="catSum-${cat.id}">${esc(Tt("st_loading"))}</span></header>
-      <ul class="dn-tiles">${tiles}</ul>
-    </section>`;
+    const tiles = list.map(s => `<li><a class="dn-tile" href="${svcPath(lang, s)}" data-s="${s.id}" data-name="${esc(searchOf(s))}" data-state="loading" aria-label="${esc(nameOf(s, lang))}"><span class="svc-wrap">${iconHtml(s, lang)}<span class="ic st"></span></span><span class="dn-tile-n">${esc(nameOf(s, lang))}</span><span class="dn-spark" aria-hidden="true"></span></a></li>`).join("");
+    return `<section class="dn-cat" data-cat="${cat.id}"><header class="dn-cat-h"><h2><a href="${catPath(lang, cat.id)}">${esc(catName(Tt, cat))}</a></h2></header><ul class="dn-tiles">${tiles}</ul></section>`;
   }).join("");
   return `<section class="dn-hero">
-      <p class="dn-kicker">${esc(Tt("every_10"))} · ${esc(Tt("from_places"))}</p>
       <h1 class="page-h">${esc(Tt("h1_home"))}</h1>
       <p class="dn-intro">${esc(Tt("intro_home"))}</p>
-      ${summaryBox(Tt)}
-      <div class="dn-tools">
+      <p class="dn-age" id="sumAge">${esc(Tt("loading"))}</p>
+      <div class="dn-hero-tools">
         <input id="q" type="search" placeholder="${esc(Tt("filter_ph"))}" aria-label="${esc(Tt("filter_ph"))}" autocomplete="off" spellcheck="false">
-        <label class="dn-check"><input type="checkbox" id="onlyIssues"> <span>${esc(Tt("only_issues"))}</span></label>
+        ${legend(Tt)}
       </div>
-      ${legend(Tt)}
     </section>
     <div class="dn-board" id="board">${cats}</div>
     <p class="dn-empty" id="noResults" hidden>${esc(Tt("no_results"))}</p>`;
@@ -142,39 +144,42 @@ function homeMain(Tt, lang) {
 
 function catMain(Tt, lang, cat) {
   const list = byCat(cat.id);
-  const rows = list.map(s => `<li><a class="dn-row" href="${svcPath(lang, s)}" data-s="${s.id}" data-name="${esc(searchOf(s))}">
-      <span class="dn-row-name"><span class="dot"></span><b>${esc(s.name)}</b></span>
+  const rows = list.map(s => `<li><a class="dn-row" href="${svcPath(lang, s)}" data-s="${s.id}" data-name="${esc(searchOf(s))}" aria-label="${esc(nameOf(s, lang))}">
+      <span class="dn-row-name">${iconHtml(s, lang)}<b>${esc(nameOf(s, lang))}</b></span>
       <span class="dn-pill">${esc(Tt("st_loading"))}</span>
       <span class="dn-spark" aria-hidden="true"></span>
       <span class="dn-row-up"><i>24h</i><b>—</b></span></a></li>`).join("");
-  return `<nav class="dn-crumbs"><a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a><span aria-hidden="true">/</span><span class="dn-crumb-here">${esc(catName(Tt, cat))}</span></nav>
+  return `${crumbs([`<a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a>`, `<span class="dn-crumb-here">${esc(catName(Tt, cat))}</span>`])}
     <header class="dn-hero">
-      <p class="dn-kicker">${esc(Tt("every_10"))} · ${esc(Tt("from_places"))}</p>
       <h1 class="page-h">${esc(fill(Tt("h1_cat"), { cat: catName(Tt, cat) }))}</h1>
       <p class="dn-intro">${esc(catDesc(Tt, cat))}</p>
-      ${summaryBox(Tt)}
-      ${legend(Tt)}
+      <div class="dn-hero-tools"><span class="dn-age" id="sumAge">${esc(Tt("loading"))}</span>${legend(Tt)}</div>
     </header>
+    <div class="dn-list-h" aria-hidden="true"><span>${esc(Tt("h_service"))}</span><span>${esc(Tt("h_status"))}</span><span>${esc(Tt("h_24h"))}</span><span></span></div>
     <ul class="dn-list">${rows}</ul>`;
 }
 
 function svcMain(Tt, lang, s) {
+  const name = nameOf(s, lang);
   const cat = CATS.find(c => c.id === s.cat);
   const siteUrl = esc(s.site);
   const siteHost = (() => { try { return new URL(s.site).host; } catch { return s.site; } })();
   const what = esc(Tt("what_text")).replace(/\{site\}/g, `<a class="dn-ext" href="${siteUrl}" target="_blank" rel="noopener">${esc(siteHost)}${EXT}</a>`);
-  const chips = byCat(s.cat).filter(x => x.id !== s.id).map(x => `<li><a class="dn-chip" href="${svcPath(lang, x)}">${esc(x.name)}</a></li>`).join("");
+  const chips = byCat(s.cat).filter(x => x.id !== s.id).map(x => `<li><a class="dn-chip" href="${svcPath(lang, x)}">${iconHtml(x, lang, "sm")}<span>${esc(nameOf(x, lang))}</span></a></li>`).join("");
   const src = STATUS[s.id];
-  const offStart = !src ? Tt("official_none") : src.api ? Tt("st_loading") : Tt("official_no_api");
   const offLink = src?.page
     ? `<a class="dn-src-link" id="officialLink" href="${esc(src.page)}" target="_blank" rel="noopener">${esc(Tt("official_go"))}${EXT}</a>`
-    : `<a class="dn-src-link" id="officialLink" href="#" hidden>${esc(Tt("official_go"))}${EXT}</a>`;
-  return `<nav class="dn-crumbs"><a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a><span aria-hidden="true">/</span><a href="${catPath(lang, s.cat)}">${esc(catName(Tt, cat))}</a><span aria-hidden="true">/</span><span class="dn-crumb-here">${esc(s.name)}</span></nav>
-    <header class="dn-svc-hero">
-      <h1 class="page-h">${esc(fill(Tt("h1_svc"), { name: s.name }))}</h1>
-      <div class="dn-status" id="status"><span class="dot"></span><b id="stateText">${esc(Tt("st_loading"))}</b><span class="dn-status-meta" id="statusMeta"></span></div>
+    : `<p class="hint">${esc(Tt("official_none"))}</p>`;
+  return `${crumbs([`<a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a>`, `<a href="${catPath(lang, s.cat)}">${esc(catName(Tt, cat))}</a>`, `<span class="dn-crumb-here">${esc(name)}</span>`])}
+    <header class="dn-svc-head">
+      <h1 class="page-h"><span class="svc-lg">${iconHtml(s, lang)}</span>${esc(fill(Tt("h1_svc"), { name }))}</h1>
       <p class="dn-p" id="verdictSentence"></p>
     </header>
+    <div class="dn-status-banner" id="statusPanel">
+      <span class="ic" id="stateIcon"></span>
+      <b id="stateText">${esc(Tt("st_loading"))}</b>
+      <span class="dn-status-meta" id="statusMeta"></span>
+    </div>
     <section class="card card-pad dn-history">
       <div class="dn-history-h"><h2>${esc(Tt("k_up24"))}</h2><span class="dn-up" id="up24">—</span></div>
       <div class="dn-bar" id="bar24" aria-hidden="true">${cells(144)}</div>
@@ -186,14 +191,12 @@ function svcMain(Tt, lang, s) {
     </section>
     <section class="card card-pad">
       <h2>${esc(Tt("loc_h"))}</h2>
-      <div class="dn-loc" data-kind="tokyo"><span class="dot"></span><b>${esc(Tt("loc_tokyo"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
-      <div class="dn-loc" data-kind="shanghai"><span class="dot"></span><b>${esc(Tt("loc_shanghai"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
+      <div class="dn-loc" data-kind="tokyo"><span class="ic"></span><b>${esc(Tt("loc_tokyo"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
+      <div class="dn-loc" data-kind="shanghai"><span class="ic"></span><b>${esc(Tt("loc_shanghai"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
     </section>
     <section class="card card-pad">
       <h2>${esc(Tt("official_h"))}</h2>
-      <div class="dn-off" id="official"><span class="dot"></span><b>${esc(offStart)}</b><span class="dn-off-desc"></span><span class="dn-off-age"></span></div>
-      <p class="dn-src-note">${esc(Tt("official_source"))}</p>
-      <p class="dn-src-note">${esc(Tt("v_scope"))}</p>
+      <p class="dn-p">${esc(Tt("official_note"))}</p>
       ${offLink}
     </section>
     <section class="card card-pad">
@@ -215,6 +218,7 @@ export async function build() {
   await mkdir(pub, { recursive: true });
   const I = await loadI18n();
   const langs = LANGS.filter(([l]) => I[l]).map(([l]) => l);
+  try { ICONS = new Set((await readdir(new URL("icons/", stat))).filter(f => f.endsWith(".png")).map(f => f.slice(0, -4))); } catch { ICONS = new Set(); }
 
   const enKeys = Object.keys(I.en).sort();
   for (const l of langs) {
@@ -250,7 +254,7 @@ export async function build() {
     strings[l] = name;
   }
 
-  for (const f of ["assets", "og"]) {
+  for (const f of ["assets", "og", "icons"]) {
     try { await cp(new URL(f + "/", stat), new URL(f + "/", pub), { recursive: true }); } catch {}
   }
   try { await cp(new URL("fonts/", stat), new URL("assets/fonts/", pub), { recursive: true }); } catch {}
@@ -312,10 +316,10 @@ export async function build() {
         main: catMain(Tt, lang, cat), graph: [appSchema(lang, fill(Tt("h1_cat"), { cat: catName(Tt, cat) }) + " · 1ms.dog", SITE + catPath(lang, cat.id), catDesc(Tt, cat))] });
     }
     for (const s of SERVICES) {
-      await writePage({ lang, type: "svc", service: s, title: fill(Tt("seo_title_svc"), { name: s.name }),
-        desc: fill(Tt("seo_desc_svc"), { name: s.name }), kw: Tt("seo_kw_home"),
+      await writePage({ lang, type: "svc", service: s, title: fill(Tt("seo_title_svc"), { name: nameOf(s, lang) }),
+        desc: fill(Tt("seo_desc_svc"), { name: nameOf(s, lang) }), kw: Tt("seo_kw_home"),
         main: svcMain(Tt, lang, s),
-        graph: [appSchema(lang, fill(Tt("h1_svc"), { name: s.name }) + " · 1ms.dog", SITE + svcPath(lang, s), fill(Tt("seo_desc_svc"), { name: s.name })), faqGraph(Tt)] });
+        graph: [appSchema(lang, fill(Tt("h1_svc"), { name: nameOf(s, lang) }) + " · 1ms.dog", SITE + svcPath(lang, s), fill(Tt("seo_desc_svc"), { name: nameOf(s, lang) })), faqGraph(Tt)] });
     }
   }
 

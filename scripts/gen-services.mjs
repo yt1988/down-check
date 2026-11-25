@@ -31,6 +31,16 @@ const ONLY_REGION = {
   DE: "eu", FR: "eu", CH: "eu", IT: "eu", ES: "eu", NL: "eu",
   US: "na", CA: "na",
 };
+// brands whose own script is not Latin need a name per language, like the baseline's Entries for 百度 and 微信
+const NAMES = {
+  tencent: { en: "Tencent Video", "zh-CN": "腾讯视频", "zh-TW": "騰訊視頻", ja: "Tencent Video", ko: "텐센트 비디오", es: "Tencent Video", fr: "Tencent Video", de: "Tencent Video", pt: "Tencent Video", ru: "Tencent Video" },
+  iqiyi: { en: "iQIYI", "zh-CN": "爱奇艺", "zh-TW": "愛奇藝", ja: "iQIYI", ko: "아이치이", es: "iQIYI", fr: "iQIYI", de: "iQIYI", pt: "iQIYI", ru: "iQIYI" },
+  mgtv: { en: "Mango TV", "zh-CN": "芒果TV", "zh-TW": "芒果TV", ja: "Mango TV", ko: "망고 TV", es: "Mango TV", fr: "Mango TV", de: "Mango TV", pt: "Mango TV", ru: "Mango TV" },
+  youku: { en: "Youku", "zh-CN": "优酷", "zh-TW": "優酷", ja: "Youku", ko: "유쿠", es: "Youku", fr: "Youku", de: "Youku", pt: "Youku", ru: "Youku" },
+  netease: { en: "NetEase Cloud Music", "zh-CN": "网易云音乐", "zh-TW": "網易雲音樂", ja: "NetEase Cloud Music", ko: "넷이즈 클라우드 뮤직", es: "NetEase Cloud Music", fr: "NetEase Cloud Music", de: "NetEase Cloud Music", pt: "NetEase Cloud Music", ru: "NetEase Cloud Music" },
+  bilibilitv: { en: "Bilibili TV", "zh-CN": "哔哩哔哩 TV", "zh-TW": "嗶哩嗶哩 TV", ja: "ビリビリ TV", ko: "빌리빌리 TV", es: "Bilibili TV", fr: "Bilibili TV", de: "Bilibili TV", pt: "Bilibili TV", ru: "Bilibili TV" },
+};
+
 // the five regional services without `only`
 const NO_ONLY = { tvb: "hk", bahamut: "tw", skygo: "uk", joyn: "eu", skyde: "eu" };
 // unlock ids that become a different page from the baseline id they collide with
@@ -55,7 +65,7 @@ for (const s of unlock) {
   const id = RENAME[s.id] || s.id;
   const region = NO_ONLY[s.id] || ONLY_REGION[s.only] || null;
   const cat = region || (GLOBAL.includes(s.cat) ? s.cat : "video");
-  add({ id, name: s.name, names: null, cat, site: s.site, probe: s.site });
+  add({ id, name: s.name, names: NAMES[id] || null, cat, site: s.site, probe: s.site });
 }
 
 const CATS = [...GLOBAL, ...REGIONS].map(id => ({ id }));

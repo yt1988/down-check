@@ -61,7 +61,6 @@ test("the board names every group and every service, and its h1 asks about all o
   for (const s of SERVICES) assert.ok(html.includes(`href="/${s.cat}/${s.id}/"`), s.id);
   assert.ok(html.includes("Which services are down right now?"));
   assert.ok(html.includes('id="q"'));
-  assert.ok(html.includes('id="onlyIssues"'));
 });
 
 test("a category page lists its services with a current-state pill and a 24-hour strip", async () => {
@@ -77,7 +76,7 @@ test("a service page has the state first, both places, the official page and the
   const s = SERVICES.find(x => x.id === "chatgpt");
   const html = await readFile(new URL("ai/chatgpt/index.html", pub), "utf8");
   assert.ok(html.includes(s.name));
-  assert.ok(html.includes('id="status"'));
+  assert.ok(html.includes('id="statusPanel"'));
   assert.ok(html.includes('id="bar24"'));
   assert.ok(html.includes('data-kind="tokyo"'));
   assert.ok(html.includes('data-kind="shanghai"'));
@@ -87,7 +86,7 @@ test("a service page has the state first, both places, the official page and the
 
 test("a service without an official status page says so instead of linking nothing", async () => {
   const html = await readFile(new URL("video/netflix/index.html", pub), "utf8");
-  assert.ok(html.includes("does not publish an official status page") || html.includes("No official status page"));
+  assert.ok(html.includes("does not publish a status page"));
 });
 
 test("the upstream data address never reaches a visitor's page", async () => {

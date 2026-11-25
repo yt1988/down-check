@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { trimProbe, trimOfficial, officialEntry } from "../src/data.mjs";
+import { trimProbe } from "../src/data.mjs";
 import { SERVICES } from "../src/services.mjs";
 
 const raw = {
@@ -25,22 +25,6 @@ test("the probe trim keeps published services, the last 144 samples and no full 
 test("a document without services is null", () => {
   assert.equal(trimProbe(null), null);
   assert.equal(trimProbe({}), null);
-});
-
-test("the official trim keeps only published services and the five fields the page needs", () => {
-  const d = trimOfficial({ at: "2026-11-25T07:00:00Z", every: 600, services: {
-    chatgpt: { at: 1795590000, indicator: "minor", description: "Degraded", updated_at: "x", page: "https://status.openai.com/", extra: 1 },
-    mystery: { at: 1, indicator: "none" },
-  } });
-  assert.deepEqual(Object.keys(d.services), ["chatgpt"]);
-  assert.equal(d.services.chatgpt.indicator, "minor");
-  assert.equal("extra" in d.services.chatgpt, false);
-});
-
-test("a Statuspage answer becomes one entry, and a non-Statuspage answer is null", () => {
-  const e = officialEntry({ page: { updated_at: "2026-11-25T06:00:00Z" }, status: { indicator: "major", description: "Outage" } }, "https://status.example/", 123);
-  assert.deepEqual(e, { at: 123, indicator: "major", description: "Outage", updated_at: "2026-11-25T06:00:00Z", page: "https://status.example/" });
-  assert.equal(officialEntry({ status: "ok" }, "x", 1), null);
 });
 
 test("probe/services.json matches the registry, one target per service", async () => {

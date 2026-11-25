@@ -8,9 +8,7 @@ const svc = { id: "x", name: "X" };
 
 const probeDoc = (services, { from = "Tokyo, JP", age = 120 } = {}) => ({ at: new Date(NOW - age * 1000).toISOString(), every: 600, from, services });
 const p = (o = {}) => ({ ok: true, unknown: false, ms: 20, http: 200, t: SEC - 120, ok_at: SEC - 120, up24: 100, up7: 100, h24: "o".repeat(144), out: [], ...o });
-const offDoc = (services) => ({ at: new Date(NOW).toISOString(), every: 600, services });
-const o = (x = {}) => ({ at: SEC - 60, indicator: "none", description: "All Systems Operational", updated_at: null, page: "https://status.example/", ...x });
-const data = (tokyo, shanghai, official) => ({ tokyo, shanghai, official });
+const data = (tokyo, shanghai) => ({ tokyo, shanghai });
 
 test("both places answer: ok", () => {
   const v = verdict(svc, data(probeDoc({ x: p() }), probeDoc({ x: p() }, { from: "Shanghai, CN" })), NOW);
@@ -53,38 +51,16 @@ test("a failure and a refusal, no answer anywhere: unreachable, the refusal does
   assert.equal(v.state, STATE.UNREACHABLE);
 });
 
-test("the official page reports a major outage: fault, even while our probes answer", () => {
-  const v = verdict(svc, data(probeDoc({ x: p() }), null, offDoc({ x: o({ indicator: "major", description: "Major outage" }) })), NOW);
-  assert.equal(v.state, STATE.FAULT);
-  assert.match(v.official.description, /Major/);
-});
-
-test("the official page reports a minor issue: partial", () => {
-  const v = verdict(svc, data(probeDoc({ x: p() }), null, offDoc({ x: o({ indicator: "minor" }) })), NOW);
-  assert.equal(v.state, STATE.PARTIAL);
-});
-
-test("the official page says fine but neither probe reaches it: partial, not an outage claim", () => {
-  const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout" }) }),
-    probeDoc({ x: p({ ok: false, err: "timeout" }) }, { from: "Shanghai, CN" }), offDoc({ x: o() })), NOW);
-  assert.equal(v.state, STATE.PARTIAL);
-});
-
-test("the official page alone, fresh and fine: ok", () => {
-  const v = verdict(svc, data(null, null, offDoc({ x: o() })), NOW);
-  assert.equal(v.state, STATE.OK);
-});
-
-test("a stale official page does not rescue stale probes", () => {
-  const old = { at: new Date(NOW - 30 * 60e3).toISOString(), every: 600, services: { x: o({ at: SEC - 30 * 60 }) } };
+test("stale probes are stale, not ok and not down", () => {
   const stale = p({ t: SEC - 30 * 60, ok_at: SEC - 30 * 60 });
-  const v = verdict(svc, data(probeDoc({ x: stale }, { age: 30 * 60 }), null, old), NOW);
+  const v = verdict(svc, data(probeDoc({ x: stale }, { age: 30 * 60 }), null), NOW);
   assert.equal(v.state, STATE.STALE);
+  assert.equal(stateClass(v.state), "unknown");
 });
 
 test("no data at all: nodata", () => {
   assert.equal(verdict(svc, null, NOW).state, STATE.NODATA);
-  assert.equal(verdict(svc, data(probeDoc({}), probeDoc({}), null), NOW).state, STATE.NODATA);
+  assert.equal(verdict(svc, data(probeDoc({}), probeDoc({})), NOW).state, STATE.NODATA);
 });
 
 test("one place missing, the other answers: ok, and the page shows the missing one", () => {

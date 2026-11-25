@@ -41,3 +41,16 @@ test("the ten languages have their own names", async () => {
   const names = new Set(Object.values(I).map(x => x.name));
   assert.equal(names.size, 10);
 });
+
+test("every service whose brand is not Latin has a name in all ten languages", async () => {
+  const { SERVICES } = await import("../src/services.mjs");
+  const { LANGS } = await import("../src/config.mjs");
+  for (const s of SERVICES) {
+    if (!s.names) continue;
+    for (const [lang] of LANGS) assert.ok(s.names[lang], `${s.id} ${lang}`);
+    for (const v of Object.values(s.names)) assert.ok(v.trim(), s.id);
+  }
+  for (const s of SERVICES) {
+    if (/[^\x00-\x7F]/.test(s.name)) assert.ok(s.names, `${s.id} has a non-Latin name but no translations`);
+  }
+});

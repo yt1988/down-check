@@ -178,7 +178,7 @@ export const SERVICES = [
   { id: "fubo", name: "Fubo", cat: "video", site: "https://www.fubo.tv/", probe: "https://www.fubo.tv/" },
   { id: "viu", name: "Viu", cat: "video", site: "https://www.viu.com/", probe: "https://www.viu.com/" },
   { id: "viki", name: "Viki", cat: "video", site: "https://www.viki.com/", probe: "https://www.viki.com/" },
-  { id: "bilibilitv", name: "Bilibili TV", cat: "video", site: "https://www.bilibili.tv/", probe: "https://www.bilibili.tv/" },
+  { id: "bilibilitv", name: "Bilibili TV", names: {"en":"Bilibili TV","zh-CN":"哔哩哔哩 TV","zh-TW":"嗶哩嗶哩 TV","ja":"ビリビリ TV","ko":"빌리빌리 TV","es":"Bilibili TV","fr":"Bilibili TV","de":"Bilibili TV","pt":"Bilibili TV","ru":"Bilibili TV"}, cat: "video", site: "https://www.bilibili.tv/", probe: "https://www.bilibili.tv/" },
   { id: "viaplay", name: "Viaplay", cat: "video", site: "https://viaplay.com/", probe: "https://viaplay.com/" },
   { id: "skyshowtime", name: "SkyShowtime", cat: "video", site: "https://www.skyshowtime.com/", probe: "https://www.skyshowtime.com/" },
   { id: "acorn", name: "Acorn TV", cat: "video", site: "https://acorn.tv/", probe: "https://acorn.tv/" },
@@ -279,11 +279,11 @@ export const SERVICES = [
   { id: "tlc", name: "TLC GO", cat: "na", site: "https://go.tlc.com/", probe: "https://go.tlc.com/" },
   { id: "cbcgem", name: "CBC Gem", cat: "na", site: "https://gem.cbc.ca/", probe: "https://gem.cbc.ca/" },
   { id: "crave", name: "Crave", cat: "na", site: "https://www.crave.ca/", probe: "https://www.crave.ca/" },
-  { id: "mgtv", name: "Mango TV", cat: "cn", site: "https://www.mgtv.com/", probe: "https://www.mgtv.com/" },
-  { id: "tencent", name: "Tencent Video", cat: "cn", site: "https://v.qq.com/", probe: "https://v.qq.com/" },
-  { id: "iqiyi", name: "iQIYI", cat: "cn", site: "https://www.iqiyi.com/", probe: "https://www.iqiyi.com/" },
-  { id: "youku", name: "Youku", cat: "cn", site: "https://www.youku.com/", probe: "https://www.youku.com/" },
-  { id: "netease", name: "NetEase Cloud Music", cat: "cn", site: "https://music.163.com/", probe: "https://music.163.com/" },
+  { id: "mgtv", name: "Mango TV", names: {"en":"Mango TV","zh-CN":"芒果TV","zh-TW":"芒果TV","ja":"Mango TV","ko":"망고 TV","es":"Mango TV","fr":"Mango TV","de":"Mango TV","pt":"Mango TV","ru":"Mango TV"}, cat: "cn", site: "https://www.mgtv.com/", probe: "https://www.mgtv.com/" },
+  { id: "tencent", name: "Tencent Video", names: {"en":"Tencent Video","zh-CN":"腾讯视频","zh-TW":"騰訊視頻","ja":"Tencent Video","ko":"텐센트 비디오","es":"Tencent Video","fr":"Tencent Video","de":"Tencent Video","pt":"Tencent Video","ru":"Tencent Video"}, cat: "cn", site: "https://v.qq.com/", probe: "https://v.qq.com/" },
+  { id: "iqiyi", name: "iQIYI", names: {"en":"iQIYI","zh-CN":"爱奇艺","zh-TW":"愛奇藝","ja":"iQIYI","ko":"아이치이","es":"iQIYI","fr":"iQIYI","de":"iQIYI","pt":"iQIYI","ru":"iQIYI"}, cat: "cn", site: "https://www.iqiyi.com/", probe: "https://www.iqiyi.com/" },
+  { id: "youku", name: "Youku", names: {"en":"Youku","zh-CN":"优酷","zh-TW":"優酷","ja":"Youku","ko":"유쿠","es":"Youku","fr":"Youku","de":"Youku","pt":"Youku","ru":"Youku"}, cat: "cn", site: "https://www.youku.com/", probe: "https://www.youku.com/" },
+  { id: "netease", name: "NetEase Cloud Music", names: {"en":"NetEase Cloud Music","zh-CN":"网易云音乐","zh-TW":"網易雲音樂","ja":"NetEase Cloud Music","ko":"넷이즈 클라우드 뮤직","es":"NetEase Cloud Music","fr":"NetEase Cloud Music","de":"NetEase Cloud Music","pt":"NetEase Cloud Music","ru":"NetEase Cloud Music"}, cat: "cn", site: "https://music.163.com/", probe: "https://music.163.com/" },
 ];
 
 export const byId = new Map(SERVICES.map(s => [s.id, s]));

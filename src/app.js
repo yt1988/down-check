@@ -1,9 +1,8 @@
 // The page fills what the build drew: the summary, every tile, the current state, the 24-hour strip, the two probe
 // rows and the official status. It never invents a state: if the data cannot be loaded, everything says so and the
 // verdict stays "cannot judge".
-import { verdict, summary, STATE, stateClass, duration, errKey } from "./model.mjs";
-import { SERVICES, CATS, byId, byCat } from "./services.mjs";
-import { STATUS } from "./status-sources.mjs";
+import { verdict, STATE, stateClass, duration, errKey } from "./model.mjs";
+import { SERVICES, byId, byCat } from "./services.mjs";
 
 const D = JSON.parse(document.getElementById("data").textContent);
 const L = window.L || {}, LANG = window.LANG || D.lang || "en";
@@ -28,6 +27,7 @@ const durTxt = d => d ? new Intl.NumberFormat(LANG, { style: "unit", unit: d.uni
 const label = state => state === STATE.OK ? (L.st_online || "ok") : (L["st_" + state] ?? state);
 const cls = state => stateClass(state);
 const places = v => (v.places || []).map(p => L["loc_" + p] || p).join(L.sep || ", ");
+const nameOf = s => (s.names && s.names[LANG]) || s.name;
 
 /* ---------- header: theme and language, as on every 1ms.dog tool ---------- */
 const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
@@ -101,9 +101,9 @@ function newestProbeAt(data) {
 }
 function newestAt(data) {
   const times = [];
-  for (const doc of [data?.tokyo, data?.shanghai, data?.official]) {
+  for (const doc of [data?.tokyo, data?.shanghai]) {
     if (!doc?.services) continue;
-    for (const s of Object.values(doc.services)) if (s.t) times.push(s.t * 1000); else if (s.at) times.push(s.at * 1000);
+    for (const s of Object.values(doc.services)) if (s.t) times.push(s.t * 1000);
   }
   return times.length ? Math.max(...times) : null;
 }
@@ -113,49 +113,26 @@ function ageLine(data, failed) {
   if (!at) return L.st_stale;
   return t("updated", { ago: ago(at) });
 }
-function levelState(level) {
-  return level === "none" ? STATE.OK : level === "minor" || level === "maintenance" ? STATE.PARTIAL
-    : level === "major" || level === "critical" ? STATE.FAULT : STATE.UNCONFIRMED;
+function paintAge(data, failed) {
+  const el = $("#sumAge");
+  if (el) el.textContent = ageLine(data, failed);
 }
-function summaryText(c) {
-  if (c.unknown === c.n) return t("sum_unknown", { n: c.n });
-  if (c.bad) return t("sum_some", { n: c.bad });
-  if (c.unknown) return t("sum_unknown", { n: c.unknown });
-  return t("sum_all_ok");
-}
-function summaryClass(c) { return c.bad ? "bad" : c.unknown ? "unknown" : "ok"; }
 
 /* ---------- home: every service, grouped ---------- */
 function homeView(data, failed, now) {
-  const c = failed ? { ok: 0, bad: 0, unknown: SERVICES.length, n: SERVICES.length } : summary(SERVICES, data, now);
-  const box = $("#summary");
-  if (box) {
-    box.className = "dn-summary " + summaryClass(c);
-    $("#sumDot").className = "dot " + (c.bad ? "bad" : c.unknown ? "" : "ok");
-    $("#sumText").textContent = summaryText(c);
-    $("#sumCounts").textContent = t("sum_counts", { ok: c.ok, bad: c.bad, unknown: c.unknown });
-    $("#sumAge").textContent = ageLine(data, failed);
-  }
+  paintAge(data, failed);
   for (const s of SERVICES) {
     const tile = document.querySelector(`.dn-tile[data-s="${s.id}"]`);
     if (!tile) continue;
     const v = failed ? verdict(s, null, now) : verdict(s, data, now);
     const st = v.state;
     tile.dataset.state = cls(st);
-    tile.querySelector(".dot").className = "dot " + cls(st);
-    const lab = tile.querySelector(".dn-tile-s");
-    lab.textContent = st === STATE.OK ? "" : label(st);
-    lab.className = "dn-tile-s " + cls(st);
+    tile.querySelector(".ic").className = "ic st " + cls(st);
+    const text = `${nameOf(s)} — ${st === STATE.OK ? L.st_online : label(st)}`;
+    tile.setAttribute("aria-label", text);
+    tile.title = text;
     const p = failed ? null : bestProbe(v);
     paintSpark(tile.querySelector(".dn-spark"), p?.h24);
-  }
-  for (const cat of CATS) {
-    const el = document.getElementById("catSum-" + cat.id);
-    if (!el) continue;
-    const list = byCat(cat.id);
-    const cc = failed ? { ok: 0, bad: 0, unknown: list.length, n: list.length } : summary(list, data, now);
-    el.textContent = summaryText(cc);
-    el.className = "dn-cat-sum " + summaryClass(cc);
   }
   filter();
 }
@@ -163,20 +140,11 @@ function homeView(data, failed, now) {
 /* ---------- category ---------- */
 function catView(data, failed, now) {
   const list = byCat(D.cat);
-  const c = failed ? { ok: 0, bad: 0, unknown: list.length, n: list.length } : summary(list, data, now);
-  const box = $("#summary");
-  if (box) {
-    box.className = "dn-summary " + summaryClass(c);
-    $("#sumDot").className = "dot " + (c.bad ? "bad" : c.unknown ? "" : "ok");
-    $("#sumText").textContent = summaryText(c);
-    $("#sumCounts").textContent = t("sum_counts", { ok: c.ok, bad: c.bad, unknown: c.unknown });
-    $("#sumAge").textContent = ageLine(data, failed);
-  }
+  paintAge(data, failed);
   for (const s of list) {
     const row = document.querySelector(`.dn-row[data-s="${s.id}"]`);
     if (!row) continue;
     const v = failed ? verdict(s, null, now) : verdict(s, data, now);
-    row.querySelector(".dot").className = "dot " + cls(v.state);
     const pill = row.querySelector(".dn-pill");
     pill.textContent = label(v.state);
     pill.className = "dn-pill " + cls(v.state);
@@ -191,10 +159,10 @@ function svcView(data, failed, now) {
   const s = byId.get(D.id);
   if (!s) return;
   const v = failed ? verdict(s, null, now) : verdict(s, data, now);
-  const st = v.state, status = $("#status");
-  if (status) {
-    status.className = "dn-status " + cls(st);
-    status.querySelector(".dot").className = "dot " + cls(st);
+  const st = v.state, panel = $("#statusPanel");
+  if (panel) {
+    panel.className = "dn-status-banner " + cls(st);
+    $("#stateIcon").className = "ic " + cls(st);
     $("#stateText").textContent = label(st);
     const where = places(v);
     const when = ageLine(data, failed);
@@ -203,19 +171,16 @@ function svcView(data, failed, now) {
   const sentence = $("#verdictSentence");
   if (sentence) {
     let text;
-    if (st === STATE.LONGFAIL) text = t("v_longfail", { places: places(v), name: s.name, dur: durTxt(duration(now - v.since)) });
-    else if (st === STATE.UNREACHABLE) text = t("v_unreachable", { places: places(v), name: s.name });
-    else if (st === STATE.PARTIAL && v.official?.fresh && v.official.degraded) text = t("v_official_partial", { desc: v.official.description || L.na });
-    else if (st === STATE.PARTIAL && v.official?.fresh && v.official.ok && !v.views.some(x => x.kind === "probe" && x.present && x.fresh && x.ok)) text = t("v_official_ok_unreachable", { places: places(v), name: s.name });
-    else if (st === STATE.PARTIAL) text = t("v_partial", { places: places(v), name: s.name });
-    else if (st === STATE.RECOVERED) text = t("v_recovered", { places: places(v), name: s.name });
-    else if (st === STATE.OK && !v.views.some(x => x.kind === "probe" && x.present && x.fresh)) text = L.v_official_online;
-    else if (st === STATE.OK) text = t("v_online", { places: places(v), name: s.name });
-    else if (st === STATE.FAULT) text = t("v_fault", { desc: v.official?.description || L.na });
+    if (st === STATE.LONGFAIL) text = t("v_longfail", { places: places(v), name: nameOf(s), dur: durTxt(duration(now - v.since)) });
+    else if (st === STATE.UNREACHABLE) text = t("v_unreachable", { places: places(v), name: nameOf(s) });
+    else if (st === STATE.PARTIAL) text = t("v_partial", { places: places(v), name: nameOf(s) });
+    else if (st === STATE.RECOVERED) text = t("v_recovered", { places: places(v), name: nameOf(s) });
+    else if (st === STATE.OK) text = t("v_online", { places: places(v), name: nameOf(s) });
     else if (st === STATE.UNCONFIRMED) text = L.v_unconfirmed;
     else if (st === STATE.STALE) text = L.v_stale;
     else text = L.v_nodata;
     sentence.textContent = text;
+    sentence.hidden = st === STATE.OK;
   }
   const p = failed ? null : bestProbe(v);
   if ($("#up24")) $("#up24").textContent = pct(p?.up24 ?? null);
@@ -226,44 +191,17 @@ function svcView(data, failed, now) {
 
   for (const row of $$(".dn-loc[data-kind]")) {
     const view = failed ? null : probeOf(v, row.dataset.kind);
-    const dot = row.querySelector(".dot"), val = row.querySelector(".dn-loc-v"), age = row.querySelector(".dn-loc-age");
+    const dot = row.querySelector(".ic"), val = row.querySelector(".dn-loc-v"), age = row.querySelector(".dn-loc-age");
     if (!view || !view.present) {
-      dot.className = "dot"; val.textContent = L.st_nodata; val.className = "dn-loc-v"; age.textContent = ""; continue;
+      dot.className = "ic"; val.textContent = L.st_nodata; val.className = "dn-loc-v"; age.textContent = ""; continue;
     }
     const vs = view.fresh ? (view.ok ? STATE.OK : view.unknown ? STATE.UNCONFIRMED : STATE.UNREACHABLE) : STATE.STALE;
-    dot.className = "dot " + cls(vs);
+    dot.className = "ic " + cls(vs);
     if (!view.fresh) { val.textContent = L.st_stale; val.className = "dn-loc-v"; }
     else if (view.ok) { val.textContent = view.ms != null ? Math.round(view.ms) + " ms" : L.na; val.className = "dn-loc-v ok"; }
     else if (view.unknown) { val.textContent = label(STATE.UNCONFIRMED); val.className = "dn-loc-v"; }
     else { val.textContent = L[errKey(view.err)] ?? L.err_other; val.className = "dn-loc-v bad"; }
     age.textContent = ago(view.at);
-  }
-
-  const offRow = $("#official");
-  if (offRow) {
-    const o = failed ? null : v.official;
-    const src = STATUS[s.id];
-    const dot = offRow.querySelector(".dot"), b = offRow.querySelector("b"), desc = offRow.querySelector(".dn-off-desc"), age = offRow.querySelector(".dn-off-age");
-    if (o && o.present) {
-      const os = o.fresh ? levelState(o.level) : STATE.STALE;
-      offRow.className = "dn-off " + cls(os);
-      dot.className = "dot " + cls(os);
-      b.textContent = label(os);
-      desc.textContent = o.description || "";
-      age.textContent = ago(o.at);
-    } else {
-      offRow.className = "dn-off";
-      dot.className = "dot";
-      b.textContent = !src ? L.official_none : src.api ? L.st_nodata : L.official_no_api;
-      desc.textContent = "";
-      age.textContent = "";
-    }
-  }
-  const offLink = $("#officialLink");
-  if (offLink) {
-    const src = STATUS[s.id];
-    if (src?.page) { offLink.href = src.page; offLink.hidden = false; }
-    else offLink.hidden = true;
   }
 
   const outs = $("#outs");
@@ -296,27 +234,23 @@ function svcView(data, failed, now) {
   const report = $("#reportBtn");
   if (report) report.hidden = typeof window.msOpenReport !== "function";
   window.msReport = () => ({
-    summary: `${s.name}: ${label(st)} · ${ageLine(data, failed)}`,
+    summary: `${nameOf(s)}: ${label(st)} · ${ageLine(data, failed)}`,
     data: { service: s.id, state: st, at: v.at, places: v.places, up24: v.up24, up7: v.up7,
       tokyo: probeOf(v, "tokyo") && { ok: probeOf(v, "tokyo").ok, unknown: probeOf(v, "tokyo").unknown, at: probeOf(v, "tokyo").at, ms: probeOf(v, "tokyo").ms, err: probeOf(v, "tokyo").err },
-      shanghai: probeOf(v, "shanghai") && { ok: probeOf(v, "shanghai").ok, unknown: probeOf(v, "shanghai").unknown, at: probeOf(v, "shanghai").at, ms: probeOf(v, "shanghai").ms, err: probeOf(v, "shanghai").err },
-      official: v.official?.present ? { level: v.official.level, at: v.official.at, description: v.official.description } : null },
-    picks: [s.name, label(st), ageLine(data, failed)],
+      shanghai: probeOf(v, "shanghai") && { ok: probeOf(v, "shanghai").ok, unknown: probeOf(v, "shanghai").unknown, at: probeOf(v, "shanghai").at, ms: probeOf(v, "shanghai").ms, err: probeOf(v, "shanghai").err } },
+    picks: [nameOf(s), label(st), ageLine(data, failed)],
   });
 }
 
-/* ---------- the search box and "only problems" ---------- */
+/* ---------- the search box ---------- */
 let filterBound = false;
 function filter() {
   const q = ($("#q")?.value || "").trim().toLowerCase();
-  const only = !!$("#onlyIssues")?.checked;
   let shown = 0;
   for (const cat of $$(".dn-cat")) {
     let inCat = 0;
     for (const li of cat.querySelectorAll(".dn-tile")) {
-      const hay = li.dataset.name || "";
-      const issue = li.dataset.state !== "ok";
-      const ok = (!q || hay.includes(q)) && (!only || issue);
+      const ok = !q || (li.dataset.name || "").includes(q);
       li.parentElement.hidden = !ok;
       if (ok) inCat++;
     }
@@ -329,7 +263,6 @@ function bindFilter() {
   if (filterBound) return;
   filterBound = true;
   $("#q")?.addEventListener("input", filter);
-  $("#onlyIssues")?.addEventListener("change", filter);
 }
 
 /* ---------- links to the other tools ---------- */

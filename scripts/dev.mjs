@@ -1,15 +1,13 @@
 #!/usr/bin/env node
-// Local preview: serves public/ and answers /api/status.json from the probe files and the official status pages.
+// Local preview: serves public/ and answers /api/status.json from the two probe files.
 // By default it reads probe/out/latest.json (Tokyo) and probe/out/sh/latest.json (Shanghai) if they exist; set
-// DOWN_PROBE_TOKYO / DOWN_PROBE_SHANGHAI to another path or URL. The official feeds are fetched here, cached 10 min,
-// which is what the Worker's cron does in production. Usage: npm run dev, then open http://localhost:8791/
+// DOWN_PROBE_TOKYO / DOWN_PROBE_SHANGHAI to another path or URL. Usage: npm run dev, open http://localhost:8791/
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { extname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { trimProbe, trimOfficial, officialEntry } from "../src/data.mjs";
-import { STATUS, OFFICIAL_IDS } from "../src/status-sources.mjs";
+import { trimProbe } from "../src/data.mjs";
 
 const PORT = Number(process.env.PORT || 8791);
 const ROOT = new URL("../public/", import.meta.url);
@@ -62,31 +60,13 @@ async function enrich(doc) {
   return doc;
 }
 
-let officialCache = null, officialAt = 0;
-async function official() {
-  if (officialCache && Date.now() - officialAt < 10 * 60e3) return officialCache;
-  const services = {};
-  const at = Date.now();
-  await Promise.all(OFFICIAL_IDS.map(async id => {
-    try {
-      const res = await fetch(STATUS[id].api, { signal: AbortSignal.timeout(5000), headers: { accept: "application/json" } });
-      if (!res.ok) return;
-      const e = officialEntry(await res.json(), STATUS[id].page, at);
-      if (e) services[id] = e;
-    } catch {}
-  }));
-  officialCache = trimOfficial({ at, every: 600, services });
-  officialAt = Date.now();
-  return officialCache;
-}
-
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, "http://localhost");
   if (url.pathname === "/api/status.json") {
-    const [tokyo, shanghai, off] = await Promise.all([probe("DOWN_PROBE_TOKYO", DEFAULT_TOKYO), probe("DOWN_PROBE_SHANGHAI", DEFAULT_SH), official()]);
-    const body = { v: 2, generated: new Date().toISOString(), tokyo, shanghai, official: off };
-    res.writeHead(tokyo || shanghai || off ? 200 : 503, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
-    res.end(JSON.stringify(tokyo || shanghai || off ? body : { error: "unavailable" }));
+    const [tokyo, shanghai] = await Promise.all([probe("DOWN_PROBE_TOKYO", DEFAULT_TOKYO), probe("DOWN_PROBE_SHANGHAI", DEFAULT_SH)]);
+    const body = { v: 3, generated: new Date().toISOString(), tokyo, shanghai };
+    res.writeHead(tokyo || shanghai ? 200 : 503, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
+    res.end(JSON.stringify(tokyo || shanghai ? body : { error: "unavailable" }));
     return;
   }
   let rel = decodeURIComponent(url.pathname);

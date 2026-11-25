@@ -1,30 +1,26 @@
 // The verdict, as pure functions: the build and the tests use this file, and scripts/build.mjs inlines it into the
 // browser bundle. Nothing here knows about the DOM or about 1ms.dog.
 //
-// Three facts, never one: what our probe in Tokyo saw, what our probe in Shanghai saw, and what the service's own
-// official status page says. A probe that cannot reach a service proves "we cannot reach it from here"; a 403, 429 or
-// a challenge page proves nothing either way (`unknown`). Only the official status page may say "outage" — and most
-// services do not publish a machine-readable one, so for them the worst state is "not answering from both places".
-// Missing or stale data is `stale`/`nodata`, never "down".
+// The verdict comes only from our own probes in Tokyo and Shanghai. A probe that cannot reach a service proves "we
+// cannot reach it from here"; a 403, 429 or a challenge page proves nothing either way (`unconfirmed`). The service's
+// official status page is a link on the page, not a factor here. Missing or stale data is `stale`/`nodata`, never
+// "down".
 
 export const STATE = {
-  OK: "ok",                 // our probes answer just now (or the official page says all systems operational)
+  OK: "ok",                 // a probe answered just now
   RECOVERED: "recovered",   // answering now, but a failure in the last 24 hours
-  PARTIAL: "partial",       // one place answers and another does not, or the official page reports a minor issue
+  PARTIAL: "partial",       // one place answers and another does not
   UNCONFIRMED: "unconfirmed", // every answer was a 403/429/challenge: we cannot say either way
   UNREACHABLE: "unreachable", // no place answers now, for less than a day
   LONGFAIL: "longfail",     // no place has answered for more than a day: more likely our check than the service
-  FAULT: "fault",           // the service's own official status page reports a major or critical outage
-  STALE: "stale",           // every source is older than STALE_MS
-  NODATA: "nodata",         // no source has this service at all
+  STALE: "stale",           // the data is older than 20 minutes
+  NODATA: "nodata",         // no data for this service at all
 };
 
 // Ten-minute probes; two missed rounds is "cannot judge".
 export const EXPECTED_EVERY = 600;
 export const STALE_MS = 20 * 60 * 1000;
 const DAY = 24 * 3600 * 1000;
-
-const pct = (ok, n) => (n ? (ok * 100) / n : null);
 
 // One probe's view of one service. `doc` is one machine's latest.json; the time is the service's own `t`, because a
 // round takes about a minute and a service measured first in it is a minute older than one measured last.
@@ -49,58 +45,31 @@ export function probeView(doc, id, now, place = "") {
   return v;
 }
 
-// The official status page's view. `indicator` is Statuspage's: none / minor / major / critical / maintenance.
-export function officialView(doc, id, now) {
-  const none = { kind: "official", present: false, fresh: false, level: null, at: null, ageMs: null };
-  if (!doc || !doc.services) return none;
-  const s = doc.services[id];
-  if (!s) return none;
-  const at = s.at ? s.at * 1000 : null;
-  const ageMs = at ? Math.max(0, now - at) : null;
-  const fresh = ageMs != null && ageMs <= STALE_MS;
-  const level = s.indicator || "unknown";
-  return { kind: "official", present: true, fresh, at, ageMs, level, description: s.description || "",
-    updatedAt: s.updated_at || null, page: s.page || null,
-    ok: level === "none", degraded: level === "minor" || level === "maintenance", bad: level === "major" || level === "critical" };
-}
-
-// The verdict for one service, from every source that knows it.
+// The verdict for one service, from our two probes.
 export function verdict(service, data, now = Date.now()) {
   const tokyo = probeView(data && data.tokyo, service.id, now, "tokyo");
   const shanghai = probeView(data && data.shanghai, service.id, now, "shanghai");
-  const official = officialView(data && data.official, service.id, now);
-  const views = [tokyo, shanghai, official];
+  const views = [tokyo, shanghai];
   const present = views.filter(v => v.present);
-  const probes = [tokyo, shanghai].filter(v => v.present && v.fresh);
-  const offFresh = official.present && official.fresh;
+  const probes = present.filter(v => v.fresh);
   const at = present.length ? Math.max(...present.map(v => v.at || 0)) : null;
   const ageMs = at ? Math.max(0, now - at) : null;
   const up24 = pickUp(probes, "up24"), up7 = pickUp(probes, "up7");
-  const base = { views, at, ageMs, since: null, up24, up7, places: probes.map(v => v.place).filter(Boolean), official };
+  const base = { views, at, ageMs, since: null, up24, up7, places: probes.map(v => v.place).filter(Boolean) };
 
-  if (!probes.length && !offFresh) return { ...base, state: present.length ? STATE.STALE : STATE.NODATA };
+  if (!probes.length) return { ...base, state: present.length ? STATE.STALE : STATE.NODATA };
 
-  // The service's own word comes first: only it can say "outage".
-  if (offFresh && official.bad) return { ...base, state: STATE.FAULT };
-  if (offFresh && official.degraded) return { ...base, state: STATE.PARTIAL };
-
-  if (probes.length) {
-    const ok = probes.filter(v => v.ok);
-    const fail = probes.filter(v => !v.ok && !v.unknown);
-    const unknown = probes.filter(v => v.unknown);
-    if (fail.length) {
-      if (ok.length) return { ...base, state: STATE.PARTIAL };
-      // the official page says it is fine, but neither of our places can reach it: still not an outage claim
-      if (offFresh && official.ok) return { ...base, state: STATE.PARTIAL };
-      const since = Math.max(...fail.map(v => v.since || 0)) || null;
-      return { ...base, state: since && now - since >= DAY ? STATE.LONGFAIL : STATE.UNREACHABLE, since };
-    }
-    if (ok.length) return { ...base, state: probes.some(v => v.recent) ? STATE.RECOVERED : STATE.OK };
-    if (unknown.length) return { ...base, state: STATE.UNCONFIRMED };
+  const ok = probes.filter(v => v.ok);
+  const fail = probes.filter(v => !v.ok && !v.unknown);
+  const unknown = probes.filter(v => v.unknown);
+  if (fail.length) {
+    if (ok.length) return { ...base, state: STATE.PARTIAL };
+    const since = Math.max(...fail.map(v => v.since || 0)) || null;
+    return { ...base, state: since && now - since >= DAY ? STATE.LONGFAIL : STATE.UNREACHABLE, since };
   }
-
-  if (offFresh && official.ok) return { ...base, state: STATE.OK };
-  return { ...base, state: STATE.STALE };
+  if (ok.length) return { ...base, state: probes.some(v => v.recent) ? STATE.RECOVERED : STATE.OK };
+  if (unknown.length) return { ...base, state: STATE.UNCONFIRMED };
+  return { ...base, state: STATE.NODATA };
 }
 
 // Prefer Tokyo's numbers; Shanghai is the fallback when Tokyo has none.
@@ -145,4 +114,4 @@ export function errKey(err) {
 
 export const stateClass = s => s === STATE.OK ? "ok"
   : s === STATE.RECOVERED || s === STATE.PARTIAL ? "warn"
-  : s === STATE.UNREACHABLE || s === STATE.LONGFAIL || s === STATE.FAULT ? "bad" : "unknown";
+  : s === STATE.UNREACHABLE || s === STATE.LONGFAIL ? "bad" : "unknown";
