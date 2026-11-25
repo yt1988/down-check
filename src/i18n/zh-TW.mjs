@@ -93,6 +93,7 @@ export default {
   err_unreachable: "網路不可達", err_cancel: "已取消", err_other: "沒有回應",
   report_result: "結果不對？", report_prefill: "這個狀態不對：",
   cross_home: "從你的瀏覽器測延遲", cross_unlock: "這條線路能解鎖什麼", cross_check: "檢查你自己的網路",
+  cross_ping: "連不上？測一下延遲", cross_reach: "網站打不開？看能不能連上",
   faq_h: "說明",
   q1: "這裡顯示線上，可是我就是打不開",
   a1: "我們只看到本站東京、上海的探測點能不能連上這個服務。你自己的網路、DNS、代理，或是你所在地區的限制，都可能讓你打不開，而服務本身沒事。換個網路試試。",

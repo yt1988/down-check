@@ -289,6 +289,8 @@ export async function build() {
       .replace("{{repo}}", () => REPO)
       .replace("{{main}}", () => main)
       .replace("{{foot_src}}", () => esc(Tt("foot_src")))
+      .replace("{{cross_ping}}", () => esc(Tt("cross_ping")))
+      .replace("{{cross_reach}}", () => esc(Tt("cross_reach")))
       .replace("{{faq_h}}", () => esc(Tt("faq_h")))
       .replace("{{helpNav}}", () => nav)
       .replace("{{helpC}}", () => body)

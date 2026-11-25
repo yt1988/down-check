@@ -93,6 +93,7 @@ export default {
   err_unreachable: "네트워크 도달 불가", err_cancel: "취소됨", err_other: "응답 없음",
   report_result: "결과가 다른가요?", report_prefill: "이 상태가 잘못된 것 같습니다:",
   cross_home: "브라우저에서 지연 측정", cross_unlock: "이 회선에서 무엇이 되나", cross_check: "내 연결 확인",
+  cross_ping: "연결이 안 되나요? 지연 측정", cross_reach: "사이트가 안 열리나요? 접속 가능 여부 확인",
   faq_h: "도움말",
   q1: "여기서는 온라인인데 저는 열리지 않아요",
   a1: "저희가 보는 것은 이 사이트의 도쿄·상하이 측정 지점이 그 서비스에 닿는지뿐입니다. 당신의 네트워크, DNS, 프록시, 지역 제한 때문에 열리지 않을 수 있고 서비스 자체는 정상일 수 있습니다. 다른 네트워크에서 해 보세요.",

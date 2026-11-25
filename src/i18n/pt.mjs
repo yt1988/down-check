@@ -93,6 +93,7 @@ export default {
   err_unreachable: "rede inalcançável", err_cancel: "cancelado", err_other: "sem resposta",
   report_result: "Resultado errado?", report_prefill: "Este status parece errado:",
   cross_home: "Medir a latência no seu navegador", cross_unlock: "O que esta linha desbloqueia", cross_check: "Verificar sua própria conexão",
+  cross_ping: "Não conecta? Meça a latência", cross_reach: "O site não abre? Verifique o acesso",
   faq_h: "Ajuda",
   q1: "Aqui diz no ar, mas não consigo abrir",
   a1: "Nós só vemos se nossas sondas em Tóquio e Xangai alcançam o serviço. Sua rede, seu DNS, um proxy ou um bloqueio do seu lado podem impedir você enquanto o serviço está bem. Tente outra rede.",

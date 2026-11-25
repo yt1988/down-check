@@ -323,9 +323,11 @@ function bindFilter() {
 /* ---------- links to the other tools ---------- */
 function wireTools() {
   const tool = id => { const m = document.querySelector(`meta[name="${id}"]`); return m ? m.content.replace(/\/+$/, "") : null; };
+  // literal calls so the shell's link check can see them; no meta means hidden
+  const known = { ping: tool("ping"), reach: tool("reach"), home: tool("home"), check: tool("check"), unlock: tool("unlock") };
   const dir = D.lang === "en" ? "" : D.lang.toLowerCase() + "/";
   for (const a of $$(".dn-cross-link")) {
-    const id = a.dataset.tool, base = tool(id);
+    const id = a.dataset.tool, base = known[id];
     if (!base) continue;
     let href = base + "/" + dir;
     if (id === "home" && a.dataset.id) href = base + "/" + dir + a.dataset.id + "/";

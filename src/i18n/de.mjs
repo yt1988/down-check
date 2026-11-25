@@ -93,6 +93,7 @@ export default {
   err_unreachable: "Netz nicht erreichbar", err_cancel: "abgebrochen", err_other: "keine Antwort",
   report_result: "Ergebnis falsch?", report_prefill: "Dieser Status stimmt nicht:",
   cross_home: "Latenz aus deinem Browser messen", cross_unlock: "Was diese Leitung freischaltet", cross_check: "Deine eigene Verbindung prüfen",
+  cross_ping: "Keine Verbindung? Latenz messen", cross_reach: "Seite öffnet nicht? Erreichbarkeit prüfen",
   faq_h: "Hilfe",
   q1: "Hier steht online, aber ich komme nicht rein",
   a1: "Wir sehen nur, ob unsere Prüfungen in Tokio und Shanghai den Dienst erreichen. Dein Netz, dein DNS, ein Proxy oder eine Sperre auf deiner Seite können dich aussperren, während der Dienst in Ordnung ist. Versuch ein anderes Netz.",

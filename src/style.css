@@ -170,6 +170,7 @@ a.icon-btn:hover { background: var(--soft); }
 .dn-chip { display: inline-flex; align-items: center; gap: 7px; min-height: 32px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--panel); color: var(--fg); font-size: var(--fs-small); }
 .dn-chip:hover { border-color: var(--muted); text-decoration: none; }
 .dn-cross { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.dn-cross-foot { justify-content: center; }
 .dn-cross-link { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; font-size: var(--fs-small); }
 .dn-cross-link svg, .dn-ext svg { width: 11px; height: 11px; flex: none; }
 .dn-ext { display: inline-flex; align-items: center; gap: 3px; }

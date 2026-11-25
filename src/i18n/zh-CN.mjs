@@ -93,6 +93,7 @@ export default {
   err_unreachable: "网络不可达", err_cancel: "已取消", err_other: "没有回应",
   report_result: "结果不对？", report_prefill: "这个状态不对：",
   cross_home: "从你的浏览器测延迟", cross_unlock: "这条线路能解锁什么", cross_check: "检查你自己的网络",
+  cross_ping: "连不上？测一下延迟", cross_reach: "网站打不开？看能不能连上",
   faq_h: "帮助",
   q1: "这里显示在线，可我就是打不开",
   a1: "我们只看到本站东京、上海的探针能不能连上这个服务。你自己的网络、DNS、代理，或者你所在地区的限制，都可能让你打不开，而服务本身没事。换个网络试试。",

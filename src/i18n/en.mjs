@@ -93,6 +93,7 @@ export default {
   err_unreachable: "network unreachable", err_cancel: "cancelled", err_other: "no answer",
   report_result: "Wrong result?", report_prefill: "This status looks wrong:",
   cross_home: "Test the latency from your browser", cross_unlock: "What this line can unlock", cross_check: "Check your own connection",
+  cross_ping: "Can't connect? Test latency", cross_reach: "Site won't open? Check reachability",
   faq_h: "Help",
   q1: "This page says online, but I cannot open it",
   a1: "We only see whether our probes in Tokyo and Shanghai can reach the service. Your network, DNS, a proxy or a block on your side can stop you while the service itself is fine. Try another network.",
