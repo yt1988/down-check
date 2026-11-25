@@ -23,7 +23,7 @@ export default {
   only_issues: "Nur Probleme",
   no_results: "Kein Dienst passt.",
   legend_ok: "Online",
-  legend_warn: "Teilweise oder wieder da",
+  legend_warn: "Wieder da",
   legend_bad: "Offline",
   legend_unknown: "Nicht bestätigt",
   all_services: "Alle Dienste",

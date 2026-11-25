@@ -23,7 +23,7 @@ export default {
   only_issues: "Solo problemas",
   no_results: "Ningún servicio coincide.",
   legend_ok: "En línea",
-  legend_warn: "Parcial o recuperado",
+  legend_warn: "Recuperado",
   legend_bad: "Caído",
   legend_unknown: "Sin confirmar",
   all_services: "Todos los servicios",

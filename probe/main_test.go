@@ -101,8 +101,8 @@ func TestOutcomeClassification(t *testing.T) {
 		{429, "", "", false, true},
 		{200, "<html>Just a moment...</html>", "", false, true},
 		{200, "<html>ok</html>", "challenge", false, true},
-		{500, "", "", false, false},
-		{503, "", "", false, false},
+		{500, "", "", false, true},
+		{503, "", "", false, true},
 	}
 	for _, c := range cases {
 		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

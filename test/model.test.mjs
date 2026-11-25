@@ -17,9 +17,10 @@ test("both places answer: ok", () => {
   assert.equal(v.up24, 100);
 });
 
-test("one place answers, one does not: partial", () => {
+test("one place answers, one does not: still online (some regions cannot reach some services)", () => {
   const v = verdict(svc, data(probeDoc({ x: p() }), probeDoc({ x: p({ ok: false, err: "timeout" }) }, { from: "Shanghai, CN" })), NOW);
-  assert.equal(v.state, STATE.PARTIAL);
+  assert.equal(v.state, STATE.OK);
+  assert.deepEqual(v.places, ["tokyo"]);
 });
 
 test("both places fail for a few hours: unreachable", () => {
@@ -45,10 +46,10 @@ test("every answer is a refusal or a challenge: unconfirmed, not offline", () =>
   assert.equal(stateClass(v.state), "unknown");
 });
 
-test("a failure and a refusal, no answer anywhere: unreachable, the refusal does not hide the failure", () => {
+test("a failure and a refusal, no positive answer: unconfirmed, not offline", () => {
   const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout" }) }),
     probeDoc({ x: p({ ok: false, unknown: true, err: "challenge" }) }, { from: "Shanghai, CN" })), NOW);
-  assert.equal(v.state, STATE.UNREACHABLE);
+  assert.equal(v.state, STATE.UNCONFIRMED);
 });
 
 test("stale probes are stale, not ok and not down", () => {

@@ -23,7 +23,7 @@ export default {
   only_issues: "問題のあるものだけ",
   no_results: "一致するサービスはありません。",
   legend_ok: "オンライン",
-  legend_warn: "一部異常・復旧",
+  legend_warn: "復旧",
   legend_bad: "オフライン",
   legend_unknown: "確認できない",
   all_services: "すべてのサービス",

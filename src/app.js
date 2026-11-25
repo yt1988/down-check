@@ -33,7 +33,7 @@ const nameOf = s => (s.names && s.names[LANG]) || s.name;
 let lastData = null, shareMod = null;
 const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const stateColor = st => st === STATE.OK ? cssVar("--t1")
-  : st === STATE.RECOVERED || st === STATE.PARTIAL ? cssVar("--warn")
+  : st === STATE.RECOVERED ? cssVar("--warn")
   : st === STATE.UNREACHABLE || st === STATE.LONGFAIL ? cssVar("--t5") : cssVar("--muted");
 function shareHeadline(c) {
   if (c.unknown === c.n) return t("sum_unknown", { n: c.n });
@@ -228,7 +228,6 @@ function svcView(data, failed, now) {
     let text;
     if (st === STATE.LONGFAIL) text = t("v_longfail", { places: places(v), name: nameOf(s), dur: durTxt(duration(now - v.since)) });
     else if (st === STATE.UNREACHABLE) text = t("v_unreachable", { places: places(v), name: nameOf(s) });
-    else if (st === STATE.PARTIAL) text = t("v_partial", { places: places(v), name: nameOf(s) });
     else if (st === STATE.RECOVERED) text = t("v_recovered", { places: places(v), name: nameOf(s) });
     else if (st === STATE.OK) text = t("v_online", { places: places(v), name: nameOf(s) });
     else if (st === STATE.UNCONFIRMED) text = L.v_unconfirmed;

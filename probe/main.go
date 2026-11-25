@@ -103,7 +103,7 @@ func main() {
 	from := flag.String("from", "Tokyo, JP", "where this runs, as shown on the page")
 	services := flag.String("services", "", "services.json (default: next to this program)")
 	conc := flag.Int("concurrency", 20, "requests in flight at once")
-	timeout := flag.Duration("timeout", 5*time.Second, "per-service timeout")
+	timeout := flag.Duration("timeout", 8*time.Second, "per-service timeout")
 	spread := flag.Duration("spread", 45*time.Second, "spread the round over this long, so nothing hits at one second")
 	every := flag.Int("every", 600, "seconds between runs, written to the file")
 	maxRun := flag.Duration("max", 8*time.Minute, "whole round limit; what did not finish is written as not measured")
@@ -216,8 +216,10 @@ func measure(parent context.Context, rawURL string, timeout time.Duration) (*sam
 	if err != nil {
 		return &sample{Err: "bad url", T: time.Now().Unix()}, 0
 	}
-	req.Header.Set("User-Agent", "1ms.dog down probe (+https://down.1ms.dog)")
-	req.Header.Set("Accept", "*/*")
+	// a normal browser request: many sites answer a named bot with 403, which says nothing about whether people can reach them
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.9")
 	req.Header.Set("Range", "bytes=0-0")
 	client := &http.Client{
 		Timeout: timeout,
@@ -254,6 +256,8 @@ func measure(parent context.Context, rawURL string, timeout time.Duration) (*sam
 		s.Unknown = true
 		s.Err = "challenge"
 	case resp.StatusCode >= 500:
+		// the host answered; an error page may be a block or an outage, and one probe cannot tell
+		s.Unknown = true
 		s.Err = fmt.Sprintf("http %d", resp.StatusCode)
 	default:
 		s.OK = true

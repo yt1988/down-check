@@ -8,8 +8,11 @@ the deployment on 1ms.dog (hostname, shell entry, probe timers) is in the privat
 The verdict comes **only from our probes in Tokyo and Shanghai**. The service's own status page is a link, not a
 factor. Never turn a probe failure or a refusal into "down":
 
-- `403`, `429`, `cf-mitigated: challenge`, a challenge page → **unconfirmed** (grey dot), not offline.
-- Both probes failing → **offline** (or **offline for days** after 24 h). Not "outage".
+- `403`, `429`, `cf-mitigated: challenge`, a challenge page, a 5xx response → **unconfirmed** (grey dot), not offline.
+- **One place answering is enough: online** (or recovered if the answering place had an interruption in the last 24
+  hours). A failure in the other place is shown on that place's row, not as a service state — some services genuinely
+  cannot be reached from some regions.
+- Only when **no place answers**: offline (or offline for days after 24 h); if any place refused, unconfirmed.
 - A source older than **20 minutes** (two missed 10-minute rounds) → **data is stale**; every source stale or
   missing → **cannot judge**. Grey, never red.
 
@@ -71,7 +74,7 @@ The upstream data address never appears in a page (a test checks it). A 403/429 
 - Every service shows its own icon before its name in every list (board tiles, group rows, related chips, the service
   H1). The icons are served from `/icons/`; `node scripts/icons.mjs` fetches missing ones at build time. Audit them
   when adding services: a favicon service can return a placeholder or another brand's icon.
-- Status dots are **9px** everywhere, circular, and colour-coded: green online, amber partial/recovered, red
+- Status dots are **9px** everywhere, circular, and colour-coded: green online, amber recovered, red
   offline, grey filled unconfirmed/stale. No other shapes.
 - The hero is centred; the search (home) is left and the legend right on one row; the age line reserves its height so
   nothing moves when the data arrives. There is no summary block and no "only problems" filter.

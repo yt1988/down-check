@@ -23,7 +23,7 @@ export default {
   only_issues: "문제만 보기",
   no_results: "일치하는 서비스가 없습니다.",
   legend_ok: "온라인",
-  legend_warn: "일부 이상·복구",
+  legend_warn: "복구됨",
   legend_bad: "오프라인",
   legend_unknown: "확인 불가",
   all_services: "모든 서비스",

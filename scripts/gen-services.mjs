@@ -41,6 +41,15 @@ const NAMES = {
   bilibilitv: { en: "Bilibili TV", "zh-CN": "哔哩哔哩 TV", "zh-TW": "嗶哩嗶哩 TV", ja: "ビリビリ TV", ko: "빌리빌리 TV", es: "Bilibili TV", fr: "Bilibili TV", de: "Bilibili TV", pt: "Bilibili TV", ru: "Bilibili TV" },
 };
 
+// A few sites are too heavy or answer on another host for their front page; probe the favicon instead.
+const PROBE = {
+  directv: "https://www.directv.com/favicon.ico",
+  nhk: "https://www3.nhk.or.jp/favicon.ico",
+};
+
+// brand spellings the source list names by their product instead
+const DISPLAY = { mistral: "Mistral" };
+
 // the five regional services without `only`
 const NO_ONLY = { tvb: "hk", bahamut: "tw", skygo: "uk", joyn: "eu", skyde: "eu" };
 // unlock ids that become a different page from the baseline id they collide with
@@ -65,7 +74,9 @@ for (const s of unlock) {
   const id = RENAME[s.id] || s.id;
   const region = NO_ONLY[s.id] || ONLY_REGION[s.only] || null;
   const cat = region || (GLOBAL.includes(s.cat) ? s.cat : "video");
-  add({ id, name: s.name, names: NAMES[id] || null, cat, site: s.site, probe: s.site });
+  const base = s.site.endsWith("/") ? s.site : s.site + "/";
+  const probe = PROBE[id] || new URL("favicon.ico", base).href;
+  add({ id, name: DISPLAY[id] || s.name, names: NAMES[id] || null, cat, site: s.site, probe });
 }
 
 const CATS = [...GLOBAL, ...REGIONS].map(id => ({ id }));

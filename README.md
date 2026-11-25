@@ -9,7 +9,7 @@ GitHub, Discord, Cloudflare, Netflix, Steam and the rest — from two places: ou
 10 minutes. Each page shows the current state first, the last 24 hours as a strip, and the interruptions of the last
 7 days.
 
-- **Current state first.** A large online / partial / offline / unconfirmed state, then the history. Every service
+- **Current state first.** A large online / recovered / offline / unconfirmed state, then the history. Every service
   shows its own icon, so a page of names is recognizable at a glance.
 - **Only our probes decide.** A service is never called "down" because one probe failed: a 403, a 429 or a challenge
   page is **unconfirmed**, and data older than 20 minutes (two missed rounds) is **cannot judge**. The service's own
@@ -36,11 +36,10 @@ GitHub, Discord, Cloudflare, Netflix, Steam and the rest — from two places: ou
 
 | State | What it means |
 |---|---|
-| Online | Our probe in Tokyo and/or Shanghai answered. |
+| Online | At least one probe (Tokyo or Shanghai) answered. One place answering is enough: some services genuinely cannot be reached from some regions, and that place's own row shows it. |
 | Recovered | Answering now; there was an interruption in the last 24 hours. |
-| Partial | One place answers and the other does not. |
-| Unconfirmed | Every answer was a refusal (403/429) or a challenge page: no way to say either way. |
-| Offline | No place answers now, for less than a day. |
+| Unconfirmed | Every answer was a refusal (403/429), a 5xx or a challenge page: no way to say either way. |
+| Offline | No place answers now, and no place refused: for less than a day. |
 | Offline for days | No place has answered for more than a day: more likely our check than the service. |
 | Data is stale / No data | Every source is older than 20 minutes, or there is no data. Grey, never red. |
 

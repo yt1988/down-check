@@ -23,7 +23,7 @@ export default {
   only_issues: "只看有问题的",
   no_results: "没有匹配的服务。",
   legend_ok: "在线",
-  legend_warn: "部分异常或已恢复",
+  legend_warn: "已恢复",
   legend_bad: "离线",
   legend_unknown: "无法确认",
   all_services: "全部服务",

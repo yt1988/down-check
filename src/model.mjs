@@ -7,9 +7,8 @@
 // "down".
 
 export const STATE = {
-  OK: "ok",                 // a probe answered just now
+  OK: "ok",                 // at least one probe answered just now
   RECOVERED: "recovered",   // answering now, but a failure in the last 24 hours
-  PARTIAL: "partial",       // one place answers and another does not
   UNCONFIRMED: "unconfirmed", // every answer was a 403/429/challenge: we cannot say either way
   UNREACHABLE: "unreachable", // no place answers now, for less than a day
   LONGFAIL: "longfail",     // no place has answered for more than a day: more likely our check than the service
@@ -62,14 +61,18 @@ export function verdict(service, data, now = Date.now()) {
   const ok = probes.filter(v => v.ok);
   const fail = probes.filter(v => !v.ok && !v.unknown);
   const unknown = probes.filter(v => v.unknown);
-  if (fail.length) {
-    if (ok.length) return { ...base, state: STATE.PARTIAL };
-    const since = Math.max(...fail.map(v => v.since || 0)) || null;
-    return { ...base, state: since && now - since >= DAY ? STATE.LONGFAIL : STATE.UNREACHABLE, since };
+  // One place answering is enough: some services are genuinely unreachable from some regions.
+  if (ok.length) {
+    const state = ok.some(v => v.recent) ? STATE.RECOVERED : STATE.OK;
+    return { ...base, state, places: ok.map(v => v.place) };
   }
-  if (ok.length) return { ...base, state: probes.some(v => v.recent) ? STATE.RECOVERED : STATE.OK };
-  if (unknown.length) return { ...base, state: STATE.UNCONFIRMED };
-  return { ...base, state: STATE.NODATA };
+  // A refusal at one place means we cannot call it down even if another place failed.
+  if (fail.length) {
+    if (unknown.length) return { ...base, state: STATE.UNCONFIRMED, places: [...fail, ...unknown].map(v => v.place) };
+    const since = Math.max(...fail.map(v => v.since || 0)) || null;
+    return { ...base, state: since && now - since >= DAY ? STATE.LONGFAIL : STATE.UNREACHABLE, since, places: fail.map(v => v.place) };
+  }
+  return { ...base, state: STATE.UNCONFIRMED, places: unknown.map(v => v.place) };
 }
 
 // Prefer Tokyo's numbers; Shanghai is the fallback when Tokyo has none.
@@ -113,5 +116,5 @@ export function errKey(err) {
 }
 
 export const stateClass = s => s === STATE.OK ? "ok"
-  : s === STATE.RECOVERED || s === STATE.PARTIAL ? "warn"
+  : s === STATE.RECOVERED ? "warn"
   : s === STATE.UNREACHABLE || s === STATE.LONGFAIL ? "bad" : "unknown";

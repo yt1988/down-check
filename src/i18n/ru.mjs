@@ -23,7 +23,7 @@ export default {
   only_issues: "Только проблемы",
   no_results: "Ничего не найдено.",
   legend_ok: "Отвечает",
-  legend_warn: "Частично или восстановлен",
+  legend_warn: "Восстановлен",
   legend_bad: "Недоступен",
   legend_unknown: "Не подтверждено",
   all_services: "Все сервисы",

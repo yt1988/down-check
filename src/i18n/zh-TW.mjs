@@ -23,7 +23,7 @@ export default {
   only_issues: "只看有問題的",
   no_results: "沒有符合的服務。",
   legend_ok: "線上",
-  legend_warn: "部分異常或已恢復",
+  legend_warn: "已恢復",
   legend_bad: "離線",
   legend_unknown: "無法確認",
   all_services: "全部服務",
