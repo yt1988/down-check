@@ -75,6 +75,7 @@ function sparkClasses(h24) {
 }
 function paintSpark(el, h24) {
   if (!el) return;
+  if (!el.children.length) for (let i = 0; i < 24; i++) el.appendChild(document.createElement("i"));
   // a service with almost no history yet gets a plain track, not a barcode of one sample
   const known = (h24 || "").replace(/-/g, "").length;
   const cs = known < 6 ? [] : sparkClasses(h24);

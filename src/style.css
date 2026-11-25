@@ -61,6 +61,7 @@ a.icon-btn:hover { background: var(--soft); }
 
 /* a 24-hour strip: one cell per hour, green / red / grey, no axes */
 .dn-spark { display: flex; align-items: stretch; gap: 1px; height: 12px; width: 54px; flex: none; }
+.dn-spark:empty { background: var(--line); opacity: .55; border-radius: 1px; }
 .dn-spark i { flex: 1; border-radius: 1px; background: var(--line); }
 .dn-spark i.ok { background: var(--t1); }
 .dn-spark i.warn { background: var(--warn); }

@@ -119,7 +119,7 @@ function homeMain(Tt, lang) {
     const list = byCat(cat.id);
     const tiles = list.map(s => `<li><a class="dn-tile" href="${svcPath(lang, s)}" data-s="${s.id}" data-name="${esc(searchOf(s))}" data-state="loading">
         <span class="dot"></span><span class="dn-tile-n">${esc(s.name)}</span><span class="sr" data-st>${esc(Tt("st_loading"))}</span>
-        <span class="dn-spark" aria-hidden="true">${cells(24)}</span><span class="dn-tile-s"></span></a></li>`).join("");
+        <span class="dn-spark" aria-hidden="true"></span><span class="dn-tile-s"></span></a></li>`).join("");
     return `<section class="dn-cat" data-cat="${cat.id}">
       <header class="dn-cat-h"><h2><a href="${catPath(lang, cat.id)}">${esc(catName(Tt, cat))}</a></h2><span class="dn-cat-sum" id="catSum-${cat.id}">${esc(Tt("st_loading"))}</span></header>
       <ul class="dn-tiles">${tiles}</ul>
@@ -145,7 +145,7 @@ function catMain(Tt, lang, cat) {
   const rows = list.map(s => `<li><a class="dn-row" href="${svcPath(lang, s)}" data-s="${s.id}" data-name="${esc(searchOf(s))}">
       <span class="dn-row-name"><span class="dot"></span><b>${esc(s.name)}</b></span>
       <span class="dn-pill">${esc(Tt("st_loading"))}</span>
-      <span class="dn-spark" aria-hidden="true">${cells(24)}</span>
+      <span class="dn-spark" aria-hidden="true"></span>
       <span class="dn-row-up"><i>24h</i><b>—</b></span></a></li>`).join("");
   return `<nav class="dn-crumbs"><a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a><span aria-hidden="true">/</span><span class="dn-crumb-here">${esc(catName(Tt, cat))}</span></nav>
     <header class="dn-hero">
