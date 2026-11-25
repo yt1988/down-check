@@ -1,5 +1,7 @@
 # Down Check
 
+**English** · [简体中文](README.zh-CN.md)
+
 **Live:** https://down.1ms.dog
 
 Which services are down right now? Down Check watches 210 services people search for during an outage — ChatGPT,
