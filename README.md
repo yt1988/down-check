@@ -12,8 +12,10 @@ GitHub, Discord, Cloudflare, Netflix, Steam and the rest — from two places: ou
 - **Current state first.** A large online / recovered / offline / unconfirmed state, then the history. Every service
   shows its own icon, so a page of names is recognizable at a glance.
 - **Only our probes decide.** A service is never called "down" because one probe failed: a 403, a 429 or a challenge
-  page is **unconfirmed**, and data older than 20 minutes (two missed rounds) is **cannot judge**. The service's own
-  status page is linked at the bottom of its page, for reference only — it is not part of the verdict.
+  page is **unconfirmed**, and data older than 20 minutes (two missed rounds) is **cannot judge**. When a service
+  blocks or errors on its usual small URL, the probe tries that service's own `robots.txt`, front page or API before
+  it gives up; one of its addresses answering is online. The service's own status page is linked at the bottom of its
+  page, for reference only — it is not part of the verdict.
 - **Share the live page.** Every page has a Share button next to its state or summary; it opens the shared dialog the
   other 1ms.dog tools use, draws a card of the state at share time, and links the live page. The card's date is the
   measurement date, so a reader knows how old the snapshot is.

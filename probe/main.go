@@ -32,8 +32,9 @@ import (
 const version = "0.1.0"
 
 type target struct {
-	ID  string `json:"id"`
-	URL string `json:"url"`
+	ID  string   `json:"id"`
+	URL string   `json:"url"`
+	Alt []string `json:"alt,omitempty"` // tried only when URL is not a definite answer
 }
 
 type sample struct {
@@ -191,7 +192,7 @@ func measureAll(ctx context.Context, targets []target, conc int, timeout, spread
 				return
 			}
 			defer func() { <-sem }()
-			s, n := measure(ctx, t.URL, timeout)
+			s, n := measureAny(ctx, t, timeout)
 			if s == nil {
 				return
 			}
@@ -203,6 +204,40 @@ func measureAll(ctx context.Context, targets []target, conc int, timeout, spread
 	}
 	wg.Wait()
 	return out, bytes
+}
+
+// measureAny asks the service's usual small target first. Only when that is not a definite answer (a refusal, a 5xx,
+// a timeout) does it try the fallbacks: the same host's robots.txt and front page, and for a few services an API host.
+// A service is up when any of its own addresses answers; one blocked path is not a service outage.
+func measureAny(parent context.Context, t target, timeout time.Duration) (*sample, int64) {
+	s, n := measure(parent, t.URL, timeout)
+	if s == nil || s.OK || len(t.Alt) == 0 {
+		return s, n
+	}
+	first, unknown := s, (*sample)(nil)
+	if s.Unknown {
+		unknown = s
+	}
+	for _, u := range t.Alt {
+		if u == "" || u == t.URL {
+			continue
+		}
+		a, an := measure(parent, u, timeout)
+		n += an
+		if a == nil {
+			continue
+		}
+		if a.OK {
+			return a, n
+		}
+		if a.Unknown && unknown == nil {
+			unknown = a
+		}
+	}
+	if unknown != nil {
+		return unknown, n
+	}
+	return first, n
 }
 
 func measure(parent context.Context, rawURL string, timeout time.Duration) (*sample, int64) {

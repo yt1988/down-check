@@ -13,6 +13,9 @@ factor. Never turn a probe failure or a refusal into "down":
   hours). A failure in the other place is shown on that place's row, not as a service state — some services genuinely
   cannot be reached from some regions.
 - Only when **no place answers**: offline (or offline for days after 24 h); if any place refused, unconfirmed.
+- A service has fallback addresses of its own (`alt` in `probe/services.json`: usually `robots.txt` and the front page,
+  or an API host for a few). They are tried only when the usual URL refuses or times out, and any one answering makes
+  the service online. A fallback must belong to the same service; never measure one company through another's host.
 - A source older than **20 minutes** (two missed 10-minute rounds) → **data is stale**; every source stale or
   missing → **cannot judge**. Grey, never red.
 
@@ -57,7 +60,8 @@ another service's page.
 ## Data flow
 
 1. `probe/` runs every 10 minutes on each machine and writes `latest.json` (plus `days/`) with per-service `t`, `h`,
-   `up24`, `up7`, `out`.
+   `up24`, `up7`, `out`. The probe tries the service's usual URL first and its own `alt` addresses only when that is
+   not a definite answer (see above).
 2. `src/worker.js` fetches Tokyo and Shanghai (`PROBE_TOKYO_URL`, `PROBE_SHANGHAI_URL`; no default — set them in the
    deployment, never in this repository), trims them with
    `src/data.mjs` (published ids, last 144 samples only), caches 60 s, and keeps the last good copy for a week. If both

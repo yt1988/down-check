@@ -50,6 +50,21 @@ const PROBE = {
 // brand spellings the source list names by their product instead
 const DISPLAY = { mistral: "Mistral" };
 
+// The probe asks one small URL per service. When that URL refuses or times out, it tries these in order, so a blocked
+// favicon or a challenge page on the front page is not reported as a service problem. The default fallbacks are the
+// same host's robots.txt and front page; a few services need a host that does not challenge datacenter addresses.
+const ALT = {
+  mistral: ["https://api.mistral.ai/v1/models"],
+  bahamut: ["https://ani.gamer.com.tw/robots.txt"],
+  telegram: ["https://telegram.org/", "https://web.telegram.org/"],
+};
+const altsFor = (id, site, probe) => {
+  if (ALT[id]) return ALT[id].filter(u => u !== probe);
+  let origin;
+  try { origin = new URL(site).origin; } catch { return []; }
+  return [...new Set([origin + "/robots.txt", origin + "/"])].filter(u => u !== probe);
+};
+
 // the five regional services without `only`
 const NO_ONLY = { tvb: "hk", bahamut: "tw", skygo: "uk", joyn: "eu", skyde: "eu" };
 // unlock ids that become a different page from the baseline id they collide with
@@ -67,7 +82,8 @@ const hostOf = u => { try { return new URL(u).host; } catch { return u; } };
 for (const s of baseline) {
   const cat = s.pack ? PACK_REGION[s.pack] : s.cat;
   if (!cat || (!GLOBAL.includes(cat) && !REGIONS.includes(cat))) throw new Error(`no group for ${s.id} (${s.cat}/${s.pack})`);
-  add({ id: s.id, name: s.name, names: s.names || null, cat, site: new URL(s.url).origin + "/", probe: s.url });
+  const site = new URL(s.url).origin + "/";
+  add({ id: s.id, name: s.name, names: s.names || null, cat, site, probe: s.url, alt: altsFor(s.id, site, s.url) });
 }
 for (const s of unlock) {
   if (byId.has(s.id) || MERGE_INTO[s.id]) continue;
@@ -76,7 +92,7 @@ for (const s of unlock) {
   const cat = region || (GLOBAL.includes(s.cat) ? s.cat : "video");
   const base = s.site.endsWith("/") ? s.site : s.site + "/";
   const probe = PROBE[id] || new URL("favicon.ico", base).href;
-  add({ id, name: DISPLAY[id] || s.name, names: NAMES[id] || null, cat, site: s.site, probe });
+  add({ id, name: DISPLAY[id] || s.name, names: NAMES[id] || null, cat, site: s.site, probe, alt: altsFor(id, s.site, probe) });
 }
 
 const CATS = [...GLOBAL, ...REGIONS].map(id => ({ id }));
@@ -95,7 +111,8 @@ export const CATS = ${JSON.stringify(CATS, null, 2)};
 export const SERVICES = [
 ${out.map(s => {
   const names = s.names ? `, names: ${JSON.stringify(s.names)}` : "";
-  return `  { id: ${JSON.stringify(s.id)}, name: ${JSON.stringify(s.name)}${names}, cat: ${JSON.stringify(s.cat)}, site: ${JSON.stringify(s.site)}, probe: ${JSON.stringify(s.probe)} },`;
+  const alt = s.alt && s.alt.length ? `, alt: ${JSON.stringify(s.alt)}` : "";
+  return `  { id: ${JSON.stringify(s.id)}, name: ${JSON.stringify(s.name)}${names}, cat: ${JSON.stringify(s.cat)}, site: ${JSON.stringify(s.site)}, probe: ${JSON.stringify(s.probe)}${alt} },`;
 }).join("\n")}
 ];
 
@@ -105,7 +122,7 @@ export const byCat = cat => SERVICES.filter(s => s.cat === cat);
 writeFileSync(new URL("../src/services.mjs", import.meta.url), js);
 
 mkdirSync(new URL("../probe/", import.meta.url), { recursive: true });
-const probe = out.map(s => ({ id: s.id, url: s.probe }));
+const probe = out.map(s => (s.alt && s.alt.length ? { id: s.id, url: s.probe, alt: s.alt } : { id: s.id, url: s.probe }));
 writeFileSync(new URL("../probe/services.json", import.meta.url), JSON.stringify(probe, null, 1) + "\n");
 
 const counts = {};

@@ -120,6 +120,39 @@ func TestOutcomeClassification(t *testing.T) {
 	}
 }
 
+func TestFallbackTarget(t *testing.T) {
+	good := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(200)
+	}))
+	defer good.Close()
+	blocked := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(403)
+	}))
+	defer blocked.Close()
+	ctx := context.Background()
+
+	// a blocked usual path, but the service answers on its fallback
+	s, _ := measureAny(ctx, target{URL: blocked.URL, Alt: []string{good.URL}}, 2*time.Second)
+	if s == nil || !s.OK {
+		t.Fatalf("fallback answer must count as up: %+v", s)
+	}
+	// a connection failure on the usual path, but the fallback answers
+	s, _ = measureAny(ctx, target{URL: "http://127.0.0.1:1/", Alt: []string{good.URL}}, 2*time.Second)
+	if s == nil || !s.OK {
+		t.Fatalf("fallback answer after a failed path must count as up: %+v", s)
+	}
+	// every path refuses: still unconfirmed, never down
+	s, _ = measureAny(ctx, target{URL: blocked.URL, Alt: []string{blocked.URL + "/robots.txt"}}, 2*time.Second)
+	if s == nil || !s.Unknown || s.OK {
+		t.Fatalf("all refusals must stay unconfirmed: %+v", s)
+	}
+	// the fallback is not requested when the usual path already answered
+	s, _ = measureAny(ctx, target{URL: good.URL, Alt: []string{blocked.URL}}, 2*time.Second)
+	if s == nil || !s.OK {
+		t.Fatalf("primary answer: %+v", s)
+	}
+}
+
 func TestErrKind(t *testing.T) {
 	for in, want := range map[string]string{
 		"context deadline exceeded":          "timeout",

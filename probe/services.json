@@ -1,842 +1,1676 @@
 [
  {
   "id": "chatgpt",
-  "url": "https://chatgpt.com/cdn-cgi/trace"
+  "url": "https://chatgpt.com/cdn-cgi/trace",
+  "alt": [
+   "https://chatgpt.com/robots.txt",
+   "https://chatgpt.com/"
+  ]
  },
  {
   "id": "claude",
-  "url": "https://claude.ai/cdn-cgi/trace"
+  "url": "https://claude.ai/cdn-cgi/trace",
+  "alt": [
+   "https://claude.ai/robots.txt",
+   "https://claude.ai/"
+  ]
  },
  {
   "id": "gemini",
-  "url": "https://gemini.google.com/generate_204"
+  "url": "https://gemini.google.com/generate_204",
+  "alt": [
+   "https://gemini.google.com/robots.txt",
+   "https://gemini.google.com/"
+  ]
  },
  {
   "id": "copilot",
-  "url": "https://copilot.microsoft.com/cdn-cgi/trace"
+  "url": "https://copilot.microsoft.com/cdn-cgi/trace",
+  "alt": [
+   "https://copilot.microsoft.com/robots.txt",
+   "https://copilot.microsoft.com/"
+  ]
  },
  {
   "id": "grok",
-  "url": "https://grok.com/cdn-cgi/trace"
+  "url": "https://grok.com/cdn-cgi/trace",
+  "alt": [
+   "https://grok.com/robots.txt",
+   "https://grok.com/"
+  ]
  },
  {
   "id": "deepseek",
-  "url": "https://fe-static.deepseek.com/chat/favicon.svg"
+  "url": "https://fe-static.deepseek.com/chat/favicon.svg",
+  "alt": [
+   "https://fe-static.deepseek.com/robots.txt",
+   "https://fe-static.deepseek.com/"
+  ]
  },
  {
   "id": "google",
-  "url": "https://www.google.com/generate_204"
+  "url": "https://www.google.com/generate_204",
+  "alt": [
+   "https://www.google.com/robots.txt",
+   "https://www.google.com/"
+  ]
  },
  {
   "id": "apple",
-  "url": "https://www.apple.com/favicon.ico"
+  "url": "https://www.apple.com/favicon.ico",
+  "alt": [
+   "https://www.apple.com/robots.txt",
+   "https://www.apple.com/"
+  ]
  },
  {
   "id": "microsoft",
-  "url": "https://www.microsoft.com/favicon.ico"
+  "url": "https://www.microsoft.com/favicon.ico",
+  "alt": [
+   "https://www.microsoft.com/robots.txt",
+   "https://www.microsoft.com/"
+  ]
  },
  {
   "id": "wikipedia",
-  "url": "https://upload.wikimedia.org/favicon.ico"
+  "url": "https://upload.wikimedia.org/favicon.ico",
+  "alt": [
+   "https://upload.wikimedia.org/robots.txt",
+   "https://upload.wikimedia.org/"
+  ]
  },
  {
   "id": "amazon",
-  "url": "https://www.amazon.com/favicon.ico"
+  "url": "https://www.amazon.com/favicon.ico",
+  "alt": [
+   "https://www.amazon.com/robots.txt",
+   "https://www.amazon.com/"
+  ]
  },
  {
   "id": "zoom",
-  "url": "https://zoom.us/cdn-cgi/trace"
+  "url": "https://zoom.us/cdn-cgi/trace",
+  "alt": [
+   "https://zoom.us/robots.txt",
+   "https://zoom.us/"
+  ]
  },
  {
   "id": "youtube",
-  "url": "https://www.youtube.com/generate_204"
+  "url": "https://www.youtube.com/generate_204",
+  "alt": [
+   "https://www.youtube.com/robots.txt",
+   "https://www.youtube.com/"
+  ]
  },
  {
   "id": "netflix",
-  "url": "https://www.netflix.com/favicon.ico"
+  "url": "https://www.netflix.com/favicon.ico",
+  "alt": [
+   "https://www.netflix.com/robots.txt",
+   "https://www.netflix.com/"
+  ]
  },
  {
   "id": "tiktok",
-  "url": "https://www.tiktok.com/favicon.ico"
+  "url": "https://www.tiktok.com/favicon.ico",
+  "alt": [
+   "https://www.tiktok.com/robots.txt",
+   "https://www.tiktok.com/"
+  ]
  },
  {
   "id": "twitch",
-  "url": "https://www.twitch.tv/favicon.ico"
+  "url": "https://www.twitch.tv/favicon.ico",
+  "alt": [
+   "https://www.twitch.tv/robots.txt",
+   "https://www.twitch.tv/"
+  ]
  },
  {
   "id": "spotify",
-  "url": "https://open.spotify.com/favicon.ico"
+  "url": "https://open.spotify.com/favicon.ico",
+  "alt": [
+   "https://open.spotify.com/robots.txt",
+   "https://open.spotify.com/"
+  ]
  },
  {
   "id": "x",
-  "url": "https://abs.twimg.com/favicons/twitter.3.ico"
+  "url": "https://abs.twimg.com/favicons/twitter.3.ico",
+  "alt": [
+   "https://abs.twimg.com/robots.txt",
+   "https://abs.twimg.com/"
+  ]
  },
  {
   "id": "instagram",
-  "url": "https://scontent.cdninstagram.com/"
+  "url": "https://scontent.cdninstagram.com/",
+  "alt": [
+   "https://scontent.cdninstagram.com/robots.txt"
+  ]
  },
  {
   "id": "facebook",
-  "url": "https://www.facebook.com/favicon.ico"
+  "url": "https://www.facebook.com/favicon.ico",
+  "alt": [
+   "https://www.facebook.com/robots.txt",
+   "https://www.facebook.com/"
+  ]
  },
  {
   "id": "whatsapp",
-  "url": "https://web.whatsapp.com/favicon.ico"
+  "url": "https://web.whatsapp.com/favicon.ico",
+  "alt": [
+   "https://web.whatsapp.com/robots.txt",
+   "https://web.whatsapp.com/"
+  ]
  },
  {
   "id": "telegram",
-  "url": "https://venus.web.telegram.org/apiw1"
+  "url": "https://venus.web.telegram.org/apiw1",
+  "alt": [
+   "https://telegram.org/",
+   "https://web.telegram.org/"
+  ]
  },
  {
   "id": "discord",
-  "url": "https://discord.com/cdn-cgi/trace"
+  "url": "https://discord.com/cdn-cgi/trace",
+  "alt": [
+   "https://discord.com/robots.txt",
+   "https://discord.com/"
+  ]
  },
  {
   "id": "reddit",
-  "url": "https://www.reddit.com/robots.txt"
+  "url": "https://www.reddit.com/robots.txt",
+  "alt": [
+   "https://www.reddit.com/"
+  ]
  },
  {
   "id": "github",
-  "url": "https://github.com/favicon.ico"
+  "url": "https://github.com/favicon.ico",
+  "alt": [
+   "https://github.com/robots.txt",
+   "https://github.com/"
+  ]
  },
  {
   "id": "npm",
-  "url": "https://registry.npmjs.org/-/ping"
+  "url": "https://registry.npmjs.org/-/ping",
+  "alt": [
+   "https://registry.npmjs.org/robots.txt",
+   "https://registry.npmjs.org/"
+  ]
  },
  {
   "id": "dockerhub",
-  "url": "https://registry-1.docker.io/v2/"
+  "url": "https://registry-1.docker.io/v2/",
+  "alt": [
+   "https://registry-1.docker.io/robots.txt",
+   "https://registry-1.docker.io/"
+  ]
  },
  {
   "id": "pypi",
-  "url": "https://pypi.org/static/images/favicon.35549fe8.ico"
+  "url": "https://pypi.org/static/images/favicon.35549fe8.ico",
+  "alt": [
+   "https://pypi.org/robots.txt",
+   "https://pypi.org/"
+  ]
  },
  {
   "id": "huggingface",
-  "url": "https://huggingface.co/favicon.ico"
+  "url": "https://huggingface.co/favicon.ico",
+  "alt": [
+   "https://huggingface.co/robots.txt",
+   "https://huggingface.co/"
+  ]
  },
  {
   "id": "steam",
-  "url": "https://store.steampowered.com/favicon.ico"
+  "url": "https://store.steampowered.com/favicon.ico",
+  "alt": [
+   "https://store.steampowered.com/robots.txt",
+   "https://store.steampowered.com/"
+  ]
  },
  {
   "id": "playstation",
-  "url": "https://www.playstation.com/favicon.ico"
+  "url": "https://www.playstation.com/favicon.ico",
+  "alt": [
+   "https://www.playstation.com/robots.txt",
+   "https://www.playstation.com/"
+  ]
  },
  {
   "id": "xbox",
-  "url": "https://www.xbox.com/favicon.ico"
+  "url": "https://www.xbox.com/favicon.ico",
+  "alt": [
+   "https://www.xbox.com/robots.txt",
+   "https://www.xbox.com/"
+  ]
  },
  {
   "id": "nintendo",
-  "url": "https://www.nintendo.com/favicon.ico"
+  "url": "https://www.nintendo.com/favicon.ico",
+  "alt": [
+   "https://www.nintendo.com/robots.txt",
+   "https://www.nintendo.com/"
+  ]
  },
  {
   "id": "epic",
-  "url": "https://store.epicgames.com/cdn-cgi/trace"
+  "url": "https://store.epicgames.com/cdn-cgi/trace",
+  "alt": [
+   "https://store.epicgames.com/robots.txt",
+   "https://store.epicgames.com/"
+  ]
  },
  {
   "id": "cloudflare",
-  "url": "https://www.cloudflare.com/cdn-cgi/trace"
+  "url": "https://www.cloudflare.com/cdn-cgi/trace",
+  "alt": [
+   "https://www.cloudflare.com/robots.txt",
+   "https://www.cloudflare.com/"
+  ]
  },
  {
   "id": "akamai",
-  "url": "https://store.akamai.steamstatic.com/favicon.ico"
+  "url": "https://store.akamai.steamstatic.com/favicon.ico",
+  "alt": [
+   "https://store.akamai.steamstatic.com/robots.txt",
+   "https://store.akamai.steamstatic.com/"
+  ]
  },
  {
   "id": "cloudfront",
-  "url": "https://a0.awsstatic.com/libra-css/images/site/fav/favicon.ico"
+  "url": "https://a0.awsstatic.com/libra-css/images/site/fav/favicon.ico",
+  "alt": [
+   "https://a0.awsstatic.com/robots.txt",
+   "https://a0.awsstatic.com/"
+  ]
  },
  {
   "id": "google-cdn",
-  "url": "https://www.gstatic.com/generate_204"
+  "url": "https://www.gstatic.com/generate_204",
+  "alt": [
+   "https://www.gstatic.com/robots.txt",
+   "https://www.gstatic.com/"
+  ]
  },
  {
   "id": "fastly",
-  "url": "https://fastly.jsdelivr.net/npm/jquery@3.7.1/package.json"
+  "url": "https://fastly.jsdelivr.net/npm/jquery@3.7.1/package.json",
+  "alt": [
+   "https://fastly.jsdelivr.net/robots.txt",
+   "https://fastly.jsdelivr.net/"
+  ]
  },
  {
   "id": "azure",
-  "url": "https://assets.xboxservices.com/assets/f8/67/f86740d7-eedd-4d9c-a963-76af7e36c4b2.svg?n=Xbox-Follow-Footer_Image-0_Mail_32x32_02.svg"
+  "url": "https://assets.xboxservices.com/assets/f8/67/f86740d7-eedd-4d9c-a963-76af7e36c4b2.svg?n=Xbox-Follow-Footer_Image-0_Mail_32x32_02.svg",
+  "alt": [
+   "https://assets.xboxservices.com/robots.txt",
+   "https://assets.xboxservices.com/"
+  ]
  },
  {
   "id": "baidu",
-  "url": "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
+  "url": "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
+  "alt": [
+   "https://www.baidu.com/robots.txt",
+   "https://www.baidu.com/"
+  ]
  },
  {
   "id": "bilibili",
-  "url": "https://www.bilibili.com/favicon.ico"
+  "url": "https://www.bilibili.com/favicon.ico",
+  "alt": [
+   "https://www.bilibili.com/robots.txt",
+   "https://www.bilibili.com/"
+  ]
  },
  {
   "id": "wechat",
-  "url": "https://weixin.qq.com/favicon.ico"
+  "url": "https://weixin.qq.com/favicon.ico",
+  "alt": [
+   "https://weixin.qq.com/robots.txt",
+   "https://weixin.qq.com/"
+  ]
  },
  {
   "id": "douyin",
-  "url": "https://lf1-cdn-tos.bytegoofy.com/goofy/ies/douyin_web/public/favicon.ico"
+  "url": "https://lf1-cdn-tos.bytegoofy.com/goofy/ies/douyin_web/public/favicon.ico",
+  "alt": [
+   "https://lf1-cdn-tos.bytegoofy.com/robots.txt",
+   "https://lf1-cdn-tos.bytegoofy.com/"
+  ]
  },
  {
   "id": "yahoo-tw",
-  "url": "https://tw.yahoo.com/favicon.ico"
+  "url": "https://tw.yahoo.com/favicon.ico",
+  "alt": [
+   "https://tw.yahoo.com/robots.txt",
+   "https://tw.yahoo.com/"
+  ]
  },
  {
   "id": "line",
-  "url": "https://line.me/favicon.ico"
+  "url": "https://line.me/favicon.ico",
+  "alt": [
+   "https://line.me/robots.txt",
+   "https://line.me/"
+  ]
  },
  {
   "id": "ettoday",
-  "url": "https://www.ettoday.net/favicon.ico"
+  "url": "https://www.ettoday.net/favicon.ico",
+  "alt": [
+   "https://www.ettoday.net/robots.txt",
+   "https://www.ettoday.net/"
+  ]
  },
  {
   "id": "ptt",
-  "url": "https://www.ptt.cc/cdn-cgi/trace"
+  "url": "https://www.ptt.cc/cdn-cgi/trace",
+  "alt": [
+   "https://www.ptt.cc/robots.txt",
+   "https://www.ptt.cc/"
+  ]
  },
  {
   "id": "yahoo-jp",
-  "url": "https://www.yahoo.co.jp/favicon.ico"
+  "url": "https://www.yahoo.co.jp/favicon.ico",
+  "alt": [
+   "https://www.yahoo.co.jp/robots.txt",
+   "https://www.yahoo.co.jp/"
+  ]
  },
  {
   "id": "rakuten",
-  "url": "https://www.rakuten.co.jp/favicon.ico"
+  "url": "https://www.rakuten.co.jp/favicon.ico",
+  "alt": [
+   "https://www.rakuten.co.jp/robots.txt",
+   "https://www.rakuten.co.jp/"
+  ]
  },
  {
   "id": "niconico",
-  "url": "https://resource.video.nimg.jp/web/images/favicon_uni/favicon.ico"
+  "url": "https://resource.video.nimg.jp/web/images/favicon_uni/favicon.ico",
+  "alt": [
+   "https://resource.video.nimg.jp/robots.txt",
+   "https://resource.video.nimg.jp/"
+  ]
  },
  {
   "id": "naver",
-  "url": "https://s.pstatic.net/static/www/u/2014/0328/mma_204243574.png"
+  "url": "https://s.pstatic.net/static/www/u/2014/0328/mma_204243574.png",
+  "alt": [
+   "https://s.pstatic.net/robots.txt",
+   "https://s.pstatic.net/"
+  ]
  },
  {
   "id": "kakao",
-  "url": "https://www.kakaocorp.com/robots.txt"
+  "url": "https://www.kakaocorp.com/robots.txt",
+  "alt": [
+   "https://www.kakaocorp.com/"
+  ]
  },
  {
   "id": "coupang",
-  "url": "https://image7.coupangcdn.com/image/coupang/favicon/v2/favicon.ico"
+  "url": "https://image7.coupangcdn.com/image/coupang/favicon/v2/favicon.ico",
+  "alt": [
+   "https://image7.coupangcdn.com/robots.txt",
+   "https://image7.coupangcdn.com/"
+  ]
  },
  {
   "id": "daum",
-  "url": "https://www.daum.net/favicon.ico"
+  "url": "https://www.daum.net/favicon.ico",
+  "alt": [
+   "https://www.daum.net/robots.txt",
+   "https://www.daum.net/"
+  ]
  },
  {
   "id": "yandex",
-  "url": "https://yandex.ru/favicon.ico"
+  "url": "https://yandex.ru/favicon.ico",
+  "alt": [
+   "https://yandex.ru/robots.txt",
+   "https://yandex.ru/"
+  ]
  },
  {
   "id": "vk",
-  "url": "https://vk.com/favicon.ico"
+  "url": "https://vk.com/favicon.ico",
+  "alt": [
+   "https://vk.com/robots.txt",
+   "https://vk.com/"
+  ]
  },
  {
   "id": "wildberries",
-  "url": "https://www.wildberries.ru/favicon.ico"
+  "url": "https://www.wildberries.ru/favicon.ico",
+  "alt": [
+   "https://www.wildberries.ru/robots.txt",
+   "https://www.wildberries.ru/"
+  ]
  },
  {
   "id": "mailru",
-  "url": "https://mail.ru/favicon.ico"
+  "url": "https://mail.ru/favicon.ico",
+  "alt": [
+   "https://mail.ru/robots.txt",
+   "https://mail.ru/"
+  ]
  },
  {
   "id": "flipkart",
-  "url": "https://static-assets-web.flixcart.com/favicon.ico"
+  "url": "https://static-assets-web.flixcart.com/favicon.ico",
+  "alt": [
+   "https://static-assets-web.flixcart.com/robots.txt",
+   "https://static-assets-web.flixcart.com/"
+  ]
  },
  {
   "id": "hotstar",
-  "url": "https://img.hotstar.com/image/upload/v1711625492/feature/rebranding/disney-plus-favicon.ico"
+  "url": "https://img.hotstar.com/image/upload/v1711625492/feature/rebranding/disney-plus-favicon.ico",
+  "alt": [
+   "https://img.hotstar.com/robots.txt",
+   "https://img.hotstar.com/"
+  ]
  },
  {
   "id": "paytm",
-  "url": "https://paytm.com/favicon.ico"
+  "url": "https://paytm.com/favicon.ico",
+  "alt": [
+   "https://paytm.com/robots.txt",
+   "https://paytm.com/"
+  ]
  },
  {
   "id": "amazon-in",
-  "url": "https://www.amazon.in/favicon.ico"
+  "url": "https://www.amazon.in/favicon.ico",
+  "alt": [
+   "https://www.amazon.in/robots.txt",
+   "https://www.amazon.in/"
+  ]
  },
  {
   "id": "shopee",
-  "url": "https://shopee.sg/favicon.ico"
+  "url": "https://shopee.sg/favicon.ico",
+  "alt": [
+   "https://shopee.sg/robots.txt",
+   "https://shopee.sg/"
+  ]
  },
  {
   "id": "lazada",
-  "url": "https://laz-img-cdn.alicdn.com/tfs/TB1PApewFT7gK0jSZFpXXaTkpXa-200-200.png"
+  "url": "https://laz-img-cdn.alicdn.com/tfs/TB1PApewFT7gK0jSZFpXXaTkpXa-200-200.png",
+  "alt": [
+   "https://laz-img-cdn.alicdn.com/robots.txt",
+   "https://laz-img-cdn.alicdn.com/"
+  ]
  },
  {
   "id": "grab",
-  "url": "https://assets.grab.com/wp-content/uploads/media/footer/AppStore.png"
+  "url": "https://assets.grab.com/wp-content/uploads/media/footer/AppStore.png",
+  "alt": [
+   "https://assets.grab.com/robots.txt",
+   "https://assets.grab.com/"
+  ]
  },
  {
   "id": "bbc",
-  "url": "https://www.bbc.co.uk/favicon.ico"
+  "url": "https://www.bbc.co.uk/favicon.ico",
+  "alt": [
+   "https://www.bbc.co.uk/robots.txt",
+   "https://www.bbc.co.uk/"
+  ]
  },
  {
   "id": "booking",
-  "url": "https://www.booking.com/robots.txt"
+  "url": "https://www.booking.com/robots.txt",
+  "alt": [
+   "https://www.booking.com/"
+  ]
  },
  {
   "id": "zalando",
-  "url": "https://www.zalando.com/favicon.ico"
+  "url": "https://www.zalando.com/favicon.ico",
+  "alt": [
+   "https://www.zalando.com/robots.txt",
+   "https://www.zalando.com/"
+  ]
  },
  {
   "id": "allegro",
-  "url": "https://allegro.pl/favicon.ico"
+  "url": "https://allegro.pl/favicon.ico",
+  "alt": [
+   "https://allegro.pl/robots.txt",
+   "https://allegro.pl/"
+  ]
  },
  {
   "id": "mercadolibre",
-  "url": "https://www.mercadolibre.com/favicon.ico"
+  "url": "https://www.mercadolibre.com/favicon.ico",
+  "alt": [
+   "https://www.mercadolibre.com/robots.txt",
+   "https://www.mercadolibre.com/"
+  ]
  },
  {
   "id": "globo",
-  "url": "https://www.globo.com/favicon.ico"
+  "url": "https://www.globo.com/favicon.ico",
+  "alt": [
+   "https://www.globo.com/robots.txt",
+   "https://www.globo.com/"
+  ]
  },
  {
   "id": "nubank",
-  "url": "https://nubank.com.br/favicon.ico"
+  "url": "https://nubank.com.br/favicon.ico",
+  "alt": [
+   "https://nubank.com.br/robots.txt",
+   "https://nubank.com.br/"
+  ]
  },
  {
   "id": "ifood",
-  "url": "https://www.ifood.com.br/cdn-cgi/trace"
+  "url": "https://www.ifood.com.br/cdn-cgi/trace",
+  "alt": [
+   "https://www.ifood.com.br/robots.txt",
+   "https://www.ifood.com.br/"
+  ]
  },
  {
   "id": "espn",
-  "url": "https://www.espn.com/favicon.ico"
+  "url": "https://www.espn.com/favicon.ico",
+  "alt": [
+   "https://www.espn.com/robots.txt",
+   "https://www.espn.com/"
+  ]
  },
  {
   "id": "disneyplus",
-  "url": "https://www.disneyplus.com/favicon.ico"
+  "url": "https://www.disneyplus.com/favicon.ico",
+  "alt": [
+   "https://www.disneyplus.com/robots.txt",
+   "https://www.disneyplus.com/"
+  ]
  },
  {
   "id": "yahoo",
-  "url": "https://www.yahoo.com/favicon.ico"
+  "url": "https://www.yahoo.com/favicon.ico",
+  "alt": [
+   "https://www.yahoo.com/robots.txt",
+   "https://www.yahoo.com/"
+  ]
  },
  {
   "id": "target",
-  "url": "https://www.target.com/favicon.ico"
+  "url": "https://www.target.com/favicon.ico",
+  "alt": [
+   "https://www.target.com/robots.txt",
+   "https://www.target.com/"
+  ]
  },
  {
   "id": "talabat",
-  "url": "https://www.talabat.com/cdn-cgi/trace"
+  "url": "https://www.talabat.com/cdn-cgi/trace",
+  "alt": [
+   "https://www.talabat.com/robots.txt",
+   "https://www.talabat.com/"
+  ]
  },
  {
   "id": "careem",
-  "url": "https://www.careem.com/cdn-cgi/trace"
+  "url": "https://www.careem.com/cdn-cgi/trace",
+  "alt": [
+   "https://www.careem.com/robots.txt",
+   "https://www.careem.com/"
+  ]
  },
  {
   "id": "aljazeera",
-  "url": "https://www.aljazeera.com/favicon_aje.ico"
+  "url": "https://www.aljazeera.com/favicon_aje.ico",
+  "alt": [
+   "https://www.aljazeera.com/robots.txt",
+   "https://www.aljazeera.com/"
+  ]
  },
  {
   "id": "trendyol",
-  "url": "https://www.trendyol.com/cdn-cgi/trace"
+  "url": "https://www.trendyol.com/cdn-cgi/trace",
+  "alt": [
+   "https://www.trendyol.com/robots.txt",
+   "https://www.trendyol.com/"
+  ]
  },
  {
   "id": "perplexity",
-  "url": "https://www.perplexity.ai/favicon.ico"
+  "url": "https://www.perplexity.ai/favicon.ico",
+  "alt": [
+   "https://www.perplexity.ai/robots.txt",
+   "https://www.perplexity.ai/"
+  ]
  },
  {
   "id": "mistral",
-  "url": "https://chat.mistral.ai/favicon.ico"
+  "url": "https://chat.mistral.ai/favicon.ico",
+  "alt": [
+   "https://api.mistral.ai/v1/models"
+  ]
  },
  {
   "id": "poe",
-  "url": "https://poe.com/favicon.ico"
+  "url": "https://poe.com/favicon.ico",
+  "alt": [
+   "https://poe.com/robots.txt",
+   "https://poe.com/"
+  ]
  },
  {
   "id": "characterai",
-  "url": "https://character.ai/favicon.ico"
+  "url": "https://character.ai/favicon.ico",
+  "alt": [
+   "https://character.ai/robots.txt",
+   "https://character.ai/"
+  ]
  },
  {
   "id": "metaai",
-  "url": "https://www.meta.ai/favicon.ico"
+  "url": "https://www.meta.ai/favicon.ico",
+  "alt": [
+   "https://www.meta.ai/robots.txt",
+   "https://www.meta.ai/"
+  ]
  },
  {
   "id": "dazn",
-  "url": "https://www.dazn.com/favicon.ico"
+  "url": "https://www.dazn.com/favicon.ico",
+  "alt": [
+   "https://www.dazn.com/robots.txt",
+   "https://www.dazn.com/"
+  ]
  },
  {
   "id": "crunchyroll",
-  "url": "https://www.crunchyroll.com/favicon.ico"
+  "url": "https://www.crunchyroll.com/favicon.ico",
+  "alt": [
+   "https://www.crunchyroll.com/robots.txt",
+   "https://www.crunchyroll.com/"
+  ]
  },
  {
   "id": "peacock",
-  "url": "https://www.peacocktv.com/favicon.ico"
+  "url": "https://www.peacocktv.com/favicon.ico",
+  "alt": [
+   "https://www.peacocktv.com/robots.txt",
+   "https://www.peacocktv.com/"
+  ]
  },
  {
   "id": "philo",
-  "url": "https://www.philo.com/favicon.ico"
+  "url": "https://www.philo.com/favicon.ico",
+  "alt": [
+   "https://www.philo.com/robots.txt",
+   "https://www.philo.com/"
+  ]
  },
  {
   "id": "nbc",
-  "url": "https://www.nbc.com/favicon.ico"
+  "url": "https://www.nbc.com/favicon.ico",
+  "alt": [
+   "https://www.nbc.com/robots.txt",
+   "https://www.nbc.com/"
+  ]
  },
  {
   "id": "shudder",
-  "url": "https://www.shudder.com/favicon.ico"
+  "url": "https://www.shudder.com/favicon.ico",
+  "alt": [
+   "https://www.shudder.com/robots.txt",
+   "https://www.shudder.com/"
+  ]
  },
  {
   "id": "bein",
-  "url": "https://connect.beinsports.com/favicon.ico"
+  "url": "https://connect.beinsports.com/favicon.ico",
+  "alt": [
+   "https://connect.beinsports.com/robots.txt",
+   "https://connect.beinsports.com/"
+  ]
  },
  {
   "id": "primevideo",
-  "url": "https://www.primevideo.com/favicon.ico"
+  "url": "https://www.primevideo.com/favicon.ico",
+  "alt": [
+   "https://www.primevideo.com/robots.txt",
+   "https://www.primevideo.com/"
+  ]
  },
  {
   "id": "appletv",
-  "url": "https://tv.apple.com/favicon.ico"
+  "url": "https://tv.apple.com/favicon.ico",
+  "alt": [
+   "https://tv.apple.com/robots.txt",
+   "https://tv.apple.com/"
+  ]
  },
  {
   "id": "max",
-  "url": "https://www.hbomax.com/favicon.ico"
+  "url": "https://www.hbomax.com/favicon.ico",
+  "alt": [
+   "https://www.hbomax.com/robots.txt",
+   "https://www.hbomax.com/"
+  ]
  },
  {
   "id": "hulu",
-  "url": "https://www.hulu.com/favicon.ico"
+  "url": "https://www.hulu.com/favicon.ico",
+  "alt": [
+   "https://www.hulu.com/robots.txt",
+   "https://www.hulu.com/"
+  ]
  },
  {
   "id": "paramount",
-  "url": "https://www.paramountplus.com/favicon.ico"
+  "url": "https://www.paramountplus.com/favicon.ico",
+  "alt": [
+   "https://www.paramountplus.com/robots.txt",
+   "https://www.paramountplus.com/"
+  ]
  },
  {
   "id": "tubi",
-  "url": "https://tubitv.com/favicon.ico"
+  "url": "https://tubitv.com/favicon.ico",
+  "alt": [
+   "https://tubitv.com/robots.txt",
+   "https://tubitv.com/"
+  ]
  },
  {
   "id": "pluto",
-  "url": "https://pluto.tv/favicon.ico"
+  "url": "https://pluto.tv/favicon.ico",
+  "alt": [
+   "https://pluto.tv/robots.txt",
+   "https://pluto.tv/"
+  ]
  },
  {
   "id": "fubo",
-  "url": "https://www.fubo.tv/favicon.ico"
+  "url": "https://www.fubo.tv/favicon.ico",
+  "alt": [
+   "https://www.fubo.tv/robots.txt",
+   "https://www.fubo.tv/"
+  ]
  },
  {
   "id": "viu",
-  "url": "https://www.viu.com/favicon.ico"
+  "url": "https://www.viu.com/favicon.ico",
+  "alt": [
+   "https://www.viu.com/robots.txt",
+   "https://www.viu.com/"
+  ]
  },
  {
   "id": "viki",
-  "url": "https://www.viki.com/favicon.ico"
+  "url": "https://www.viki.com/favicon.ico",
+  "alt": [
+   "https://www.viki.com/robots.txt",
+   "https://www.viki.com/"
+  ]
  },
  {
   "id": "bilibilitv",
-  "url": "https://www.bilibili.tv/favicon.ico"
+  "url": "https://www.bilibili.tv/favicon.ico",
+  "alt": [
+   "https://www.bilibili.tv/robots.txt",
+   "https://www.bilibili.tv/"
+  ]
  },
  {
   "id": "viaplay",
-  "url": "https://viaplay.com/favicon.ico"
+  "url": "https://viaplay.com/favicon.ico",
+  "alt": [
+   "https://viaplay.com/robots.txt",
+   "https://viaplay.com/"
+  ]
  },
  {
   "id": "skyshowtime",
-  "url": "https://www.skyshowtime.com/favicon.ico"
+  "url": "https://www.skyshowtime.com/favicon.ico",
+  "alt": [
+   "https://www.skyshowtime.com/robots.txt",
+   "https://www.skyshowtime.com/"
+  ]
  },
  {
   "id": "acorn",
-  "url": "https://acorn.tv/favicon.ico"
+  "url": "https://acorn.tv/favicon.ico",
+  "alt": [
+   "https://acorn.tv/robots.txt",
+   "https://acorn.tv/"
+  ]
  },
  {
   "id": "catchplay",
-  "url": "https://www.catchplay.com/favicon.ico"
+  "url": "https://www.catchplay.com/favicon.ico",
+  "alt": [
+   "https://www.catchplay.com/robots.txt",
+   "https://www.catchplay.com/"
+  ]
  },
  {
   "id": "docplay",
-  "url": "https://www.docplay.com/favicon.ico"
+  "url": "https://www.docplay.com/favicon.ico",
+  "alt": [
+   "https://www.docplay.com/robots.txt",
+   "https://www.docplay.com/"
+  ]
  },
  {
   "id": "nowtv",
-  "url": "https://www.nowtv.com/favicon.ico"
+  "url": "https://www.nowtv.com/favicon.ico",
+  "alt": [
+   "https://www.nowtv.com/robots.txt",
+   "https://www.nowtv.com/"
+  ]
  },
  {
   "id": "pandora",
-  "url": "https://www.pandora.com/favicon.ico"
+  "url": "https://www.pandora.com/favicon.ico",
+  "alt": [
+   "https://www.pandora.com/robots.txt",
+   "https://www.pandora.com/"
+  ]
  },
  {
   "id": "deezer",
-  "url": "https://www.deezer.com/favicon.ico"
+  "url": "https://www.deezer.com/favicon.ico",
+  "alt": [
+   "https://www.deezer.com/robots.txt",
+   "https://www.deezer.com/"
+  ]
  },
  {
   "id": "soundcloud",
-  "url": "https://soundcloud.com/favicon.ico"
+  "url": "https://soundcloud.com/favicon.ico",
+  "alt": [
+   "https://soundcloud.com/robots.txt",
+   "https://soundcloud.com/"
+  ]
  },
  {
   "id": "messenger",
-  "url": "https://www.messenger.com/favicon.ico"
+  "url": "https://www.messenger.com/favicon.ico",
+  "alt": [
+   "https://www.messenger.com/robots.txt",
+   "https://www.messenger.com/"
+  ]
  },
  {
   "id": "threads",
-  "url": "https://www.threads.com/favicon.ico"
+  "url": "https://www.threads.com/favicon.ico",
+  "alt": [
+   "https://www.threads.com/robots.txt",
+   "https://www.threads.com/"
+  ]
  },
  {
   "id": "signal",
-  "url": "https://signal.org/favicon.ico"
+  "url": "https://signal.org/favicon.ico",
+  "alt": [
+   "https://signal.org/robots.txt",
+   "https://signal.org/"
+  ]
  },
  {
   "id": "snapchat",
-  "url": "https://www.snapchat.com/favicon.ico"
+  "url": "https://www.snapchat.com/favicon.ico",
+  "alt": [
+   "https://www.snapchat.com/robots.txt",
+   "https://www.snapchat.com/"
+  ]
  },
  {
   "id": "pinterest",
-  "url": "https://www.pinterest.com/favicon.ico"
+  "url": "https://www.pinterest.com/favicon.ico",
+  "alt": [
+   "https://www.pinterest.com/robots.txt",
+   "https://www.pinterest.com/"
+  ]
  },
  {
   "id": "roblox",
-  "url": "https://www.roblox.com/favicon.ico"
+  "url": "https://www.roblox.com/favicon.ico",
+  "alt": [
+   "https://www.roblox.com/robots.txt",
+   "https://www.roblox.com/"
+  ]
  },
  {
   "id": "kktv",
-  "url": "https://www.kktv.me/favicon.ico"
+  "url": "https://www.kktv.me/favicon.ico",
+  "alt": [
+   "https://www.kktv.me/robots.txt",
+   "https://www.kktv.me/"
+  ]
  },
  {
   "id": "tvb",
-  "url": "https://www.tvbanywhere.com/favicon.ico"
+  "url": "https://www.tvbanywhere.com/favicon.ico",
+  "alt": [
+   "https://www.tvbanywhere.com/robots.txt",
+   "https://www.tvbanywhere.com/"
+  ]
  },
  {
   "id": "sbs",
-  "url": "https://www.sbs.com.au/ondemand/favicon.ico"
+  "url": "https://www.sbs.com.au/ondemand/favicon.ico",
+  "alt": [
+   "https://www.sbs.com.au/robots.txt",
+   "https://www.sbs.com.au/"
+  ]
  },
  {
   "id": "fod",
-  "url": "https://fod.fujitv.co.jp/favicon.ico"
+  "url": "https://fod.fujitv.co.jp/favicon.ico",
+  "alt": [
+   "https://fod.fujitv.co.jp/robots.txt",
+   "https://fod.fujitv.co.jp/"
+  ]
  },
  {
   "id": "dmm",
-  "url": "https://tv.dmm.com/favicon.ico"
+  "url": "https://tv.dmm.com/favicon.ico",
+  "alt": [
+   "https://tv.dmm.com/robots.txt",
+   "https://tv.dmm.com/"
+  ]
  },
  {
   "id": "zdf",
-  "url": "https://www.zdf.de/favicon.ico"
+  "url": "https://www.zdf.de/favicon.ico",
+  "alt": [
+   "https://www.zdf.de/robots.txt",
+   "https://www.zdf.de/"
+  ]
  },
  {
   "id": "nhk",
-  "url": "https://www3.nhk.or.jp/favicon.ico"
+  "url": "https://www3.nhk.or.jp/favicon.ico",
+  "alt": [
+   "https://www.nhk.or.jp/robots.txt",
+   "https://www.nhk.or.jp/"
+  ]
  },
  {
   "id": "telasa",
-  "url": "https://www.telasa.jp/favicon.ico"
+  "url": "https://www.telasa.jp/favicon.ico",
+  "alt": [
+   "https://www.telasa.jp/robots.txt",
+   "https://www.telasa.jp/"
+  ]
  },
  {
   "id": "jcom",
-  "url": "https://linkvod.myjcom.jp/favicon.ico"
+  "url": "https://linkvod.myjcom.jp/favicon.ico",
+  "alt": [
+   "https://linkvod.myjcom.jp/robots.txt",
+   "https://linkvod.myjcom.jp/"
+  ]
  },
  {
   "id": "abema",
-  "url": "https://abema.tv/favicon.ico"
+  "url": "https://abema.tv/favicon.ico",
+  "alt": [
+   "https://abema.tv/robots.txt",
+   "https://abema.tv/"
+  ]
  },
  {
   "id": "unext",
-  "url": "https://video.unext.jp/favicon.ico"
+  "url": "https://video.unext.jp/favicon.ico",
+  "alt": [
+   "https://video.unext.jp/robots.txt",
+   "https://video.unext.jp/"
+  ]
  },
  {
   "id": "tver",
-  "url": "https://tver.jp/favicon.ico"
+  "url": "https://tver.jp/favicon.ico",
+  "alt": [
+   "https://tver.jp/robots.txt",
+   "https://tver.jp/"
+  ]
  },
  {
   "id": "hulujp",
-  "url": "https://www.hulu.jp/favicon.ico"
+  "url": "https://www.hulu.jp/favicon.ico",
+  "alt": [
+   "https://www.hulu.jp/robots.txt",
+   "https://www.hulu.jp/"
+  ]
  },
  {
   "id": "lemino",
-  "url": "https://lemino.docomo.ne.jp/favicon.ico"
+  "url": "https://lemino.docomo.ne.jp/favicon.ico",
+  "alt": [
+   "https://lemino.docomo.ne.jp/robots.txt",
+   "https://lemino.docomo.ne.jp/"
+  ]
  },
  {
   "id": "danime",
-  "url": "https://animestore.docomo.ne.jp/favicon.ico"
+  "url": "https://animestore.docomo.ne.jp/favicon.ico",
+  "alt": [
+   "https://animestore.docomo.ne.jp/robots.txt",
+   "https://animestore.docomo.ne.jp/"
+  ]
  },
  {
   "id": "wowow",
-  "url": "https://www.wowow.co.jp/favicon.ico"
+  "url": "https://www.wowow.co.jp/favicon.ico",
+  "alt": [
+   "https://www.wowow.co.jp/robots.txt",
+   "https://www.wowow.co.jp/"
+  ]
  },
  {
   "id": "radiko",
-  "url": "https://radiko.jp/favicon.ico"
+  "url": "https://radiko.jp/favicon.ico",
+  "alt": [
+   "https://radiko.jp/robots.txt",
+   "https://radiko.jp/"
+  ]
  },
  {
   "id": "videomarket",
-  "url": "https://www.videomarket.jp/favicon.ico"
+  "url": "https://www.videomarket.jp/favicon.ico",
+  "alt": [
+   "https://www.videomarket.jp/robots.txt",
+   "https://www.videomarket.jp/"
+  ]
  },
  {
   "id": "rakutenjp",
-  "url": "https://tv.rakuten.co.jp/favicon.ico"
+  "url": "https://tv.rakuten.co.jp/favicon.ico",
+  "alt": [
+   "https://tv.rakuten.co.jp/robots.txt",
+   "https://tv.rakuten.co.jp/"
+  ]
  },
  {
   "id": "mora",
-  "url": "https://mora.jp/favicon.ico"
+  "url": "https://mora.jp/favicon.ico",
+  "alt": [
+   "https://mora.jp/robots.txt",
+   "https://mora.jp/"
+  ]
  },
  {
   "id": "wavve",
-  "url": "https://www.wavve.com/favicon.ico"
+  "url": "https://www.wavve.com/favicon.ico",
+  "alt": [
+   "https://www.wavve.com/robots.txt",
+   "https://www.wavve.com/"
+  ]
  },
  {
   "id": "tving",
-  "url": "https://www.tving.com/favicon.ico"
+  "url": "https://www.tving.com/favicon.ico",
+  "alt": [
+   "https://www.tving.com/robots.txt",
+   "https://www.tving.com/"
+  ]
  },
  {
   "id": "watcha",
-  "url": "https://watcha.com/favicon.ico"
+  "url": "https://watcha.com/favicon.ico",
+  "alt": [
+   "https://watcha.com/robots.txt",
+   "https://watcha.com/"
+  ]
  },
  {
   "id": "spotv",
-  "url": "https://www.spotvnow.co.kr/favicon.ico"
+  "url": "https://www.spotvnow.co.kr/favicon.ico",
+  "alt": [
+   "https://www.spotvnow.co.kr/robots.txt",
+   "https://www.spotvnow.co.kr/"
+  ]
  },
  {
   "id": "4gtv",
-  "url": "https://www.4gtv.tv/favicon.ico"
+  "url": "https://www.4gtv.tv/favicon.ico",
+  "alt": [
+   "https://www.4gtv.tv/robots.txt",
+   "https://www.4gtv.tv/"
+  ]
  },
  {
   "id": "litv",
-  "url": "https://www.litv.tv/favicon.ico"
+  "url": "https://www.litv.tv/favicon.ico",
+  "alt": [
+   "https://www.litv.tv/robots.txt",
+   "https://www.litv.tv/"
+  ]
  },
  {
   "id": "bahamut",
-  "url": "https://ani.gamer.com.tw/favicon.ico"
+  "url": "https://ani.gamer.com.tw/favicon.ico",
+  "alt": [
+   "https://ani.gamer.com.tw/robots.txt"
+  ]
  },
  {
   "id": "hami",
-  "url": "https://hamivideo.hinet.net/favicon.ico"
+  "url": "https://hamivideo.hinet.net/favicon.ico",
+  "alt": [
+   "https://hamivideo.hinet.net/robots.txt",
+   "https://hamivideo.hinet.net/"
+  ]
  },
  {
   "id": "myvideo",
-  "url": "https://www.myvideo.net.tw/favicon.ico"
+  "url": "https://www.myvideo.net.tw/favicon.ico",
+  "alt": [
+   "https://www.myvideo.net.tw/robots.txt",
+   "https://www.myvideo.net.tw/"
+  ]
  },
  {
   "id": "friday",
-  "url": "https://video.friday.tw/favicon.ico"
+  "url": "https://video.friday.tw/favicon.ico",
+  "alt": [
+   "https://video.friday.tw/robots.txt",
+   "https://video.friday.tw/"
+  ]
  },
  {
   "id": "ofiii",
-  "url": "https://www.ofiii.com/favicon.ico"
+  "url": "https://www.ofiii.com/favicon.ico",
+  "alt": [
+   "https://www.ofiii.com/robots.txt",
+   "https://www.ofiii.com/"
+  ]
  },
  {
   "id": "linetv",
-  "url": "https://www.linetv.tw/favicon.ico"
+  "url": "https://www.linetv.tw/favicon.ico",
+  "alt": [
+   "https://www.linetv.tw/robots.txt",
+   "https://www.linetv.tw/"
+  ]
  },
  {
   "id": "mytvsuper",
-  "url": "https://www.mytvsuper.com/favicon.ico"
+  "url": "https://www.mytvsuper.com/favicon.ico",
+  "alt": [
+   "https://www.mytvsuper.com/robots.txt",
+   "https://www.mytvsuper.com/"
+  ]
  },
  {
   "id": "nowe",
-  "url": "https://www.nowe.com/favicon.ico"
+  "url": "https://www.nowe.com/favicon.ico",
+  "alt": [
+   "https://www.nowe.com/robots.txt",
+   "https://www.nowe.com/"
+  ]
  },
  {
   "id": "viutv",
-  "url": "https://viu.tv/favicon.ico"
+  "url": "https://viu.tv/favicon.ico",
+  "alt": [
+   "https://viu.tv/robots.txt",
+   "https://viu.tv/"
+  ]
  },
  {
   "id": "hoytv",
-  "url": "https://hoy.tv/favicon.ico"
+  "url": "https://hoy.tv/favicon.ico",
+  "alt": [
+   "https://hoy.tv/robots.txt",
+   "https://hoy.tv/"
+  ]
  },
  {
   "id": "sonyliv",
-  "url": "https://www.sonyliv.com/favicon.ico"
+  "url": "https://www.sonyliv.com/favicon.ico",
+  "alt": [
+   "https://www.sonyliv.com/robots.txt",
+   "https://www.sonyliv.com/"
+  ]
  },
  {
   "id": "tataplay",
-  "url": "https://www.tataplaybinge.com/favicon.ico"
+  "url": "https://www.tataplaybinge.com/favicon.ico",
+  "alt": [
+   "https://www.tataplaybinge.com/robots.txt",
+   "https://www.tataplaybinge.com/"
+  ]
  },
  {
   "id": "mxplayer",
-  "url": "https://www.mxplayer.in/favicon.ico"
+  "url": "https://www.mxplayer.in/favicon.ico",
+  "alt": [
+   "https://www.mxplayer.in/robots.txt",
+   "https://www.mxplayer.in/"
+  ]
  },
  {
   "id": "mewatch",
-  "url": "https://www.mewatch.sg/favicon.ico"
+  "url": "https://www.mewatch.sg/favicon.ico",
+  "alt": [
+   "https://www.mewatch.sg/robots.txt",
+   "https://www.mewatch.sg/"
+  ]
  },
  {
   "id": "starhub",
-  "url": "https://www.starhubtvplus.com/favicon.ico"
+  "url": "https://www.starhubtvplus.com/favicon.ico",
+  "alt": [
+   "https://www.starhubtvplus.com/robots.txt",
+   "https://www.starhubtvplus.com/"
+  ]
  },
  {
   "id": "vidio",
-  "url": "https://www.vidio.com/favicon.ico"
+  "url": "https://www.vidio.com/favicon.ico",
+  "alt": [
+   "https://www.vidio.com/robots.txt",
+   "https://www.vidio.com/"
+  ]
  },
  {
   "id": "trueid",
-  "url": "https://tv.trueid.net/favicon.ico"
+  "url": "https://tv.trueid.net/favicon.ico",
+  "alt": [
+   "https://tv.trueid.net/robots.txt",
+   "https://tv.trueid.net/"
+  ]
  },
  {
   "id": "aisplay",
-  "url": "https://aisplay.ais.co.th/favicon.ico"
+  "url": "https://aisplay.ais.co.th/favicon.ico",
+  "alt": [
+   "https://aisplay.ais.co.th/robots.txt",
+   "https://aisplay.ais.co.th/"
+  ]
  },
  {
   "id": "sooka",
-  "url": "https://sooka.my/favicon.ico"
+  "url": "https://sooka.my/favicon.ico",
+  "alt": [
+   "https://sooka.my/robots.txt",
+   "https://sooka.my/"
+  ]
  },
  {
   "id": "galaxyplay",
-  "url": "https://galaxyplay.vn/favicon.ico"
+  "url": "https://galaxyplay.vn/favicon.ico",
+  "alt": [
+   "https://galaxyplay.vn/robots.txt",
+   "https://galaxyplay.vn/"
+  ]
  },
  {
   "id": "tv360",
-  "url": "https://tv360.vn/favicon.ico"
+  "url": "https://tv360.vn/favicon.ico",
+  "alt": [
+   "https://tv360.vn/robots.txt",
+   "https://tv360.vn/"
+  ]
  },
  {
   "id": "kplus",
-  "url": "https://www.kplus.vn/favicon.ico"
+  "url": "https://www.kplus.vn/favicon.ico",
+  "alt": [
+   "https://www.kplus.vn/robots.txt",
+   "https://www.kplus.vn/"
+  ]
  },
  {
   "id": "tenplay",
-  "url": "https://10play.com.au/favicon.ico"
+  "url": "https://10play.com.au/favicon.ico",
+  "alt": [
+   "https://10play.com.au/robots.txt",
+   "https://10play.com.au/"
+  ]
  },
  {
   "id": "stan",
-  "url": "https://www.stan.com.au/favicon.ico"
+  "url": "https://www.stan.com.au/favicon.ico",
+  "alt": [
+   "https://www.stan.com.au/robots.txt",
+   "https://www.stan.com.au/"
+  ]
  },
  {
   "id": "binge",
-  "url": "https://binge.com.au/favicon.ico"
+  "url": "https://binge.com.au/favicon.ico",
+  "alt": [
+   "https://binge.com.au/robots.txt",
+   "https://binge.com.au/"
+  ]
  },
  {
   "id": "kayo",
-  "url": "https://kayosports.com.au/favicon.ico"
+  "url": "https://kayosports.com.au/favicon.ico",
+  "alt": [
+   "https://kayosports.com.au/robots.txt",
+   "https://kayosports.com.au/"
+  ]
  },
  {
   "id": "7plus",
-  "url": "https://7plus.com.au/favicon.ico"
+  "url": "https://7plus.com.au/favicon.ico",
+  "alt": [
+   "https://7plus.com.au/robots.txt",
+   "https://7plus.com.au/"
+  ]
  },
  {
   "id": "iview",
-  "url": "https://iview.abc.net.au/favicon.ico"
+  "url": "https://iview.abc.net.au/favicon.ico",
+  "alt": [
+   "https://iview.abc.net.au/robots.txt",
+   "https://iview.abc.net.au/"
+  ]
  },
  {
   "id": "9now",
-  "url": "https://www.9now.com.au/favicon.ico"
+  "url": "https://www.9now.com.au/favicon.ico",
+  "alt": [
+   "https://www.9now.com.au/robots.txt",
+   "https://www.9now.com.au/"
+  ]
  },
  {
   "id": "threenow",
-  "url": "https://www.threenow.co.nz/favicon.ico"
+  "url": "https://www.threenow.co.nz/favicon.ico",
+  "alt": [
+   "https://www.threenow.co.nz/robots.txt",
+   "https://www.threenow.co.nz/"
+  ]
  },
  {
   "id": "neon",
-  "url": "https://www.neontv.co.nz/favicon.ico"
+  "url": "https://www.neontv.co.nz/favicon.ico",
+  "alt": [
+   "https://www.neontv.co.nz/robots.txt",
+   "https://www.neontv.co.nz/"
+  ]
  },
  {
   "id": "skygonz",
-  "url": "https://www.skygo.co.nz/favicon.ico"
+  "url": "https://www.skygo.co.nz/favicon.ico",
+  "alt": [
+   "https://www.skygo.co.nz/robots.txt",
+   "https://www.skygo.co.nz/"
+  ]
  },
  {
   "id": "itvx",
-  "url": "https://www.itv.com/favicon.ico"
+  "url": "https://www.itv.com/favicon.ico",
+  "alt": [
+   "https://www.itv.com/robots.txt",
+   "https://www.itv.com/"
+  ]
  },
  {
   "id": "channel4",
-  "url": "https://www.channel4.com/favicon.ico"
+  "url": "https://www.channel4.com/favicon.ico",
+  "alt": [
+   "https://www.channel4.com/robots.txt",
+   "https://www.channel4.com/"
+  ]
  },
  {
   "id": "my5",
-  "url": "https://www.channel5.com/favicon.ico"
+  "url": "https://www.channel5.com/favicon.ico",
+  "alt": [
+   "https://www.channel5.com/robots.txt",
+   "https://www.channel5.com/"
+  ]
  },
  {
   "id": "skygo",
-  "url": "https://www.sky.com/watch/sky-go/favicon.ico"
+  "url": "https://www.sky.com/watch/sky-go/favicon.ico",
+  "alt": [
+   "https://www.sky.com/robots.txt",
+   "https://www.sky.com/"
+  ]
  },
  {
   "id": "molotov",
-  "url": "https://www.molotov.tv/favicon.ico"
+  "url": "https://www.molotov.tv/favicon.ico",
+  "alt": [
+   "https://www.molotov.tv/robots.txt",
+   "https://www.molotov.tv/"
+  ]
  },
  {
   "id": "francetv",
-  "url": "https://www.france.tv/favicon.ico"
+  "url": "https://www.france.tv/favicon.ico",
+  "alt": [
+   "https://www.france.tv/robots.txt",
+   "https://www.france.tv/"
+  ]
  },
  {
   "id": "joyn",
-  "url": "https://www.joyn.de/favicon.ico"
+  "url": "https://www.joyn.de/favicon.ico",
+  "alt": [
+   "https://www.joyn.de/robots.txt",
+   "https://www.joyn.de/"
+  ]
  },
  {
   "id": "rtlplus",
-  "url": "https://plus.rtl.de/favicon.ico"
+  "url": "https://plus.rtl.de/favicon.ico",
+  "alt": [
+   "https://plus.rtl.de/robots.txt",
+   "https://plus.rtl.de/"
+  ]
  },
  {
   "id": "skyde",
-  "url": "https://www.sky.de/favicon.ico"
+  "url": "https://www.sky.de/favicon.ico",
+  "alt": [
+   "https://www.sky.de/robots.txt",
+   "https://www.sky.de/"
+  ]
  },
  {
   "id": "skych",
-  "url": "https://www.sky.ch/favicon.ico"
+  "url": "https://www.sky.ch/favicon.ico",
+  "alt": [
+   "https://www.sky.ch/robots.txt",
+   "https://www.sky.ch/"
+  ]
  },
  {
   "id": "raiplay",
-  "url": "https://www.raiplay.it/favicon.ico"
+  "url": "https://www.raiplay.it/favicon.ico",
+  "alt": [
+   "https://www.raiplay.it/robots.txt",
+   "https://www.raiplay.it/"
+  ]
  },
  {
   "id": "movistar",
-  "url": "https://www.movistarplus.es/favicon.ico"
+  "url": "https://www.movistarplus.es/favicon.ico",
+  "alt": [
+   "https://www.movistarplus.es/robots.txt",
+   "https://www.movistarplus.es/"
+  ]
  },
  {
   "id": "npo",
-  "url": "https://npo.nl/favicon.ico"
+  "url": "https://npo.nl/favicon.ico",
+  "alt": [
+   "https://npo.nl/robots.txt",
+   "https://npo.nl/"
+  ]
  },
  {
   "id": "videoland",
-  "url": "https://www.videoland.com/favicon.ico"
+  "url": "https://www.videoland.com/favicon.ico",
+  "alt": [
+   "https://www.videoland.com/robots.txt",
+   "https://www.videoland.com/"
+  ]
  },
  {
   "id": "nlziet",
-  "url": "https://www.nlziet.nl/favicon.ico"
+  "url": "https://www.nlziet.nl/favicon.ico",
+  "alt": [
+   "https://www.nlziet.nl/robots.txt",
+   "https://www.nlziet.nl/"
+  ]
  },
  {
   "id": "amediateka",
-  "url": "https://www.amediateka.ru/favicon.ico"
+  "url": "https://www.amediateka.ru/favicon.ico",
+  "alt": [
+   "https://www.amediateka.ru/robots.txt",
+   "https://www.amediateka.ru/"
+  ]
  },
  {
   "id": "sling",
-  "url": "https://www.sling.com/favicon.ico"
+  "url": "https://www.sling.com/favicon.ico",
+  "alt": [
+   "https://www.sling.com/robots.txt",
+   "https://www.sling.com/"
+  ]
  },
  {
   "id": "starz",
-  "url": "https://www.starz.com/favicon.ico"
+  "url": "https://www.starz.com/favicon.ico",
+  "alt": [
+   "https://www.starz.com/robots.txt",
+   "https://www.starz.com/"
+  ]
  },
  {
   "id": "aetv",
-  "url": "https://play.aetv.com/favicon.ico"
+  "url": "https://play.aetv.com/favicon.ico",
+  "alt": [
+   "https://play.aetv.com/robots.txt",
+   "https://play.aetv.com/"
+  ]
  },
  {
   "id": "cw",
-  "url": "https://www.cwtv.com/favicon.ico"
+  "url": "https://www.cwtv.com/favicon.ico",
+  "alt": [
+   "https://www.cwtv.com/robots.txt",
+   "https://www.cwtv.com/"
+  ]
  },
  {
   "id": "directv",
-  "url": "https://www.directv.com/favicon.ico"
+  "url": "https://www.directv.com/favicon.ico",
+  "alt": [
+   "https://stream.directv.com/robots.txt",
+   "https://stream.directv.com/"
+  ]
  },
  {
   "id": "mgmplus",
-  "url": "https://www.mgmplus.com/favicon.ico"
+  "url": "https://www.mgmplus.com/favicon.ico",
+  "alt": [
+   "https://www.mgmplus.com/robots.txt",
+   "https://www.mgmplus.com/"
+  ]
  },
  {
   "id": "fxnow",
-  "url": "https://www.fxnetworks.com/favicon.ico"
+  "url": "https://www.fxnetworks.com/favicon.ico",
+  "alt": [
+   "https://www.fxnetworks.com/robots.txt",
+   "https://www.fxnetworks.com/"
+  ]
  },
  {
   "id": "nflplus",
-  "url": "https://www.nfl.com/plus/favicon.ico"
+  "url": "https://www.nfl.com/plus/favicon.ico",
+  "alt": [
+   "https://www.nfl.com/robots.txt",
+   "https://www.nfl.com/"
+  ]
  },
  {
   "id": "tlc",
-  "url": "https://go.tlc.com/favicon.ico"
+  "url": "https://go.tlc.com/favicon.ico",
+  "alt": [
+   "https://go.tlc.com/robots.txt",
+   "https://go.tlc.com/"
+  ]
  },
  {
   "id": "cbcgem",
-  "url": "https://gem.cbc.ca/favicon.ico"
+  "url": "https://gem.cbc.ca/favicon.ico",
+  "alt": [
+   "https://gem.cbc.ca/robots.txt",
+   "https://gem.cbc.ca/"
+  ]
  },
  {
   "id": "crave",
-  "url": "https://www.crave.ca/favicon.ico"
+  "url": "https://www.crave.ca/favicon.ico",
+  "alt": [
+   "https://www.crave.ca/robots.txt",
+   "https://www.crave.ca/"
+  ]
  },
  {
   "id": "mgtv",
-  "url": "https://www.mgtv.com/favicon.ico"
+  "url": "https://www.mgtv.com/favicon.ico",
+  "alt": [
+   "https://www.mgtv.com/robots.txt",
+   "https://www.mgtv.com/"
+  ]
  },
  {
   "id": "tencent",
-  "url": "https://v.qq.com/favicon.ico"
+  "url": "https://v.qq.com/favicon.ico",
+  "alt": [
+   "https://v.qq.com/robots.txt",
+   "https://v.qq.com/"
+  ]
  },
  {
   "id": "iqiyi",
-  "url": "https://www.iqiyi.com/favicon.ico"
+  "url": "https://www.iqiyi.com/favicon.ico",
+  "alt": [
+   "https://www.iqiyi.com/robots.txt",
+   "https://www.iqiyi.com/"
+  ]
  },
  {
   "id": "youku",
-  "url": "https://www.youku.com/favicon.ico"
+  "url": "https://www.youku.com/favicon.ico",
+  "alt": [
+   "https://www.youku.com/robots.txt",
+   "https://www.youku.com/"
+  ]
  },
  {
   "id": "netease",
-  "url": "https://music.163.com/favicon.ico"
+  "url": "https://music.163.com/favicon.ico",
+  "alt": [
+   "https://music.163.com/robots.txt",
+   "https://music.163.com/"
+  ]
  }
 ]
