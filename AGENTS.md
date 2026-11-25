@@ -68,7 +68,8 @@ The upstream data address never appears in a page (a test checks it). A 403/429 
 - Current state first: the full-width state banner on a service page, the pill on a group row, the icon badge on the
   board. Online tiles do not repeat a word; issues are marked by the dot/border.
 - Every service shows its own icon before its name in every list (board tiles, group rows, related chips, the service
-  H1). The icons are served from `/icons/`.
+  H1). The icons are served from `/icons/`; `node scripts/icons.mjs` fetches missing ones at build time. Audit them
+  when adding services: a favicon service can return a placeholder or another brand's icon.
 - Status dots are **9px** everywhere, circular, and colour-coded: green online, amber partial/recovered, red
   offline, grey filled unconfirmed/stale. No other shapes.
 - The hero is centred; the search (home) is left and the legend right on one row; the age line reserves its height so
@@ -94,4 +95,5 @@ The upstream data address never appears in a page (a test checks it). A 403/429 
   says "no data".
 - The probe is on a 10-minute timer; a round takes about 48 s and 35 MB (see `probe/README.md`).
 - The service's own status page is a reference link only; it never changes the verdict.
-- No share dialog: a status snapshot is stale within ten minutes, and the page URL is what is worth sharing.
+- The share link is the live page, not an encoded result: the card is a timestamped snapshot, the page shows the
+  latest state when opened.

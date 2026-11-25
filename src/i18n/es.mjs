@@ -68,6 +68,7 @@ export default {
   v_stale: "Los datos están desactualizados, así que esta página no puede determinar nada.",
   v_nodata: "Ahora mismo no hay datos de este servicio.",
   v_scope: "Esto es lo que dicen nuestras sondas y la página oficial del servicio. La página oficial es la palabra del servicio; nuestras sondas solo muestran si llegamos desde Tokio y Shanghái.",
+  k_incidents: "Interrupciones, 7 días",
   k_up24: "En línea, 24 horas", k_up7: "En línea, 7 días", k_last: "Última respuesta",
   bar_past: "Hace 24 horas", bar_now: "Ahora",
   loc_h: "Nuestras sondas", loc_tokyo: "Tokio", loc_shanghai: "Shanghái",
@@ -83,7 +84,7 @@ export default {
   incidents_ongoing: "en curso",
   incidents_checks: "Comprobaciones: {n}",
   what_h: "Qué comprobamos",
-  what_text: "Nuestras sondas en Tokio y Shanghái solicitan {site} cada 10 minutos y anotan si respondió. Un 403, un 429 o una página de verificación cuenta como sin confirmar, no como caída. La página de estado oficial se enlaza, no se copia.",
+  what_text: "Nuestras sondas en Tokio y Shanghái solicitan {site} cada 10 minutos. Un 403, un 429 o una página de verificación cuenta como sin confirmar, no como caída.",
   related_h: "Otros servicios de este grupo",
   back_home: "Todos los servicios",
 
@@ -101,5 +102,7 @@ export default {
   a3: "Nuestras sondas en Tokio y Shanghái comprueban cada 10 minutos, y las páginas de estado oficiales se leen cada 10 minutos. Cada página muestra la hora de la última comprobación; si una fuente tiene más de 20 minutos, la página dice que no puede determinar.",
   q4: "¿De dónde salen los datos? ¿Recogéis algo sobre mí?",
   a4: "De nuestras dos sondas en Tokio y Shanghái. La página carga un pequeño archivo JSON de este sitio. Sin cuenta, sin cookies publicitarias y no se guarda nada sobre los visitantes.",
+  share_btn: "Compartir",
+  share_foot: "Estado en vivo, comprobado cada 10 minutos",
   foot_src: "Datos: nuestras sondas en Tokio y Shanghái, cada 10 minutos.",
 };

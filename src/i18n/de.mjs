@@ -68,6 +68,7 @@ export default {
   v_stale: "Die Daten sind veraltet, deshalb kann diese Seite nichts feststellen.",
   v_nodata: "Für diesen Dienst gibt es gerade keine Daten.",
   v_scope: "Das sagen unsere Prüfungen und die offizielle Seite des Dienstes. Die offizielle Seite ist das Wort des Dienstes; unsere Prüfungen zeigen nur, ob wir ihn aus Tokio und Shanghai erreichen.",
+  k_incidents: "Ausfälle, 7 Tage",
   k_up24: "Online, 24 Stunden", k_up7: "Online, 7 Tage", k_last: "Letzte Antwort",
   bar_past: "Vor 24 Stunden", bar_now: "Jetzt",
   loc_h: "Unsere Prüfungen", loc_tokyo: "Tokio", loc_shanghai: "Shanghai",
@@ -83,7 +84,7 @@ export default {
   incidents_ongoing: "andauernd",
   incidents_checks: "Prüfungen: {n}",
   what_h: "Was wir prüfen",
-  what_text: "Unsere Prüfungen in Tokio und Shanghai rufen {site} alle 10 Minuten ab und notieren, ob eine Antwort kam. Ein 403, ein 429 oder eine Challenge-Seite gilt als nicht bestätigt, nicht als Ausfall. Die offizielle Statusseite wird verlinkt, nicht kopiert.",
+  what_text: "Unsere Prüfungen in Tokio und Shanghai rufen {site} alle 10 Minuten ab. Ein 403, ein 429 oder eine Challenge-Seite gilt als nicht bestätigt, nicht als Ausfall.",
   related_h: "Weitere Dienste dieser Gruppe",
   back_home: "Alle Dienste",
 
@@ -101,5 +102,7 @@ export default {
   a3: "Unsere Prüfungen in Tokio und Shanghai laufen alle 10 Minuten, und die offiziellen Statusseiten werden alle 10 Minuten gelesen. Jede Seite zeigt die Zeit der letzten Prüfung; ist eine Quelle älter als 20 Minuten, sagt die Seite, dass sie es nicht feststellen kann.",
   q4: "Woher kommen die Daten? Sammelt ihr etwas über mich?",
   a4: "Aus unseren zwei Prüfungen in Tokio und Shanghai. Die Seite lädt eine kleine JSON-Datei von dieser Website. Kein Konto, keine Werbe-Cookies, und über Besucher wird nichts gespeichert.",
+  share_btn: "Teilen",
+  share_foot: "Live-Status, alle 10 Minuten geprüft",
   foot_src: "Daten: unsere Prüfungen in Tokio und Shanghai, alle 10 Minuten.",
 };

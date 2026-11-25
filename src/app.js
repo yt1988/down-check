@@ -1,7 +1,7 @@
 // The page fills what the build drew: the summary, every tile, the current state, the 24-hour strip, the two probe
 // rows and the official status. It never invents a state: if the data cannot be loaded, everything says so and the
 // verdict stays "cannot judge".
-import { verdict, STATE, stateClass, duration, errKey } from "./model.mjs";
+import { verdict, summary, STATE, stateClass, duration, errKey } from "./model.mjs";
 import { SERVICES, byId, byCat } from "./services.mjs";
 
 const D = JSON.parse(document.getElementById("data").textContent);
@@ -28,6 +28,53 @@ const label = state => state === STATE.OK ? (L.st_online || "ok") : (L["st_" + s
 const cls = state => stateClass(state);
 const places = v => (v.places || []).map(p => L["loc_" + p] || p).join(L.sep || ", ");
 const nameOf = s => (s.names && s.names[LANG]) || s.name;
+
+/* ---------- share: the public dialog, with the live page as the link ---------- */
+let lastData = null, shareMod = null;
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const stateColor = st => st === STATE.OK ? cssVar("--t1")
+  : st === STATE.RECOVERED || st === STATE.PARTIAL ? cssVar("--warn")
+  : st === STATE.UNREACHABLE || st === STATE.LONGFAIL ? cssVar("--t5") : cssVar("--muted");
+function shareHeadline(c) {
+  if (c.unknown === c.n) return t("sum_unknown", { n: c.n });
+  if (c.bad) return t("sum_some", { n: c.bad });
+  if (c.unknown) return t("sum_unknown", { n: c.unknown });
+  return t("sum_all_ok");
+}
+async function openShare() {
+  if (!lastData) return;
+  const now = Date.now(), url = location.origin + location.pathname;
+  if (!shareMod) shareMod = await import("/assets/share/share.js?v=10");
+  const fg = () => cssVar("--fg") || "#141416", muted = () => cssVar("--muted") || "#6e6e78";
+  const base = { lang: LANG, name: L.app_name, file: "down-check", show: [], never: [], canShow: false,
+    link: () => url, home: url, ts: newestProbeAt(lastData) || now, height: 630, foot: () => [L.share_foot] };
+  let cfg;
+  if (D.type === "svc") {
+    const s = byId.get(D.id);
+    if (!s) return;
+    const v = verdict(s, lastData, now), name = nameOf(s), st = label(v.state), color = stateColor(v.state);
+    cfg = { ...base, file: "down-" + s.id, text: () => `${name}: ${st} — ${url}`,
+      draw: async (ctx, kit) => {
+        ctx.fillStyle = fg(); kit.fit(ctx, name, kit.W - kit.P * 2, 56, 32); ctx.fillText(name, kit.P, kit.top + 34);
+        ctx.fillStyle = color; kit.fit(ctx, st, kit.W - kit.P * 2, 104, 48); ctx.fillText(st, kit.P, kit.top + 162);
+        ctx.fillStyle = muted(); ctx.font = `500 30px ${kit.F}`;
+        ctx.fillText(`${L.k_up24}: ${pct(v.up24)}  ·  ${L.k_up7}: ${pct(v.up7)}`, kit.P, kit.top + 232);
+      } };
+  } else {
+    const c = summary(D.type === "home" ? SERVICES : byCat(D.cat), lastData, now);
+    const title = document.querySelector("h1")?.textContent || L.app_name;
+    const head = shareHeadline(c), color = c.bad ? cssVar("--t5") : c.unknown ? cssVar("--muted") : cssVar("--t1");
+    const counts = t("sum_counts", { ok: c.ok, bad: c.bad, unknown: c.unknown });
+    cfg = { ...base, text: () => `${head} — ${url}`,
+      draw: async (ctx, kit) => {
+        ctx.fillStyle = fg(); kit.fit(ctx, title, kit.W - kit.P * 2, 48, 30); ctx.fillText(title, kit.P, kit.top + 30);
+        ctx.fillStyle = color; kit.fit(ctx, head, kit.W - kit.P * 2, 76, 40); ctx.fillText(head, kit.P, kit.top + 146);
+        ctx.fillStyle = muted(); ctx.font = `500 30px ${kit.F}`; ctx.fillText(counts, kit.P, kit.top + 216);
+      } };
+  }
+  shareMod.share(cfg).open();
+}
+$("#shareBtn")?.addEventListener("click", openShare);
 
 /* ---------- header: theme and language, as on every 1ms.dog tool ---------- */
 const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
@@ -148,7 +195,7 @@ function catView(data, failed, now) {
     const pill = row.querySelector(".dn-pill");
     pill.textContent = label(v.state);
     pill.className = "dn-pill " + cls(v.state);
-    row.querySelector(".dn-row-up b").textContent = pct(v.up24);
+    row.querySelector(".dn-row-up b").textContent = v.up24 == null ? L.st_nodata : pct(v.up24);
     const p = failed ? null : bestProbe(v);
     paintSpark(row.querySelector(".dn-spark"), p?.h24);
   }
@@ -186,7 +233,7 @@ function svcView(data, failed, now) {
   if ($("#up24")) $("#up24").textContent = pct(p?.up24 ?? null);
   if ($("#kUp24")) $("#kUp24").textContent = pct(p?.up24 ?? null);
   if ($("#kUp7")) $("#kUp7").textContent = pct(p?.up7 ?? null);
-  if ($("#kLast")) $("#kLast").textContent = p?.okAt ? agoShort(p.okAt) : L.na;
+  if ($("#kInc")) $("#kInc").textContent = !p || !p.fresh ? L.na : new Intl.NumberFormat(LANG).format((p.out || []).length);
   paintBar($("#bar24"), p?.h24);
 
   for (const row of $$(".dn-loc[data-kind]")) {
@@ -289,11 +336,15 @@ async function load() {
     const r = await fetch("/api/status.json", { cache: "no-store", signal: AbortSignal.timeout(8000) });
     if (!r.ok) throw new Error("http " + r.status);
     const data = await r.json();
+    lastData = data;
+    $("#shareBtn")?.removeAttribute("hidden");
     const now = Date.now();
     if (D.type === "home") homeView(data, false, now);
     else if (D.type === "cat") catView(data, false, now);
     else svcView(data, false, now);
   } catch {
+    lastData = null;
+    $("#shareBtn")?.setAttribute("hidden", "");
     const now = Date.now();
     if (D.type === "home") homeView(null, true, now);
     else if (D.type === "cat") catView(null, true, now);

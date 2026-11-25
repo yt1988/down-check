@@ -39,14 +39,14 @@ const cells = n => "<i></i>".repeat(n);
 // What the browser needs at runtime; everything else is written into the page at build time.
 const RUNTIME = new Set(["name", "lang_label", "a_lang", "a_theme", "a_help", "a_close", "a_prev", "a_next",
   "th_system", "th_light", "th_dark", "just_now", "na", "retry", "loading", "sep",
-  "sum_all_ok", "sum_some", "sum_unknown", "sum_counts", "updated",
+  "sum_all_ok", "sum_some", "sum_unknown", "sum_counts", "k_up24", "k_up7", "updated",
   "st_online", "st_recovered", "st_partial", "st_unreachable", "st_longfail", "st_fault", "st_unconfirmed", "st_stale", "st_nodata", "st_loading",
   "v_online", "v_recovered", "v_partial", "v_official_partial", "v_official_online", "v_official_ok_unreachable", "v_unreachable", "v_longfail", "v_fault", "v_unconfirmed", "v_stale", "v_nodata",
   "loc_tokyo", "loc_shanghai",
   "official_none", "official_no_api",
   "incidents_none", "incidents_unknown", "incidents_ongoing", "incidents_checks",
   "err_challenge", "err_timeout", "err_reset", "err_http", "err_eof", "err_dns", "err_tls", "err_refused", "err_unreachable", "err_cancel", "err_other", "chip_official",
-  "report_result", "report_prefill", "cross_home", "cross_unlock", "cross_check"]);
+  "report_result", "report_prefill", "cross_home", "cross_unlock", "cross_check", "share_foot"]);
 
 async function loadI18n() {
   const out = {};
@@ -135,7 +135,7 @@ function homeMain(Tt, lang) {
       <p class="dn-age" id="sumAge">${esc(Tt("loading"))}</p>
       <div class="dn-hero-tools">
         <input id="q" type="search" placeholder="${esc(Tt("filter_ph"))}" aria-label="${esc(Tt("filter_ph"))}" autocomplete="off" spellcheck="false">
-        ${legend(Tt)}
+        <div class="dn-hero-right">${legend(Tt)}<button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button></div>
       </div>
     </section>
     <div class="dn-board" id="board">${cats}</div>
@@ -153,7 +153,7 @@ function catMain(Tt, lang, cat) {
     <header class="dn-hero">
       <h1 class="page-h">${esc(fill(Tt("h1_cat"), { cat: catName(Tt, cat) }))}</h1>
       <p class="dn-intro">${esc(catDesc(Tt, cat))}</p>
-      <div class="dn-hero-tools"><span class="dn-age" id="sumAge">${esc(Tt("loading"))}</span>${legend(Tt)}</div>
+      <div class="dn-hero-tools"><span class="dn-age" id="sumAge">${esc(Tt("loading"))}</span><div class="dn-hero-right">${legend(Tt)}<button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button></div></div>
     </header>
     <div class="dn-list-h" aria-hidden="true"><span>${esc(Tt("h_service"))}</span><span>${esc(Tt("h_status"))}</span><span>${esc(Tt("h_24h"))}</span><span></span></div>
     <ul class="dn-list">${rows}</ul>`;
@@ -167,9 +167,9 @@ function svcMain(Tt, lang, s) {
   const what = esc(Tt("what_text")).replace(/\{site\}/g, `<a class="dn-ext" href="${siteUrl}" target="_blank" rel="noopener">${esc(siteHost)}${EXT}</a>`);
   const chips = byCat(s.cat).filter(x => x.id !== s.id).map(x => `<li><a class="dn-chip" href="${svcPath(lang, x)}">${iconHtml(x, lang, "sm")}<span>${esc(nameOf(x, lang))}</span></a></li>`).join("");
   const src = STATUS[s.id];
-  const offLink = src?.page
-    ? `<a class="dn-src-link" id="officialLink" href="${esc(src.page)}" target="_blank" rel="noopener">${esc(Tt("official_go"))}${EXT}</a>`
-    : `<p class="hint">${esc(Tt("official_none"))}</p>`;
+  const offBlock = src?.page
+    ? `<p class="dn-p">${esc(Tt("official_note"))}</p><a class="dn-src-link" id="officialLink" href="${esc(src.page)}" target="_blank" rel="noopener">${esc(Tt("official_go"))}${EXT}</a>`
+    : `<p class="dn-p hint">${esc(Tt("official_none"))}</p>`;
   return `${crumbs([`<a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a>`, `<a href="${catPath(lang, s.cat)}">${esc(catName(Tt, cat))}</a>`, `<span class="dn-crumb-here">${esc(name)}</span>`])}
     <header class="dn-svc-head">
       <h1 class="page-h"><span class="svc-lg">${iconHtml(s, lang)}</span>${esc(fill(Tt("h1_svc"), { name }))}</h1>
@@ -179,6 +179,7 @@ function svcMain(Tt, lang, s) {
       <span class="ic" id="stateIcon"></span>
       <b id="stateText">${esc(Tt("st_loading"))}</b>
       <span class="dn-status-meta" id="statusMeta"></span>
+      <button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button>
     </div>
     <section class="card card-pad dn-history">
       <div class="dn-history-h"><h2>${esc(Tt("k_up24"))}</h2><span class="dn-up" id="up24">—</span></div>
@@ -186,7 +187,7 @@ function svcMain(Tt, lang, s) {
       <div class="dn-axis"><span>${esc(Tt("bar_past"))}</span><span>${esc(Tt("bar_now"))}</span></div>
       <div class="dn-kpis">
         <div><span>${esc(Tt("k_up7"))}</span><b id="kUp7">—</b></div>
-        <div><span>${esc(Tt("k_last"))}</span><b id="kLast">—</b></div>
+        <div><span>${esc(Tt("k_incidents"))}</span><b id="kInc">—</b></div>
       </div>
     </section>
     <section class="card card-pad">
@@ -196,8 +197,7 @@ function svcMain(Tt, lang, s) {
     </section>
     <section class="card card-pad">
       <h2>${esc(Tt("official_h"))}</h2>
-      <p class="dn-p">${esc(Tt("official_note"))}</p>
-      ${offLink}
+      ${offBlock}
     </section>
     <section class="card card-pad">
       <h2>${esc(Tt("incidents_h"))}</h2>
@@ -239,7 +239,7 @@ export async function build() {
 
   const js = (await bundle({
     entryPoints: [fileURLToPath(new URL("app.js", src))], bundle: true, format: "iife", target: "es2019",
-    minify: true, legalComments: "none", write: false,
+    minify: true, legalComments: "none", write: false, external: ["/assets/share/*"],
   })).outputFiles[0].text;
   const jsName = `app.${hash(js)}.js`;
   await writeFile(new URL("assets/" + jsName, pub), js);
@@ -346,7 +346,7 @@ ${urls.map(u => `<url><loc>${esc(u)}</loc></url>`).join("\n")}
 `);
 
   const csp = ["default-src 'self'", `script-src 'self' 'sha256-${sha(PREPAINT)}'`, "style-src 'self'", "font-src 'self'",
-    "img-src 'self' data:", "connect-src 'self'", "object-src 'none'", "base-uri 'none'", "form-action 'none'", "frame-ancestors 'none'"].join("; ");
+    "img-src 'self' data: blob:", "connect-src 'self' https:", "object-src 'none'", "base-uri 'none'", "form-action 'none'", "frame-ancestors 'none'"].join("; ");
   await writeFile(new URL("_headers", pub), `# Generated by scripts/build.mjs
 /*
   Content-Security-Policy: ${csp}
@@ -363,6 +363,9 @@ ${urls.map(u => `<url><loc>${esc(u)}</loc></url>`).join("\n")}
 /assets/fonts/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+/assets/share/*
+  ! Cache-Control
+  Cache-Control: public, max-age=0, must-revalidate
 /assets/*
   ! Cache-Control
   Cache-Control: public, max-age=604800

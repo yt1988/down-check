@@ -68,6 +68,7 @@ export default {
   v_stale: "The data is out of date, so this page cannot judge.",
   v_nodata: "No data for this service right now.",
   v_scope: "This is what our own probes and the service's official page say. The official page is the service's own word; our probes only show whether we can reach it from Tokyo and Shanghai.",
+  k_incidents: "Interruptions, 7 days",
   k_up24: "Online, 24 hours", k_up7: "Online, 7 days", k_last: "Last answer",
   bar_past: "24 hours ago", bar_now: "Now",
   loc_h: "Our probes", loc_tokyo: "Tokyo", loc_shanghai: "Shanghai",
@@ -83,7 +84,7 @@ export default {
   incidents_ongoing: "ongoing",
   incidents_checks: "Checks: {n}",
   what_h: "What we check",
-  what_text: "Our probes in Tokyo and Shanghai request {site} every 10 minutes and record whether it answered. A 403, a 429 or a challenge page counts as unconfirmed, not down. The official status page is linked, not copied.",
+  what_text: "Our probes in Tokyo and Shanghai request {site} every 10 minutes. A 403, a 429 or a challenge page counts as unconfirmed, not down.",
   related_h: "Other services in this group",
   back_home: "All services",
 
@@ -101,5 +102,7 @@ export default {
   a3: "Our probes in Tokyo and Shanghai check every 10 minutes, and the official status pages are read every 10 minutes. Each page shows the time of the last check; when a source is older than 20 minutes, the page says it cannot judge.",
   q4: "Where does the data come from? Do you collect anything about me?",
   a4: "From our two probes in Tokyo and Shanghai. The page loads one small JSON file from this site. No account, no advertising cookies, and nothing about visitors is stored.",
+  share_btn: "Share",
+  share_foot: "Live status, checked every 10 minutes",
   foot_src: "Data: our probes in Tokyo and Shanghai, every 10 minutes.",
 };

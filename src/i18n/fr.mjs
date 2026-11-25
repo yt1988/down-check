@@ -68,6 +68,7 @@ export default {
   v_stale: "Les données sont périmées : cette page ne peut pas se prononcer.",
   v_nodata: "Pas de données pour ce service en ce moment.",
   v_scope: "Voici ce que disent nos sondes et la page officielle du service. La page officielle est la parole du service ; nos sondes montrent seulement si nous l'atteignons depuis Tokyo et Shanghai.",
+  k_incidents: "Interruptions, 7 jours",
   k_up24: "En ligne, 24 heures", k_up7: "En ligne, 7 jours", k_last: "Dernière réponse",
   bar_past: "Il y a 24 heures", bar_now: "Maintenant",
   loc_h: "Nos sondes", loc_tokyo: "Tokyo", loc_shanghai: "Shanghai",
@@ -83,7 +84,7 @@ export default {
   incidents_ongoing: "en cours",
   incidents_checks: "Vérifications : {n}",
   what_h: "Ce que nous vérifions",
-  what_text: "Nos sondes à Tokyo et Shanghai demandent {site} toutes les 10 minutes et notent si une réponse est venue. Un 403, un 429 ou une page de vérification compte comme non confirmé, pas comme une panne. La page de statut officielle est mise en lien, pas recopiée.",
+  what_text: "Nos sondes à Tokyo et Shanghai demandent {site} toutes les 10 minutes. Un 403, un 429 ou une page de vérification compte comme non confirmé, pas comme une panne.",
   related_h: "Autres services de ce groupe",
   back_home: "Tous les services",
 
@@ -101,5 +102,7 @@ export default {
   a3: "Nos sondes à Tokyo et Shanghai vérifient toutes les 10 minutes, et les pages de statut officielles sont lues toutes les 10 minutes. Chaque page indique l'heure de la dernière vérification ; au-delà de 20 minutes pour une source, la page dit qu'elle ne peut pas se prononcer.",
   q4: "D'où viennent les données ? Collectez-vous quelque chose sur moi ?",
   a4: "De nos deux sondes à Tokyo et Shanghai. La page charge un petit fichier JSON depuis ce site. Pas de compte, pas de cookie publicitaire, et rien sur les visiteurs n'est conservé.",
+  share_btn: "Partager",
+  share_foot: "État en direct, vérifié toutes les 10 minutes",
   foot_src: "Données : nos sondes à Tokyo et Shanghai, toutes les 10 minutes.",
 };

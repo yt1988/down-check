@@ -38,6 +38,7 @@ a.icon-btn:hover { background: var(--soft); }
   color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-ctl); }
 .dn-hero-tools input[type="search"]:focus { outline: 2px solid var(--ink); outline-offset: 1px; }
 .dn-hero-tools .dn-legend { justify-content: flex-end; }
+.dn-hero-right { display: flex; align-items: center; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
 /* legend */
 .dn-legend { justify-content: center; }
 
@@ -173,7 +174,7 @@ a.icon-btn:hover { background: var(--soft); }
 .dn-report { display: flex; }
 .dn-foot { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; font-size: var(--fs-small); color: var(--muted); padding: 2px 4px; }
 .dn-foot p { margin: 0; }
-.dn-p { color: var(--fg); max-width: 80ch; }
+.dn-p { color: var(--fg); max-width: none; }
 .card h2 { margin-bottom: 8px; }
 
 /* help dialog, the same shape as the other tools */
@@ -198,6 +199,7 @@ a.icon-btn:hover { background: var(--soft); }
   .dn-hero-tools { flex-direction: column; align-items: stretch; gap: 10px; }
   .dn-hero-tools input[type="search"] { flex: 1 1 auto; max-width: none; }
   .dn-hero-tools .dn-legend { justify-content: center; }
+  .dn-hero-right { justify-content: center; }
 }
 @media (max-width: 760px) {
   .dn-list-h { display: none; }
