@@ -1,0 +1,12 @@
+# Every 10 minutes, at minute 1 (so the round runs 01–02 and the next starts at 11). Persistent=false: a missed round
+# is missed, not made up; the page shows the age and says "cannot judge" after 20 minutes.
+[Unit]
+Description=1ms.dog down probe every 10 minutes
+
+[Timer]
+OnCalendar=*:01/10:00
+AccuracySec=1s
+Persistent=false
+
+[Install]
+WantedBy=timers.target

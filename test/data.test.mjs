@@ -1,42 +1,54 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { trimIndex, trimUnlock } from "../src/data.mjs";
-import { BASE_IDS, UNLOCK_IDS } from "../src/services.mjs";
+import { readFile } from "node:fs/promises";
+import { trimProbe, trimOfficial, officialEntry } from "../src/data.mjs";
+import { SERVICES } from "../src/services.mjs";
 
-const rawIndex = {
-  v: 1, at: "2026-11-25T05:00:00Z", every: 3600, from: "Tokyo, JP",
+const raw = {
+  at: "2026-11-25T07:00:00Z", every: 600, from: "Tokyo, JP", complete: true,
   services: {
-    chatgpt: { name: "ChatGPT", cat: "ai", last: { ms: 6.7, err: undefined, pop: "NRT" }, h24: [1, null, 3], up24: 100, up7: 99.4, out: [{ from: 1, to: 2, runs: 2, err: "timeout" }] },
-    mystery: { name: "Not published", cat: "x", last: { ms: 1 } },
+    chatgpt: { ok: true, unknown: false, ms: 42, http: 200, t: 1795590000, ok_at: 1795590000, up24: 100, up7: 99.9, h: "o".repeat(200), out: [] },
+    mystery: { ok: true, ms: 1 },
   },
 };
 
-test("the index trim keeps only published services and only the fields a page uses", () => {
-  const d = trimIndex(rawIndex);
+test("the probe trim keeps published services, the last 144 samples and no full history", () => {
+  const d = trimProbe(raw);
   assert.deepEqual(Object.keys(d.services), ["chatgpt"]);
-  assert.equal(d.services.chatgpt.ms, 6.7);
-  assert.equal(d.services.chatgpt.err, null);
-  assert.equal(d.services.chatgpt.pop, "NRT");
-  assert.equal(d.services.chatgpt.up24, 100);
-  assert.deepEqual(d.services.chatgpt.out, rawIndex.services.chatgpt.out);
-  assert.equal(d.at, rawIndex.at);
-  assert.ok(BASE_IDS.includes("chatgpt"));
+  assert.equal(d.services.chatgpt.ms, 42);
+  assert.equal(d.services.chatgpt.h24, "o".repeat(144));
+  assert.equal("h" in d.services.chatgpt, false);
+  assert.equal(d.every, 600);
+  assert.equal(d.complete, true);
 });
 
-test("an index document without services is null", () => {
-  assert.equal(trimIndex(null), null);
-  assert.equal(trimIndex({}), null);
+test("a document without services is null", () => {
+  assert.equal(trimProbe(null), null);
+  assert.equal(trimProbe({}), null);
 });
 
-test("the unlock trim keeps the history and the last good time", () => {
-  const raw = { at: "2026-11-25T05:13:00Z", every: 3600, from: "JP", services: {
-    chatgpt: { s: "ok", err: null, streak: 10, since: "2026-11-01T00:00:00Z", ok_at: "2026-11-25T05:13:00Z", ms: 333, h: "ooo", extra: "drop me" },
-    mystery: { s: "ok" },
-  } };
-  const d = trimUnlock(raw);
+test("the official trim keeps only published services and the five fields the page needs", () => {
+  const d = trimOfficial({ at: "2026-11-25T07:00:00Z", every: 600, services: {
+    chatgpt: { at: 1795590000, indicator: "minor", description: "Degraded", updated_at: "x", page: "https://status.openai.com/", extra: 1 },
+    mystery: { at: 1, indicator: "none" },
+  } });
   assert.deepEqual(Object.keys(d.services), ["chatgpt"]);
-  assert.equal(d.services.chatgpt.ok_at, "2026-11-25T05:13:00Z");
-  assert.equal(d.services.chatgpt.h, "ooo");
+  assert.equal(d.services.chatgpt.indicator, "minor");
   assert.equal("extra" in d.services.chatgpt, false);
-  assert.ok(UNLOCK_IDS.includes("chatgpt"));
+});
+
+test("a Statuspage answer becomes one entry, and a non-Statuspage answer is null", () => {
+  const e = officialEntry({ page: { updated_at: "2026-11-25T06:00:00Z" }, status: { indicator: "major", description: "Outage" } }, "https://status.example/", 123);
+  assert.deepEqual(e, { at: 123, indicator: "major", description: "Outage", updated_at: "2026-11-25T06:00:00Z", page: "https://status.example/" });
+  assert.equal(officialEntry({ status: "ok" }, "x", 1), null);
+});
+
+test("probe/services.json matches the registry, one target per service", async () => {
+  const list = JSON.parse(await readFile(new URL("../probe/services.json", import.meta.url), "utf8"));
+  assert.equal(list.length, SERVICES.length);
+  for (const s of SERVICES) {
+    const hit = list.find(x => x.id === s.id);
+    assert.ok(hit, s.id);
+    assert.equal(hit.url, s.probe, s.id);
+  }
 });

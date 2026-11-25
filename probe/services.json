@@ -1,0 +1,842 @@
+[
+ {
+  "id": "chatgpt",
+  "url": "https://chatgpt.com/cdn-cgi/trace"
+ },
+ {
+  "id": "claude",
+  "url": "https://claude.ai/cdn-cgi/trace"
+ },
+ {
+  "id": "gemini",
+  "url": "https://gemini.google.com/generate_204"
+ },
+ {
+  "id": "copilot",
+  "url": "https://copilot.microsoft.com/cdn-cgi/trace"
+ },
+ {
+  "id": "grok",
+  "url": "https://grok.com/cdn-cgi/trace"
+ },
+ {
+  "id": "deepseek",
+  "url": "https://fe-static.deepseek.com/chat/favicon.svg"
+ },
+ {
+  "id": "google",
+  "url": "https://www.google.com/generate_204"
+ },
+ {
+  "id": "apple",
+  "url": "https://www.apple.com/favicon.ico"
+ },
+ {
+  "id": "microsoft",
+  "url": "https://www.microsoft.com/favicon.ico"
+ },
+ {
+  "id": "wikipedia",
+  "url": "https://upload.wikimedia.org/favicon.ico"
+ },
+ {
+  "id": "amazon",
+  "url": "https://www.amazon.com/favicon.ico"
+ },
+ {
+  "id": "zoom",
+  "url": "https://zoom.us/cdn-cgi/trace"
+ },
+ {
+  "id": "youtube",
+  "url": "https://www.youtube.com/generate_204"
+ },
+ {
+  "id": "netflix",
+  "url": "https://www.netflix.com/favicon.ico"
+ },
+ {
+  "id": "tiktok",
+  "url": "https://www.tiktok.com/favicon.ico"
+ },
+ {
+  "id": "twitch",
+  "url": "https://www.twitch.tv/favicon.ico"
+ },
+ {
+  "id": "spotify",
+  "url": "https://open.spotify.com/favicon.ico"
+ },
+ {
+  "id": "x",
+  "url": "https://abs.twimg.com/favicons/twitter.3.ico"
+ },
+ {
+  "id": "instagram",
+  "url": "https://scontent.cdninstagram.com/"
+ },
+ {
+  "id": "facebook",
+  "url": "https://www.facebook.com/favicon.ico"
+ },
+ {
+  "id": "whatsapp",
+  "url": "https://web.whatsapp.com/favicon.ico"
+ },
+ {
+  "id": "telegram",
+  "url": "https://venus.web.telegram.org/apiw1"
+ },
+ {
+  "id": "discord",
+  "url": "https://discord.com/cdn-cgi/trace"
+ },
+ {
+  "id": "reddit",
+  "url": "https://www.reddit.com/robots.txt"
+ },
+ {
+  "id": "github",
+  "url": "https://github.com/favicon.ico"
+ },
+ {
+  "id": "npm",
+  "url": "https://registry.npmjs.org/-/ping"
+ },
+ {
+  "id": "dockerhub",
+  "url": "https://registry-1.docker.io/v2/"
+ },
+ {
+  "id": "pypi",
+  "url": "https://pypi.org/static/images/favicon.35549fe8.ico"
+ },
+ {
+  "id": "huggingface",
+  "url": "https://huggingface.co/favicon.ico"
+ },
+ {
+  "id": "steam",
+  "url": "https://store.steampowered.com/favicon.ico"
+ },
+ {
+  "id": "playstation",
+  "url": "https://www.playstation.com/favicon.ico"
+ },
+ {
+  "id": "xbox",
+  "url": "https://www.xbox.com/favicon.ico"
+ },
+ {
+  "id": "nintendo",
+  "url": "https://www.nintendo.com/favicon.ico"
+ },
+ {
+  "id": "epic",
+  "url": "https://store.epicgames.com/cdn-cgi/trace"
+ },
+ {
+  "id": "cloudflare",
+  "url": "https://www.cloudflare.com/cdn-cgi/trace"
+ },
+ {
+  "id": "akamai",
+  "url": "https://store.akamai.steamstatic.com/favicon.ico"
+ },
+ {
+  "id": "cloudfront",
+  "url": "https://a0.awsstatic.com/libra-css/images/site/fav/favicon.ico"
+ },
+ {
+  "id": "google-cdn",
+  "url": "https://www.gstatic.com/generate_204"
+ },
+ {
+  "id": "fastly",
+  "url": "https://fastly.jsdelivr.net/npm/jquery@3.7.1/package.json"
+ },
+ {
+  "id": "azure",
+  "url": "https://assets.xboxservices.com/assets/f8/67/f86740d7-eedd-4d9c-a963-76af7e36c4b2.svg?n=Xbox-Follow-Footer_Image-0_Mail_32x32_02.svg"
+ },
+ {
+  "id": "baidu",
+  "url": "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
+ },
+ {
+  "id": "bilibili",
+  "url": "https://www.bilibili.com/favicon.ico"
+ },
+ {
+  "id": "wechat",
+  "url": "https://weixin.qq.com/favicon.ico"
+ },
+ {
+  "id": "douyin",
+  "url": "https://lf1-cdn-tos.bytegoofy.com/goofy/ies/douyin_web/public/favicon.ico"
+ },
+ {
+  "id": "yahoo-tw",
+  "url": "https://tw.yahoo.com/favicon.ico"
+ },
+ {
+  "id": "line",
+  "url": "https://line.me/favicon.ico"
+ },
+ {
+  "id": "ettoday",
+  "url": "https://www.ettoday.net/favicon.ico"
+ },
+ {
+  "id": "ptt",
+  "url": "https://www.ptt.cc/cdn-cgi/trace"
+ },
+ {
+  "id": "yahoo-jp",
+  "url": "https://www.yahoo.co.jp/favicon.ico"
+ },
+ {
+  "id": "rakuten",
+  "url": "https://www.rakuten.co.jp/favicon.ico"
+ },
+ {
+  "id": "niconico",
+  "url": "https://resource.video.nimg.jp/web/images/favicon_uni/favicon.ico"
+ },
+ {
+  "id": "naver",
+  "url": "https://s.pstatic.net/static/www/u/2014/0328/mma_204243574.png"
+ },
+ {
+  "id": "kakao",
+  "url": "https://www.kakaocorp.com/robots.txt"
+ },
+ {
+  "id": "coupang",
+  "url": "https://image7.coupangcdn.com/image/coupang/favicon/v2/favicon.ico"
+ },
+ {
+  "id": "daum",
+  "url": "https://www.daum.net/favicon.ico"
+ },
+ {
+  "id": "yandex",
+  "url": "https://yandex.ru/favicon.ico"
+ },
+ {
+  "id": "vk",
+  "url": "https://vk.com/favicon.ico"
+ },
+ {
+  "id": "wildberries",
+  "url": "https://www.wildberries.ru/favicon.ico"
+ },
+ {
+  "id": "mailru",
+  "url": "https://mail.ru/favicon.ico"
+ },
+ {
+  "id": "flipkart",
+  "url": "https://static-assets-web.flixcart.com/favicon.ico"
+ },
+ {
+  "id": "hotstar",
+  "url": "https://img.hotstar.com/image/upload/v1711625492/feature/rebranding/disney-plus-favicon.ico"
+ },
+ {
+  "id": "paytm",
+  "url": "https://paytm.com/favicon.ico"
+ },
+ {
+  "id": "amazon-in",
+  "url": "https://www.amazon.in/favicon.ico"
+ },
+ {
+  "id": "shopee",
+  "url": "https://shopee.sg/favicon.ico"
+ },
+ {
+  "id": "lazada",
+  "url": "https://laz-img-cdn.alicdn.com/tfs/TB1PApewFT7gK0jSZFpXXaTkpXa-200-200.png"
+ },
+ {
+  "id": "grab",
+  "url": "https://assets.grab.com/wp-content/uploads/media/footer/AppStore.png"
+ },
+ {
+  "id": "bbc",
+  "url": "https://www.bbc.co.uk/favicon.ico"
+ },
+ {
+  "id": "booking",
+  "url": "https://www.booking.com/robots.txt"
+ },
+ {
+  "id": "zalando",
+  "url": "https://www.zalando.com/favicon.ico"
+ },
+ {
+  "id": "allegro",
+  "url": "https://allegro.pl/favicon.ico"
+ },
+ {
+  "id": "mercadolibre",
+  "url": "https://www.mercadolibre.com/favicon.ico"
+ },
+ {
+  "id": "globo",
+  "url": "https://www.globo.com/favicon.ico"
+ },
+ {
+  "id": "nubank",
+  "url": "https://nubank.com.br/favicon.ico"
+ },
+ {
+  "id": "ifood",
+  "url": "https://www.ifood.com.br/cdn-cgi/trace"
+ },
+ {
+  "id": "espn",
+  "url": "https://www.espn.com/favicon.ico"
+ },
+ {
+  "id": "disneyplus",
+  "url": "https://www.disneyplus.com/favicon.ico"
+ },
+ {
+  "id": "yahoo",
+  "url": "https://www.yahoo.com/favicon.ico"
+ },
+ {
+  "id": "target",
+  "url": "https://www.target.com/favicon.ico"
+ },
+ {
+  "id": "talabat",
+  "url": "https://www.talabat.com/cdn-cgi/trace"
+ },
+ {
+  "id": "careem",
+  "url": "https://www.careem.com/cdn-cgi/trace"
+ },
+ {
+  "id": "aljazeera",
+  "url": "https://www.aljazeera.com/favicon_aje.ico"
+ },
+ {
+  "id": "trendyol",
+  "url": "https://www.trendyol.com/cdn-cgi/trace"
+ },
+ {
+  "id": "perplexity",
+  "url": "https://www.perplexity.ai/"
+ },
+ {
+  "id": "mistral",
+  "url": "https://chat.mistral.ai/"
+ },
+ {
+  "id": "poe",
+  "url": "https://poe.com/"
+ },
+ {
+  "id": "characterai",
+  "url": "https://character.ai/"
+ },
+ {
+  "id": "metaai",
+  "url": "https://www.meta.ai/"
+ },
+ {
+  "id": "dazn",
+  "url": "https://www.dazn.com/"
+ },
+ {
+  "id": "crunchyroll",
+  "url": "https://www.crunchyroll.com/"
+ },
+ {
+  "id": "peacock",
+  "url": "https://www.peacocktv.com/"
+ },
+ {
+  "id": "philo",
+  "url": "https://www.philo.com/"
+ },
+ {
+  "id": "nbc",
+  "url": "https://www.nbc.com/"
+ },
+ {
+  "id": "shudder",
+  "url": "https://www.shudder.com/"
+ },
+ {
+  "id": "bein",
+  "url": "https://connect.beinsports.com/"
+ },
+ {
+  "id": "primevideo",
+  "url": "https://www.primevideo.com/"
+ },
+ {
+  "id": "appletv",
+  "url": "https://tv.apple.com/"
+ },
+ {
+  "id": "max",
+  "url": "https://www.hbomax.com/"
+ },
+ {
+  "id": "hulu",
+  "url": "https://www.hulu.com/"
+ },
+ {
+  "id": "paramount",
+  "url": "https://www.paramountplus.com/"
+ },
+ {
+  "id": "tubi",
+  "url": "https://tubitv.com/"
+ },
+ {
+  "id": "pluto",
+  "url": "https://pluto.tv/"
+ },
+ {
+  "id": "fubo",
+  "url": "https://www.fubo.tv/"
+ },
+ {
+  "id": "viu",
+  "url": "https://www.viu.com/"
+ },
+ {
+  "id": "viki",
+  "url": "https://www.viki.com/"
+ },
+ {
+  "id": "bilibilitv",
+  "url": "https://www.bilibili.tv/"
+ },
+ {
+  "id": "viaplay",
+  "url": "https://viaplay.com/"
+ },
+ {
+  "id": "skyshowtime",
+  "url": "https://www.skyshowtime.com/"
+ },
+ {
+  "id": "acorn",
+  "url": "https://acorn.tv/"
+ },
+ {
+  "id": "catchplay",
+  "url": "https://www.catchplay.com/"
+ },
+ {
+  "id": "docplay",
+  "url": "https://www.docplay.com/"
+ },
+ {
+  "id": "nowtv",
+  "url": "https://www.nowtv.com/"
+ },
+ {
+  "id": "pandora",
+  "url": "https://www.pandora.com/"
+ },
+ {
+  "id": "deezer",
+  "url": "https://www.deezer.com/"
+ },
+ {
+  "id": "soundcloud",
+  "url": "https://soundcloud.com/"
+ },
+ {
+  "id": "messenger",
+  "url": "https://www.messenger.com/"
+ },
+ {
+  "id": "threads",
+  "url": "https://www.threads.com/"
+ },
+ {
+  "id": "signal",
+  "url": "https://signal.org/"
+ },
+ {
+  "id": "snapchat",
+  "url": "https://www.snapchat.com/"
+ },
+ {
+  "id": "pinterest",
+  "url": "https://www.pinterest.com/"
+ },
+ {
+  "id": "roblox",
+  "url": "https://www.roblox.com/"
+ },
+ {
+  "id": "kktv",
+  "url": "https://www.kktv.me/"
+ },
+ {
+  "id": "tvb",
+  "url": "https://www.tvbanywhere.com/"
+ },
+ {
+  "id": "sbs",
+  "url": "https://www.sbs.com.au/ondemand/"
+ },
+ {
+  "id": "fod",
+  "url": "https://fod.fujitv.co.jp/"
+ },
+ {
+  "id": "dmm",
+  "url": "https://tv.dmm.com/"
+ },
+ {
+  "id": "zdf",
+  "url": "https://www.zdf.de/"
+ },
+ {
+  "id": "nhk",
+  "url": "https://www.nhk.or.jp/"
+ },
+ {
+  "id": "telasa",
+  "url": "https://www.telasa.jp/"
+ },
+ {
+  "id": "jcom",
+  "url": "https://linkvod.myjcom.jp/"
+ },
+ {
+  "id": "abema",
+  "url": "https://abema.tv/"
+ },
+ {
+  "id": "unext",
+  "url": "https://video.unext.jp/"
+ },
+ {
+  "id": "tver",
+  "url": "https://tver.jp/"
+ },
+ {
+  "id": "hulujp",
+  "url": "https://www.hulu.jp/"
+ },
+ {
+  "id": "lemino",
+  "url": "https://lemino.docomo.ne.jp/"
+ },
+ {
+  "id": "danime",
+  "url": "https://animestore.docomo.ne.jp/"
+ },
+ {
+  "id": "wowow",
+  "url": "https://www.wowow.co.jp/"
+ },
+ {
+  "id": "radiko",
+  "url": "https://radiko.jp/"
+ },
+ {
+  "id": "videomarket",
+  "url": "https://www.videomarket.jp/"
+ },
+ {
+  "id": "rakutenjp",
+  "url": "https://tv.rakuten.co.jp/"
+ },
+ {
+  "id": "mora",
+  "url": "https://mora.jp/"
+ },
+ {
+  "id": "wavve",
+  "url": "https://www.wavve.com/"
+ },
+ {
+  "id": "tving",
+  "url": "https://www.tving.com/"
+ },
+ {
+  "id": "watcha",
+  "url": "https://watcha.com/"
+ },
+ {
+  "id": "spotv",
+  "url": "https://www.spotvnow.co.kr/"
+ },
+ {
+  "id": "4gtv",
+  "url": "https://www.4gtv.tv/"
+ },
+ {
+  "id": "litv",
+  "url": "https://www.litv.tv/"
+ },
+ {
+  "id": "bahamut",
+  "url": "https://ani.gamer.com.tw/"
+ },
+ {
+  "id": "hami",
+  "url": "https://hamivideo.hinet.net/"
+ },
+ {
+  "id": "myvideo",
+  "url": "https://www.myvideo.net.tw/"
+ },
+ {
+  "id": "friday",
+  "url": "https://video.friday.tw/"
+ },
+ {
+  "id": "ofiii",
+  "url": "https://www.ofiii.com/"
+ },
+ {
+  "id": "linetv",
+  "url": "https://www.linetv.tw/"
+ },
+ {
+  "id": "mytvsuper",
+  "url": "https://www.mytvsuper.com/"
+ },
+ {
+  "id": "nowe",
+  "url": "https://www.nowe.com/"
+ },
+ {
+  "id": "viutv",
+  "url": "https://viu.tv/"
+ },
+ {
+  "id": "hoytv",
+  "url": "https://hoy.tv/"
+ },
+ {
+  "id": "sonyliv",
+  "url": "https://www.sonyliv.com/"
+ },
+ {
+  "id": "tataplay",
+  "url": "https://www.tataplaybinge.com/"
+ },
+ {
+  "id": "mxplayer",
+  "url": "https://www.mxplayer.in/"
+ },
+ {
+  "id": "mewatch",
+  "url": "https://www.mewatch.sg/"
+ },
+ {
+  "id": "starhub",
+  "url": "https://www.starhubtvplus.com/"
+ },
+ {
+  "id": "vidio",
+  "url": "https://www.vidio.com/"
+ },
+ {
+  "id": "trueid",
+  "url": "https://tv.trueid.net/"
+ },
+ {
+  "id": "aisplay",
+  "url": "https://aisplay.ais.co.th/"
+ },
+ {
+  "id": "sooka",
+  "url": "https://sooka.my/"
+ },
+ {
+  "id": "galaxyplay",
+  "url": "https://galaxyplay.vn/"
+ },
+ {
+  "id": "tv360",
+  "url": "https://tv360.vn/"
+ },
+ {
+  "id": "kplus",
+  "url": "https://www.kplus.vn/"
+ },
+ {
+  "id": "tenplay",
+  "url": "https://10play.com.au/"
+ },
+ {
+  "id": "stan",
+  "url": "https://www.stan.com.au/"
+ },
+ {
+  "id": "binge",
+  "url": "https://binge.com.au/"
+ },
+ {
+  "id": "kayo",
+  "url": "https://kayosports.com.au/"
+ },
+ {
+  "id": "7plus",
+  "url": "https://7plus.com.au/"
+ },
+ {
+  "id": "iview",
+  "url": "https://iview.abc.net.au/"
+ },
+ {
+  "id": "9now",
+  "url": "https://www.9now.com.au/"
+ },
+ {
+  "id": "threenow",
+  "url": "https://www.threenow.co.nz/"
+ },
+ {
+  "id": "neon",
+  "url": "https://www.neontv.co.nz/"
+ },
+ {
+  "id": "skygonz",
+  "url": "https://www.skygo.co.nz/"
+ },
+ {
+  "id": "itvx",
+  "url": "https://www.itv.com/"
+ },
+ {
+  "id": "channel4",
+  "url": "https://www.channel4.com/"
+ },
+ {
+  "id": "my5",
+  "url": "https://www.channel5.com/"
+ },
+ {
+  "id": "skygo",
+  "url": "https://www.sky.com/watch/sky-go"
+ },
+ {
+  "id": "molotov",
+  "url": "https://www.molotov.tv/"
+ },
+ {
+  "id": "francetv",
+  "url": "https://www.france.tv/"
+ },
+ {
+  "id": "joyn",
+  "url": "https://www.joyn.de/"
+ },
+ {
+  "id": "rtlplus",
+  "url": "https://plus.rtl.de/"
+ },
+ {
+  "id": "skyde",
+  "url": "https://www.sky.de/"
+ },
+ {
+  "id": "skych",
+  "url": "https://www.sky.ch/"
+ },
+ {
+  "id": "raiplay",
+  "url": "https://www.raiplay.it/"
+ },
+ {
+  "id": "movistar",
+  "url": "https://www.movistarplus.es/"
+ },
+ {
+  "id": "npo",
+  "url": "https://npo.nl/"
+ },
+ {
+  "id": "videoland",
+  "url": "https://www.videoland.com/"
+ },
+ {
+  "id": "nlziet",
+  "url": "https://www.nlziet.nl/"
+ },
+ {
+  "id": "amediateka",
+  "url": "https://www.amediateka.ru/"
+ },
+ {
+  "id": "sling",
+  "url": "https://www.sling.com/"
+ },
+ {
+  "id": "starz",
+  "url": "https://www.starz.com/"
+ },
+ {
+  "id": "aetv",
+  "url": "https://play.aetv.com/"
+ },
+ {
+  "id": "cw",
+  "url": "https://www.cwtv.com/"
+ },
+ {
+  "id": "directv",
+  "url": "https://stream.directv.com/"
+ },
+ {
+  "id": "mgmplus",
+  "url": "https://www.mgmplus.com/"
+ },
+ {
+  "id": "fxnow",
+  "url": "https://www.fxnetworks.com/"
+ },
+ {
+  "id": "nflplus",
+  "url": "https://www.nfl.com/plus/"
+ },
+ {
+  "id": "tlc",
+  "url": "https://go.tlc.com/"
+ },
+ {
+  "id": "cbcgem",
+  "url": "https://gem.cbc.ca/"
+ },
+ {
+  "id": "crave",
+  "url": "https://www.crave.ca/"
+ },
+ {
+  "id": "mgtv",
+  "url": "https://www.mgtv.com/"
+ },
+ {
+  "id": "tencent",
+  "url": "https://v.qq.com/"
+ },
+ {
+  "id": "iqiyi",
+  "url": "https://www.iqiyi.com/"
+ },
+ {
+  "id": "youku",
+  "url": "https://www.youku.com/"
+ },
+ {
+  "id": "netease",
+  "url": "https://music.163.com/"
+ }
+]

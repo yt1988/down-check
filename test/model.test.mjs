@@ -1,100 +1,114 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { verdict, STATE, duration, errKey, stateClass } from "../src/model.mjs";
+import { verdict, STATE, duration, errKey, stateClass, summary } from "../src/model.mjs";
 
-const NOW = Date.parse("2026-11-25T06:00:00Z");
-const AT = "2026-11-25T05:00:00Z";
-const svc = { id: "x", name: "X", src: { base: "x", unlock: "x" } };
-const baseOnly = { id: "y", name: "Y", src: { base: "y" } };
+const NOW = Date.parse("2026-11-25T07:00:00Z");
+const SEC = Math.floor(NOW / 1000);
+const svc = { id: "x", name: "X" };
 
-const base = (o = {}) => ({ ms: 10, err: null, up24: 100, up7: 100, h24: [], out: [], ...o });
-const un = (o = {}) => ({ s: "ok", err: null, since: null, ok_at: AT, ms: 10, h: "o".repeat(48), ...o });
-const doc = (services, { at = AT, every = 3600, stale = false } = {}) => ({ at, every, stale, services });
+const probeDoc = (services, { from = "Tokyo, JP", age = 120 } = {}) => ({ at: new Date(NOW - age * 1000).toISOString(), every: 600, from, services });
+const p = (o = {}) => ({ ok: true, unknown: false, ms: 20, http: 200, t: SEC - 120, ok_at: SEC - 120, up24: 100, up7: 100, h24: "o".repeat(144), out: [], ...o });
+const offDoc = (services) => ({ at: new Date(NOW).toISOString(), every: 600, services });
+const o = (x = {}) => ({ at: SEC - 60, indicator: "none", description: "All Systems Operational", updated_at: null, page: "https://status.example/", ...x });
+const data = (tokyo, shanghai, official) => ({ tokyo, shanghai, official });
 
-test("both endpoints answer: ok", () => {
-  const v = verdict(svc, { index: doc({ x: base() }), unlock: doc({ x: un() }) }, NOW);
+test("both places answer: ok", () => {
+  const v = verdict(svc, data(probeDoc({ x: p() }), probeDoc({ x: p() }, { from: "Shanghai, CN" })), NOW);
   assert.equal(v.state, STATE.OK);
+  assert.deepEqual(v.places, ["tokyo", "shanghai"]);
   assert.equal(v.up24, 100);
 });
 
-test("one endpoint answers, the other does not: partial, never an outage", () => {
-  const v = verdict(svc, { index: doc({ x: base({ err: "timeout", ms: -1 }) }), unlock: doc({ x: un() }) }, NOW);
+test("one place answers, one does not: partial", () => {
+  const v = verdict(svc, data(probeDoc({ x: p() }), probeDoc({ x: p({ ok: false, err: "timeout" }) }, { from: "Shanghai, CN" })), NOW);
   assert.equal(v.state, STATE.PARTIAL);
 });
 
-test("both endpoints fail for a few hours: unreachable", () => {
-  const since = new Date(NOW - 3 * 3600e3).toISOString();
-  const v = verdict(svc, {
-    index: doc({ x: base({ err: "timeout", ms: -1, out: [{ from: Math.floor((NOW - 3 * 3600e3) / 1000), to: Math.floor((NOW - 3600e3) / 1000), runs: 3, err: "timeout" }] }) }),
-    unlock: doc({ x: un({ s: "bad", err: "http", since, h: "o".repeat(45) + "bbb" }) }),
-  }, NOW);
+test("both places fail for a few hours: unreachable", () => {
+  const since = SEC - 2 * 3600;
+  const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout", out: [{ from: since, to: SEC - 120, runs: 12, err: "timeout" }] }) }),
+    probeDoc({ x: p({ ok: false, err: "reset", out: [{ from: since, to: SEC - 120, runs: 12, err: "reset" }] }) }, { from: "Shanghai, CN" })), NOW);
   assert.equal(v.state, STATE.UNREACHABLE);
-  assert.equal(v.since, Date.parse(since));
+  assert.equal(v.since, since * 1000);
 });
 
-test("both endpoints fail for more than a day: longfail, still not called an outage", () => {
-  const since = new Date(NOW - 50 * 3600e3).toISOString();
-  const v = verdict(svc, {
-    index: doc({ x: base({ err: "timeout", ms: -1, out: [{ from: Math.floor((NOW - 50 * 3600e3) / 1000), to: Math.floor((NOW - 3600e3) / 1000), runs: 50, err: "timeout" }] }) }),
-    unlock: doc({ x: un({ s: "bad", err: "http", since, h: "b".repeat(48) }) }),
-  }, NOW);
+test("both places fail for days: longfail, still not an outage", () => {
+  const since = SEC - 50 * 3600;
+  const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout", out: [{ from: since, to: SEC - 120, runs: 300, err: "timeout" }] }) }),
+    probeDoc({ x: p({ ok: false, err: "timeout", out: [{ from: since, to: SEC - 120, runs: 300, err: "timeout" }] }) }, { from: "Shanghai, CN" })), NOW);
   assert.equal(v.state, STATE.LONGFAIL);
   assert.match(duration(NOW - v.since).unit, /day|hour/);
 });
 
-test("a single endpoint that fails is partial only when another one answers; alone it is unreachable", () => {
-  const v = verdict(baseOnly, { index: doc({ y: base({ err: "reset", ms: -1 }) }) }, NOW);
+test("every answer is a refusal or a challenge: unconfirmed, not offline", () => {
+  const v = verdict(svc, data(probeDoc({ x: p({ ok: false, unknown: true, err: "challenge", http: 403 }) }),
+    probeDoc({ x: p({ ok: false, unknown: true, err: "challenge", http: 429 }) }, { from: "Shanghai, CN" })), NOW);
+  assert.equal(v.state, STATE.UNCONFIRMED);
+  assert.equal(stateClass(v.state), "unknown");
+});
+
+test("a failure and a refusal, no answer anywhere: unreachable, the refusal does not hide the failure", () => {
+  const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout" }) }),
+    probeDoc({ x: p({ ok: false, unknown: true, err: "challenge" }) }, { from: "Shanghai, CN" })), NOW);
   assert.equal(v.state, STATE.UNREACHABLE);
 });
 
-test("answered now but an interruption within 24 hours: recovered", () => {
-  const v = verdict(baseOnly, { index: doc({ y: base({ out: [{ from: Math.floor((NOW - 6 * 3600e3) / 1000), to: Math.floor((NOW - 4 * 3600e3) / 1000), runs: 2, err: "timeout" }] }) }) }, NOW);
-  assert.equal(v.state, STATE.RECOVERED);
+test("the official page reports a major outage: fault, even while our probes answer", () => {
+  const v = verdict(svc, data(probeDoc({ x: p() }), null, offDoc({ x: o({ indicator: "major", description: "Major outage" }) })), NOW);
+  assert.equal(v.state, STATE.FAULT);
+  assert.match(v.official.description, /Major/);
 });
 
-test("the unlock history alone shows a recent bad run: recovered", () => {
-  const v = verdict({ id: "z", name: "Z", src: { unlock: "z" } }, { unlock: doc({ z: un({ h: "o".repeat(45) + "bbo" }) }) }, NOW);
-  assert.equal(v.state, STATE.RECOVERED);
+test("the official page reports a minor issue: partial", () => {
+  const v = verdict(svc, data(probeDoc({ x: p() }), null, offDoc({ x: o({ indicator: "minor" }) })), NOW);
+  assert.equal(v.state, STATE.PARTIAL);
 });
 
-test("stale data is stale, not ok and not down", () => {
-  const old = "2026-11-25T01:00:00Z"; // 5 hours old, interval 1 hour
-  const v = verdict(svc, { index: doc({ x: base() }, { at: old }), unlock: doc({ x: un() }, { at: old }) }, NOW);
-  assert.equal(v.state, STATE.STALE);
-  assert.ok(v.views.every(x => !x.fresh));
+test("the official page says fine but neither probe reaches it: partial, not an outage claim", () => {
+  const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout" }) }),
+    probeDoc({ x: p({ ok: false, err: "timeout" }) }, { from: "Shanghai, CN" }), offDoc({ x: o() })), NOW);
+  assert.equal(v.state, STATE.PARTIAL);
 });
 
-test("a stale upstream does not hide a fresh one", () => {
-  const v = verdict(svc, { index: doc({ x: base() }, { at: "2026-11-25T01:00:00Z" }), unlock: doc({ x: un() }) }, NOW);
+test("the official page alone, fresh and fine: ok", () => {
+  const v = verdict(svc, data(null, null, offDoc({ x: o() })), NOW);
   assert.equal(v.state, STATE.OK);
-  assert.equal(v.partialStale, true);
+});
+
+test("a stale official page does not rescue stale probes", () => {
+  const old = { at: new Date(NOW - 30 * 60e3).toISOString(), every: 600, services: { x: o({ at: SEC - 30 * 60 }) } };
+  const stale = p({ t: SEC - 30 * 60, ok_at: SEC - 30 * 60 });
+  const v = verdict(svc, data(probeDoc({ x: stale }, { age: 30 * 60 }), null, old), NOW);
+  assert.equal(v.state, STATE.STALE);
 });
 
 test("no data at all: nodata", () => {
   assert.equal(verdict(svc, null, NOW).state, STATE.NODATA);
-  assert.equal(verdict(svc, { index: doc({}), unlock: doc({}) }, NOW).state, STATE.NODATA);
+  assert.equal(verdict(svc, data(probeDoc({}), probeDoc({}), null), NOW).state, STATE.NODATA);
 });
 
-test("one source missing but the other answers: ok (the page shows the missing one)", () => {
-  assert.equal(verdict(svc, { index: doc({ x: base() }), unlock: null }, NOW).state, STATE.OK);
+test("one place missing, the other answers: ok, and the page shows the missing one", () => {
+  const v = verdict(svc, data(probeDoc({ x: p() }), null), NOW);
+  assert.equal(v.state, STATE.OK);
+  assert.deepEqual(v.places, ["tokyo"]);
 });
 
-test("a service missing from one stale source still uses the fresh one", () => {
-  const v = verdict(svc, { index: doc({ x: base({ err: "timeout", ms: -1 }) }), unlock: doc({}, { at: "2026-11-25T00:00:00Z" }) }, NOW);
-  assert.equal(v.state, STATE.UNREACHABLE);
-  assert.equal(v.partialStale, false);
+test("an interruption within 24 hours: recovered", () => {
+  const v = verdict(svc, data(probeDoc({ x: p({ out: [{ from: SEC - 4 * 3600, to: SEC - 2 * 3600, runs: 12, err: "timeout" }] }) }), null), NOW);
+  assert.equal(v.state, STATE.RECOVERED);
+});
+
+test("summary counts problems separately from unconfirmed", () => {
+  const list = [{ id: "x" }, { id: "y" }, { id: "z" }];
+  const d = data(probeDoc({ x: p(), y: p({ ok: false, err: "timeout" }), z: p({ ok: false, unknown: true, err: "challenge" }) }), null);
+  const c = summary(list, d, NOW);
+  assert.deepEqual({ ok: c.ok, bad: c.bad, unknown: c.unknown }, { ok: 1, bad: 1, unknown: 1 });
 });
 
 test("errors map to the words pages have", () => {
+  assert.equal(errKey("challenge"), "err_challenge");
   assert.equal(errKey("timeout"), "err_timeout");
-  assert.equal(errKey("EOF"), "err_eof");
-  assert.equal(errKey("http"), "err_http");
+  assert.equal(errKey("http 503"), "err_http");
+  assert.equal(errKey("connection refused"), "err_refused");
   assert.equal(errKey("something new"), "err_other");
-});
-
-test("colors: unknown never looks like a failure", () => {
-  assert.equal(stateClass(STATE.OK), "ok");
-  assert.equal(stateClass(STATE.UNREACHABLE), "bad");
-  assert.equal(stateClass(STATE.STALE), "unknown");
-  assert.equal(stateClass(STATE.NODATA), "unknown");
 });

@@ -2,73 +2,96 @@
 
 **Live:** https://down.1ms.dog
 
-Is ChatGPT down right now? Is GitHub, Discord or Cloudflare? Down Check shows what our own server in Tokyo sees for
-30 services people search for during an outage, the interruptions of the last 7 days, and a link to each service's
-official status page.
+Which services are down right now? Down Check watches 210 services people search for during an outage — ChatGPT,
+GitHub, Discord, Cloudflare, Netflix, Steam and the rest — from two places: our own probes in Tokyo and Shanghai, every
+10 minutes. Each page shows the current state first, the last 24 hours as a strip, the interruptions of the last 7 days,
+and a link to the service's own official status page.
 
-- **Every hour, from Tokyo.** Two checks that already run on our server: the hourly latency baseline (82 services)
-  and the hourly unlock check (154 services). This page publishes 30 of them for now; the list is data, not code.
-- **It does not call a service down.** A single probe can only prove "we cannot reach it from here". When our check
-  fails, the page says **not answering from Tokyo** and links the official status page. When the data is missing or
-  older than three check intervals, it says **cannot judge** — never "down".
+- **Current state first.** A large online / partial / offline / unconfirmed state, then the history. A service is never
+  called "down" because one probe failed: only the service's own official status page may report an outage.
+- **Unconfirmed is a state.** A 403, a 429 or a challenge page is shown as unconfirmed, not offline. Missing data or
+  data older than 20 minutes (two missed rounds) is "cannot judge".
 - **10 languages**: English, 简体中文, 繁體中文, 日本語, 한국어, Español, Français, Deutsch, Português, Русский.
-- **Category and service pages** for search: `/<group>/` and `/<group>/<service>/`; every page in every language.
+- **All services, all languages**: `/`, `/<group>/` and `/<group>/<service>/`.
 
 ## How a verdict is made
 
 | State | What it means |
 |---|---|
-| Answering | Our check got an answer just now (one of the two endpoints, or both). |
-| Answering again | It answers now; there was a failure in the last 24 hours. |
-| Partly answering | One of our two endpoints answers, the other does not. |
-| Not answering from Tokyo | Neither endpoint answers now, for less than a day. |
-| Not answering for days | Neither has answered for more than a day: more likely our check than the service. |
-| Data is stale / No data | The upstream file is older than 3 × its interval, or the service is missing. The page says it cannot judge. |
+| Online | Our probes in Tokyo and/or Shanghai answered. |
+| Recovered | Answering now; there was an interruption in the last 24 hours. |
+| Partial | One place answers and the other does not; or the official page reports a minor issue or maintenance. |
+| Unconfirmed | Every answer was a refusal (403/429) or a challenge page: no way to say either way. |
+| Offline | No place answers now, for less than a day. |
+| Offline for days | No place has answered for more than a day: more likely our check than the service. |
+| Official outage | The service's own official status page reports a major or critical outage. |
+| Data is stale / No data | Every source is older than 20 minutes, or a source has no data. Grey, never red. |
 
-The official status page is linked, not copied. In this version the page does not fetch it, so it never claims an
-outage on its own; a later version adds the official feed and the three-way verdict (normal / partial / outage).
+The official status page is the service's own word; the page labels it with its source and never presents it as our
+measurement. Only services that publish a machine-readable Statuspage feed take part in the verdict; the rest still link
+their official page.
 
 ## Run it locally
 
 ```bash
 npm ci
-npm run build      # src/ + static/ → public/ (not committed: 380 pages)
-npm run dev        # build, then http://localhost:8791/ with the live upstream data
-npm test           # build, then the model, strings, data and page tests
+npm run build                        # src/ + static/ → public/ (not committed: 2,320 pages)
+npm run dev                          # build, then http://localhost:8791/
+npm test                             # build, then the model, strings, data and page tests
 ```
 
-`npm run dev` reads the same two upstream files the Worker reads. Without network access the pages show "cannot
-judge" — which is the correct degraded state, not an error.
+To see live probe data, build and run the probe first (Go 1.22+):
+
+```bash
+cd probe && go build -o ../../down-probe . && cd ..
+./down-probe --out probe/out --services probe/services.json --from "Tokyo, JP"
+npm run dev
+```
+
+`npm run dev` reads `probe/out/latest.json` (Tokyo) and `probe/out/sh/latest.json` (Shanghai, optional), and fetches the
+official status pages itself. With no probe file the probe rows say "no data" — the correct degraded state, not an
+error. For local design work, `scripts/dev.mjs` fills the part of the 24-hour strip the probe does not have yet from
+the existing hourly baseline; production does not do that.
 
 ## Deploy
 
-The Worker serves static assets and one small endpoint (`/api/status.json`). `public/` is not committed: Workers
-Builds runs `npm ci && npm test` and then `npx wrangler deploy`; the test builds the site first. No custom domain:
-on 1ms.dog the shell routes the hostname to this Worker. To self-host, bind your own domain in the Cloudflare
-dashboard, and point the Worker at your own copies of the two JSON files (`INDEX_URL` / `UNLOCK_URL` in
-`src/worker.js`).
+The Worker serves static assets, one endpoint (`/api/status.json`) and one cron:
+
+- **`/api/status.json`** merges the two probe files and the official snapshot, trims to what a page shows, caches 60 s,
+  and keeps the last good copy for a week (marked `stale`).
+- **Cron every 10 minutes** reads the services' own Statuspage answers and writes one KV key with the snapshot. One
+  write per run, never one key per service.
+- `public/` is not committed: Workers Builds runs `npm ci && npm test` and then `npx wrangler deploy`; the test builds
+  the site first. No custom domain: on 1ms.dog the shell routes the hostname to this Worker.
+- Before the first deploy, create the KV namespace and replace `REPLACE_WITH_KV_NAMESPACE_ID` in `wrangler.toml`.
+  Without the binding the pages still work; the official rows say "no data".
+- To self-host, bind your own domain and point `PROBE_TOKYO_URL` / `PROBE_SHANGHAI_URL` (Worker variables) at your own
+  probe output; the defaults are 1ms.dog's data host.
 
 ## Data
 
-The Worker reads two JSON files and keeps only the published services:
+`probe/latest.json` (one per machine): `at`, `every`, `from`, `complete`, and per service `ok`, `unknown`, `ms`,
+`http`, `err`, `t` (this service's own measurement time), `h` (history, 10-minute samples), `up24`, `up7`, `out`.
+The Worker trims it to the published services and the last 144 samples (`h24`) before any browser sees it.
 
-- `index/summary.json` — per service: `last { ms, err }`, `up24`, `up7`, `h24[24]`, `out[]` (7-day outages).
-- `unlock/status.json` — per service: `s` (`ok` / `bad`), `err`, `streak`, `since`, `ok_at`, `h` (the last runs).
+The official snapshot in KV: one `{ at, every, services: { <id>: { at, indicator, description, updated_at, page } } }`.
+`indicator` is Statuspage's `none / minor / major / critical / maintenance`.
 
-Both declare `at` and `every`; the page uses them for the "last check" line and for the freshness threshold. Missing
-or stale data is shown as unknown. Nothing about visitors is collected: the page reads one same-origin JSON and sets
-no cookies.
+Nothing about visitors is collected: the page reads one same-origin JSON and sets no cookies.
 
 ## Layout
 
 ```
-src/services.mjs   the published services and groups (add a service here)
-src/model.mjs      verdict, freshness and error mapping (shared by the page and the tests)
-src/data.mjs       what the Worker keeps from each upstream file
-src/worker.js      /api/status.json, cached 60 s, last good copy kept 7 days
-src/app.js         fills the page from the JSON
-scripts/build.mjs  380 static pages, sitemap, robots, llms.txt, _headers
-scripts/assets.mjs link-preview images, one per language
+src/services.mjs        the 210 services and 21 groups (generated from data/)
+src/model.mjs           verdict, freshness and error mapping (shared by the page and the tests)
+src/status-sources.mjs  official status pages and their machine-readable feeds
+src/data.mjs            what the Worker keeps from each upstream file
+src/worker.js           /api/status.json, the cron, one KV key
+src/app.js              fills the page from the JSON
+scripts/gen-services.mjs  data/baseline.json + data/unlock.json → src/services.mjs + probe/services.json
+scripts/build.mjs       2,320 static pages, sitemap, robots, llms.txt, _headers
+scripts/assets.mjs      link-preview images, one per language
+probe/                  the 10-minute probe (Go), its systemd units and measured cost
 ```
 
 <!-- 1ms-repos: generated by the 1ms.dog shell repository's scripts/repos.mjs; edit sites.js or that script, not here -->
@@ -76,4 +99,4 @@ scripts/assets.mjs link-preview images, one per language
 
 ## License
 
-MIT. The service names are their owners' trademarks; this page only measures whether they answer.
+MIT. The service names are their owners' trademarks; this page only records whether they answered.

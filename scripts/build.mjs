@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Builds public/ from src/ and static/ (public/ is not committed: Workers Builds runs this, then deploys):
-//   index.html, <lang>/index.html                    the overview per language
+//   index.html, <lang>/index.html                    the board of every service, per language
 //   <lang>/<cat>/index.html                          one page per group
 //   <lang>/<cat>/<service>/index.html                one page per service
 //   assets/app.<hash>.css, assets/app.<hash>.js      the page's styles and code
@@ -14,18 +14,16 @@ import { fileURLToPath } from "node:url";
 import { build as bundle } from "esbuild";
 import { LANGS, SITE, REPO } from "../src/config.mjs";
 import { CATS, SERVICES, byCat } from "../src/services.mjs";
+import { STATUS } from "../src/status-sources.mjs";
 
 const pub = new URL("../public/", import.meta.url), src = new URL("../src/", import.meta.url), stat = new URL("../static/", import.meta.url);
 const t0 = Date.now();
 
-// language, URL folder, og:locale; the first is the root
-const TR = { "zh-CN": "zh-cn", "zh-TW": "zh-tw" };
 const dirOf = lang => LANGS.find(l => l[0] === lang)[1];
 const pathOf = (lang, rest = "") => "/" + (dirOf(lang) ? dirOf(lang) + "/" : "") + rest;
 const catPath = (lang, cat) => pathOf(lang, cat + "/");
 const svcPath = (lang, s) => pathOf(lang, s.cat + "/" + s.id + "/");
 
-// Runs before first paint: apply the saved theme and, on the English root only, send the visitor to their language.
 const PREPAINT = `(function(){var d=document.documentElement,th=null,s=null;try{th=localStorage.getItem("down:theme");s=localStorage.getItem("down:lang")}catch(e){}if(th==="light"||th==="dark")d.setAttribute("data-theme",th);if(!d.hasAttribute("data-root"))return;var P=JSON.parse(d.getAttribute("data-paths")||"{}"),l=null;try{var q=new URLSearchParams(location.search).get("lang");if(P[q])l=q}catch(e){}if(!l&&P[s])l=s;for(var ls=navigator.languages||[navigator.language||"en"],i=0;!l&&!s&&i<ls.length;i++){var x=String(ls[i]).toLowerCase(),b=x.split("-")[0];l=b==="zh"?(/tw|hk|mo|hant/.test(x)?"zh-TW":"zh-CN"):P[b]?b:null}if(l&&l!=="en"&&location.pathname===P.en)location.replace(P[l]+location.search+location.hash)})();`;
 
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -33,20 +31,22 @@ const fill = (s, v) => String(s).replace(/\{(\w+)\}/g, (m, k) => (k in v ? v[k] 
 const hash = s => createHash("sha256").update(s).digest("hex").slice(0, 10);
 const sha = s => createHash("sha256").update(s).digest("base64");
 const json = x => JSON.stringify(x).replace(/</g, "\\u003c");
-const T = (i18n, lang, key) => i18n[lang][key] ?? i18n.en[key] ?? key;
+const T = (I, lang, key) => I[lang][key] ?? I.en[key] ?? key;
 const EXT = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg>';
+const GLOBAL = new Set(["ai", "video", "social", "dev", "game", "web", "cdn"]);
+const cells = n => "<i></i>".repeat(n);
 
 // What the browser needs at runtime; everything else is written into the page at build time.
 const RUNTIME = new Set(["name", "lang_label", "a_lang", "a_theme", "a_help", "a_close", "a_prev", "a_next",
-  "th_system", "th_light", "th_dark",
-  "st_loading", "st_ok", "st_recovered", "st_partial", "st_unreachable", "st_longfail", "st_stale", "st_nodata",
-  "v_ok", "v_recovered", "v_partial", "v_unreachable", "v_longfail", "v_stale", "v_nodata",
-  "meta_at", "meta_interval", "meta_stale", "meta_fail",
-  "sum_ok", "sum_some", "sum_unknown", "k_up24", "k_up7", "k_lastok", "k_checks",
-  "src_base_row", "src_unlock_row", "src_ok", "src_no_ms", "src_err", "src_nodata_val",
-  "err_timeout", "err_reset", "err_http", "err_eof", "err_dns", "err_tls", "err_cancel", "err_other",
-  "loading", "retry", "na", "just_now", "out_none", "out_none_window", "out_unknown", "out_ongoing", "out_checks", "cross_home", "cross_unlock", "cross_check",
-  "report_result", "report_prefill"]);
+  "th_system", "th_light", "th_dark", "just_now", "na", "retry", "loading", "sep",
+  "sum_all_ok", "sum_some", "sum_unknown", "sum_counts", "updated",
+  "st_online", "st_recovered", "st_partial", "st_unreachable", "st_longfail", "st_fault", "st_unconfirmed", "st_stale", "st_nodata", "st_loading",
+  "v_online", "v_recovered", "v_partial", "v_official_partial", "v_official_online", "v_official_ok_unreachable", "v_unreachable", "v_longfail", "v_fault", "v_unconfirmed", "v_stale", "v_nodata",
+  "loc_tokyo", "loc_shanghai",
+  "official_none", "official_no_api",
+  "incidents_none", "incidents_unknown", "incidents_ongoing", "incidents_checks",
+  "err_challenge", "err_timeout", "err_reset", "err_http", "err_eof", "err_dns", "err_tls", "err_refused", "err_unreachable", "err_cancel", "err_other",
+  "report_result", "report_prefill", "cross_home", "cross_unlock", "cross_check"]);
 
 async function loadI18n() {
   const out = {};
@@ -93,74 +93,114 @@ function helpParts(Tt) {
   return { nav, body };
 }
 
+const catName = (Tt, cat) => Tt("cat_" + cat.id);
+function catDesc(Tt, cat) {
+  if (GLOBAL.has(cat.id)) return Tt("cat_desc_" + cat.id);
+  const all = byCat(cat.id);
+  const list = all.length <= 6 ? all.map(s => s.name) : all.slice(0, 4).map(s => s.name).concat("…");
+  return fill(Tt("cat_desc_region"), { region: catName(Tt, cat), list: list.join(Tt("sep")) });
+}
+const searchOf = s => [s.name, s.id, ...(s.names ? Object.values(s.names) : [])].join(" ").toLowerCase();
+
+function legend(Tt) {
+  return `<div class="dn-legend">
+      <span><i class="dot ok"></i>${esc(Tt("legend_ok"))}</span>
+      <span><i class="dot warn"></i>${esc(Tt("legend_warn"))}</span>
+      <span><i class="dot bad"></i>${esc(Tt("legend_bad"))}</span>
+      <span><i class="dot"></i>${esc(Tt("legend_unknown"))}</span>
+    </div>`;
+}
+function summaryBox(Tt) {
+  return `<div class="dn-summary" id="summary"><span class="dot" id="sumDot"></span><b id="sumText">${esc(Tt("st_loading"))}</b><span class="dn-counts" id="sumCounts"></span><span class="dn-age" id="sumAge"></span></div>`;
+}
+
 function homeMain(Tt, lang) {
-  const cats = CATS.map(c => {
-    const list = byCat(c.id);
-    return `<section class="dn-cat" aria-labelledby="cat-${c.id}">
-      <div class="dn-cat-h"><h2 id="cat-${c.id}"><a href="${catPath(lang, c.id)}">${esc(Tt(c.name))}</a></h2><span class="dn-cat-n" id="catN-${c.id}">${list.length}</span></div>
-      <ul class="dn-grid">${list.map(s => `<li><a class="dn-svc" href="${svcPath(lang, s)}" data-s="${s.id}"><span class="dot"></span><span class="dn-svc-n">${esc(s.name)}</span><span class="dn-svc-st">${esc(Tt("st_loading"))}</span></a></li>`).join("")}</ul>
+  const cats = CATS.map(cat => {
+    const list = byCat(cat.id);
+    const tiles = list.map(s => `<li><a class="dn-tile" href="${svcPath(lang, s)}" data-s="${s.id}" data-name="${esc(searchOf(s))}" data-state="loading">
+        <span class="dot"></span><span class="dn-tile-n">${esc(s.name)}</span><span class="sr" data-st>${esc(Tt("st_loading"))}</span>
+        <span class="dn-spark" aria-hidden="true">${cells(24)}</span><span class="dn-tile-s"></span></a></li>`).join("");
+    return `<section class="dn-cat" data-cat="${cat.id}">
+      <header class="dn-cat-h"><h2><a href="${catPath(lang, cat.id)}">${esc(catName(Tt, cat))}</a></h2><span class="dn-cat-sum" id="catSum-${cat.id}">${esc(Tt("st_loading"))}</span></header>
+      <ul class="dn-tiles">${tiles}</ul>
     </section>`;
   }).join("");
   return `<section class="dn-hero">
+      <p class="dn-kicker">${esc(Tt("every_10"))} · ${esc(Tt("from_places"))}</p>
       <h1 class="page-h">${esc(Tt("h1_home"))}</h1>
       <p class="dn-intro">${esc(Tt("intro_home"))}</p>
-      <p class="dn-live" id="liveMeta">${esc(Tt("st_loading"))}</p>
-      <div class="page-verdict dn-verdict" id="verdict"><span class="dot"></span><span id="vText">${esc(Tt("st_loading"))}</span></div>
+      ${summaryBox(Tt)}
+      <div class="dn-tools">
+        <input id="q" type="search" placeholder="${esc(Tt("filter_ph"))}" aria-label="${esc(Tt("filter_ph"))}" autocomplete="off" spellcheck="false">
+        <label class="dn-check"><input type="checkbox" id="onlyIssues"> <span>${esc(Tt("only_issues"))}</span></label>
+      </div>
+      ${legend(Tt)}
     </section>
-    <div class="dn-cats">${cats}</div>
-    <section class="card card-pad"><h2>${esc(Tt("honesty_h"))}</h2><p class="dn-p">${esc(Tt("honesty_t"))}</p></section>`;
+    <div class="dn-board" id="board">${cats}</div>
+    <p class="dn-empty" id="noResults" hidden>${esc(Tt("no_results"))}</p>`;
 }
 
 function catMain(Tt, lang, cat) {
   const list = byCat(cat.id);
-  const rows = list.map(s => `<li><a class="dn-row" href="${svcPath(lang, s)}" data-s="${s.id}">
-      <span class="dot"></span><span class="dn-row-n">${esc(s.name)}</span>
-      <span class="dn-row-u">—</span><span class="dn-row-st">${esc(Tt("st_loading"))}</span></a></li>`).join("");
-  return `<nav class="dn-crumbs"><a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a><span aria-hidden="true">/</span><span class="dn-crumb-here">${esc(Tt(cat.name))}</span></nav>
+  const rows = list.map(s => `<li><a class="dn-row" href="${svcPath(lang, s)}" data-s="${s.id}" data-name="${esc(searchOf(s))}">
+      <span class="dn-row-name"><span class="dot"></span><b>${esc(s.name)}</b></span>
+      <span class="dn-pill">${esc(Tt("st_loading"))}</span>
+      <span class="dn-spark" aria-hidden="true">${cells(24)}</span>
+      <span class="dn-row-up"><i>24h</i><b>—</b></span></a></li>`).join("");
+  return `<nav class="dn-crumbs"><a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a><span aria-hidden="true">/</span><span class="dn-crumb-here">${esc(catName(Tt, cat))}</span></nav>
     <header class="dn-hero">
-      <h1 class="page-h">${esc(fill(Tt("h1_cat"), { cat: Tt(cat.name) }))}</h1>
-      <p class="dn-intro">${esc(Tt(cat.desc))}</p>
-      <p class="dn-live" id="liveMeta">${esc(Tt("st_loading"))}</p>
-      <div class="page-verdict" id="verdict"><span class="dot"></span><span id="vText">${esc(Tt("st_loading"))}</span></div>
+      <p class="dn-kicker">${esc(Tt("every_10"))} · ${esc(Tt("from_places"))}</p>
+      <h1 class="page-h">${esc(fill(Tt("h1_cat"), { cat: catName(Tt, cat) }))}</h1>
+      <p class="dn-intro">${esc(catDesc(Tt, cat))}</p>
+      ${summaryBox(Tt)}
+      ${legend(Tt)}
     </header>
-    <div class="dn-cols" aria-hidden="true"><span></span><span></span><span>24h</span><span>${esc(Tt("h_state"))}</span></div>
-    <ul class="dn-rows">${rows}</ul>
-    <section class="card card-pad"><h2>${esc(Tt("honesty_h"))}</h2><p class="dn-p">${esc(Tt("honesty_t"))}</p></section>`;
+    <ul class="dn-list">${rows}</ul>`;
 }
 
 function svcMain(Tt, lang, s) {
   const cat = CATS.find(c => c.id === s.cat);
   const siteUrl = esc(s.site);
   const siteHost = (() => { try { return new URL(s.site).host; } catch { return s.site; } })();
-  const srcText = esc(Tt("src_text")).replace(/\{site\}/g, `<a class="dn-ext" href="${siteUrl}" target="_blank" rel="noopener">${esc(siteHost)}${EXT}</a>`);
-  const rows = [
-    s.src.base ? `<div class="dn-src" data-kind="base"><span class="dot"></span><span class="dn-src-n">${esc(Tt("src_base_row"))}</span><span class="dn-src-v">${esc(Tt("st_loading"))}</span></div>` : "",
-    s.src.unlock ? `<div class="dn-src" data-kind="unlock"><span class="dot"></span><span class="dn-src-n">${esc(Tt("src_unlock_row"))}</span><span class="dn-src-v">${esc(Tt("st_loading"))}</span></div>` : "",
-  ].join("");
-  const off = s.status
-    ? `<p class="dn-p"><a class="dn-ext" href="${esc(s.status)}" target="_blank" rel="noopener">${esc(Tt("off_go"))}${EXT}</a></p>`
-    : `<p class="dn-p hint">${esc(Tt("off_none"))}</p>`;
+  const what = esc(Tt("what_text")).replace(/\{site\}/g, `<a class="dn-ext" href="${siteUrl}" target="_blank" rel="noopener">${esc(siteHost)}${EXT}</a>`);
   const chips = byCat(s.cat).filter(x => x.id !== s.id).map(x => `<li><a class="dn-chip" href="${svcPath(lang, x)}">${esc(x.name)}</a></li>`).join("");
-  return `<nav class="dn-crumbs"><a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a><span aria-hidden="true">/</span><a href="${catPath(lang, s.cat)}">${esc(Tt(cat.name))}</a><span aria-hidden="true">/</span><span class="dn-crumb-here">${esc(s.name)}</span></nav>
-    <header><h1 class="page-h">${esc(fill(Tt("h1_svc"), { name: s.name }))}</h1></header>
-    <section class="card card-pad dn-verdict-card">
-      <div class="page-verdict" id="verdict"><span class="dot"></span><span id="vText">${esc(Tt("st_loading"))}</span></div>
-      <p class="dn-scope">${esc(Tt("v_scope"))}</p>
-      <p class="dn-live" id="liveMeta">${esc(Tt("st_loading"))}</p>
-      <div class="kpis">
-        <div class="kpi"><b id="kUp24">—</b><span>${esc(Tt("k_up24"))}</span></div>
-        <div class="kpi"><b id="kUp7">—</b><span>${esc(Tt("k_up7"))}</span></div>
-        <div class="kpi"><b id="kLast">—</b><span>${esc(Tt("k_lastok"))}</span></div>
+  const src = STATUS[s.id];
+  const offStart = !src ? Tt("official_none") : src.api ? Tt("st_loading") : Tt("official_no_api");
+  const offLink = src?.page
+    ? `<a class="dn-src-link" id="officialLink" href="${esc(src.page)}" target="_blank" rel="noopener">${esc(Tt("official_go"))}${EXT}</a>`
+    : `<a class="dn-src-link" id="officialLink" href="#" hidden>${esc(Tt("official_go"))}${EXT}</a>`;
+  return `<nav class="dn-crumbs"><a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a><span aria-hidden="true">/</span><a href="${catPath(lang, s.cat)}">${esc(catName(Tt, cat))}</a><span aria-hidden="true">/</span><span class="dn-crumb-here">${esc(s.name)}</span></nav>
+    <header class="dn-svc-hero">
+      <h1 class="page-h">${esc(fill(Tt("h1_svc"), { name: s.name }))}</h1>
+      <div class="dn-status" id="status"><span class="dot"></span><b id="stateText">${esc(Tt("st_loading"))}</b><span class="dn-status-meta" id="statusMeta"></span></div>
+      <p class="dn-p" id="verdictSentence"></p>
+    </header>
+    <section class="card card-pad dn-history">
+      <div class="dn-history-h"><h2>${esc(Tt("k_up24"))}</h2><span class="dn-up" id="up24">—</span></div>
+      <div class="dn-bar" id="bar24" aria-hidden="true">${cells(144)}</div>
+      <div class="dn-axis"><span>${esc(Tt("bar_past"))}</span><span>${esc(Tt("bar_now"))}</span></div>
+      <div class="dn-kpis">
+        <div><span>${esc(Tt("k_up7"))}</span><b id="kUp7">—</b></div>
+        <div><span>${esc(Tt("k_last"))}</span><b id="kLast">—</b></div>
       </div>
-      <div class="dn-srcs" id="srcs">${rows}</div>
-      <button class="btn ghost sm" id="retry" type="button" hidden>${esc(Tt("retry"))}</button>
     </section>
     <section class="card card-pad">
-      <div class="dn-sec-h"><h2>${esc(Tt("out_h"))}</h2><span class="hint" id="outCount"></span></div>
+      <h2>${esc(Tt("loc_h"))}</h2>
+      <div class="dn-loc" data-kind="tokyo"><span class="dot"></span><b>${esc(Tt("loc_tokyo"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
+      <div class="dn-loc" data-kind="shanghai"><span class="dot"></span><b>${esc(Tt("loc_shanghai"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
+    </section>
+    <section class="card card-pad">
+      <h2>${esc(Tt("official_h"))}</h2>
+      <div class="dn-off" id="official"><span class="dot"></span><b>${esc(offStart)}</b><span class="dn-off-desc"></span><span class="dn-off-age"></span></div>
+      <p class="dn-src-note">${esc(Tt("official_source"))}</p>
+      <p class="dn-src-note">${esc(Tt("v_scope"))}</p>
+      ${offLink}
+    </section>
+    <section class="card card-pad">
+      <h2>${esc(Tt("incidents_h"))}</h2>
       <ul class="dn-outs" id="outs"><li class="dn-out dn-out-empty">${esc(Tt("st_loading"))}</li></ul>
     </section>
-    <section class="card card-pad"><h2>${esc(Tt("src_h"))}</h2><p class="dn-p">${srcText}</p></section>
-    <section class="card card-pad"><h2>${esc(Tt("off_h"))}</h2>${off}</section>
+    <section class="card card-pad"><h2>${esc(Tt("what_h"))}</h2><p class="dn-p">${what}</p></section>
     <nav class="dn-related"><h2>${esc(Tt("related_h"))}</h2><ul class="dn-chips">${chips}</ul></nav>
     <div class="dn-cross">
       <a class="dn-cross-link" data-tool="home" data-id="${s.id}" hidden>${esc(Tt("cross_home"))}${EXT}</a>
@@ -176,7 +216,6 @@ export async function build() {
   const I = await loadI18n();
   const langs = LANGS.filter(([l]) => I[l]).map(([l]) => l);
 
-  // the same keys and placeholders in every language
   const enKeys = Object.keys(I.en).sort();
   for (const l of langs) {
     const keys = Object.keys(I[l]).sort();
@@ -189,7 +228,6 @@ export async function build() {
   }
   for (const k of RUNTIME) if (!(k in I.en)) throw new Error("runtime key missing from en: " + k);
 
-  // styles and code
   const css = (await Promise.all(["fonts.css", "base.css", "style.css"].map(f => readFile(new URL(f, src), "utf8")))).join("\n");
   const cssName = `app.${hash(css)}.css`;
   await mkdir(new URL("assets/", pub), { recursive: true });
@@ -212,7 +250,6 @@ export async function build() {
     strings[l] = name;
   }
 
-  // static files, copied as they are
   for (const f of ["assets", "og"]) {
     try { await cp(new URL(f + "/", stat), new URL(f + "/", pub), { recursive: true }); } catch {}
   }
@@ -225,7 +262,7 @@ export async function build() {
   const urls = [];
   let pages = 0;
 
-  async function writePage({ lang, type, cat, service, title, desc, kw, main, graph, altsRest }) {
+  async function writePage({ lang, type, cat, service, title, desc, kw, main, graph }) {
     const Tt = key => T(I, lang, key);
     const paths = {};
     for (const l of langs) paths[l] = type === "home" ? pathOf(l) : type === "cat" ? catPath(l, cat.id) : svcPath(l, service);
@@ -257,8 +294,7 @@ export async function build() {
     for (const k of ["a_lang", "a_theme", "a_help", "a_close", "a_prev", "a_next", "lang_label"]) {
       html = html.split(`{{a:${k}}}`).join(esc(Tt(k))).split(`{{${k}}}`).join(esc(Tt(k)));
     }
-    html = html.split("{{lang_label}}").join(esc(Tt("lang_label")));
-    const rel = (type === "home" ? (dirOf(lang) ? dirOf(lang) + "/" : "") : type === "cat" ? (dirOf(lang) ? dirOf(lang) + "/" : "") + cat.id + "/" : (dirOf(lang) ? dirOf(lang) + "/" : "") + service.cat + "/" + service.id + "/");
+    const rel = (dirOf(lang) ? dirOf(lang) + "/" : "") + (type === "home" ? "" : type === "cat" ? cat.id + "/" : service.cat + "/" + service.id + "/");
     const file = new URL(rel + "index.html", pub);
     await mkdir(new URL(".", file), { recursive: true });
     await writeFile(file, html);
@@ -271,9 +307,9 @@ export async function build() {
     await writePage({ lang, type: "home", title: Tt("seo_title_home"), desc: Tt("seo_desc_home"), kw: Tt("seo_kw_home"),
       main: homeMain(Tt, lang), graph: [appSchema(lang, Tt("app_name") + " · 1ms.dog", SITE + pathOf(lang), Tt("seo_desc_home")), faqGraph(Tt)] });
     for (const cat of CATS) {
-      await writePage({ lang, type: "cat", cat, title: fill(Tt("seo_title_cat"), { cat: Tt(cat.name) }),
-        desc: fill(Tt("seo_desc_cat"), { cat: Tt(cat.name) }), kw: Tt("seo_kw_home"),
-        main: catMain(Tt, lang, cat), graph: [appSchema(lang, Tt(cat.name) + " · 1ms.dog", SITE + catPath(lang, cat.id), Tt(cat.desc))] });
+      await writePage({ lang, type: "cat", cat, title: fill(Tt("seo_title_cat"), { cat: catName(Tt, cat) }),
+        desc: fill(Tt("seo_desc_cat"), { cat: catName(Tt, cat) }), kw: Tt("seo_kw_home"),
+        main: catMain(Tt, lang, cat), graph: [appSchema(lang, fill(Tt("h1_cat"), { cat: catName(Tt, cat) }) + " · 1ms.dog", SITE + catPath(lang, cat.id), catDesc(Tt, cat))] });
     }
     for (const s of SERVICES) {
       await writePage({ lang, type: "svc", service: s, title: fill(Tt("seo_title_svc"), { name: s.name }),
@@ -283,7 +319,6 @@ export async function build() {
     }
   }
 
-  // sitemap, robots, llms
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `<url><loc>${esc(u)}</loc></url>`).join("\n")}
@@ -294,10 +329,11 @@ ${urls.map(u => `<url><loc>${esc(u)}</loc></url>`).join("\n")}
   const en = I.en;
   await writeFile(new URL("llms.txt", pub), `# ${en.app_name} · 1ms.dog
 
-> Live status of ${SERVICES.length} services people search for during an outage: whether our own server in Tokyo can
-> reach each one, checked hourly, with the interruptions of the last 7 days and a link to each service's official
-> status page. A single probe proves reachability from Tokyo, not an outage: when the data is missing or older than
-> three checks, the page says it cannot judge instead of calling the service down. No visitor data is collected.
+> Live status of ${SERVICES.length} services people search for during an outage. Our probes in Tokyo and Shanghai
+> request each service every 10 minutes; each page shows the current state, the last 24 hours as a strip, the last
+> 7 days of interruptions, and a link to the service's own official status page. A 403, 429 or challenge page is
+> shown as unconfirmed, not down; missing or stale data (over 20 minutes) is shown as cannot judge. No visitor data
+> is collected.
 
 - Overview: ${SITE}/ (also ${langs.slice(1).map(l => "/" + dirOf(l) + "/").join(", ")})
 - Groups: ${CATS.map(c => SITE + catPath("en", c.id)).join(", ")}

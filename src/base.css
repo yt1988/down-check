@@ -62,17 +62,17 @@
    --t1…--t5 are the shared good-to-bad ladder: same meaning in every tool, never redefined per tool.
    Add a tool-specific color inside this block, never outside it. */
 :root {
-  --ink: #c81e3a; --ink-fg: #ffffff; --ink-soft: #c81e3a14;
+  --ink: #2563eb; --ink-fg: #ffffff; --ink-soft: #2563eb14;
   --warn: #b86e00; --warn-soft: #b86e001f; --bad: #d23a2f;
   --t0: #8b5cf6; --t1: #1a8a5a; --t2: #3d7d1e; --t3: #8a6700; --t4: #b0530a; --t5: #d23a2f;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --ink: #f87186; --ink-fg: #3f0713; --ink-soft: #f8718624;
+  --ink: #60a5fa; --ink-fg: #0b1a3a; --ink-soft: #60a5fa24;
   --warn: #f5a524; --warn-soft: #f5a52424; --bad: #f56565;
   --t0: #c4a7ff; --t1: #3ecf8e; --t2: #9fd356; --t3: #f5c524; --t4: #f59e42; --t5: #f56565;
 } }
 :root[data-theme="dark"] {
-  --ink: #f87186; --ink-fg: #3f0713; --ink-soft: #f8718624;
+  --ink: #60a5fa; --ink-fg: #0b1a3a; --ink-soft: #60a5fa24;
   --warn: #f5a524; --warn-soft: #f5a52424; --bad: #f56565;
   --t0: #c4a7ff; --t1: #3ecf8e; --t2: #9fd356; --t3: #f5c524; --t4: #f59e42; --t5: #f56565;
 }

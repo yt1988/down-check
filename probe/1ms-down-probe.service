@@ -1,0 +1,22 @@
+# One probe round. Copy to /etc/systemd/system/ and change User, Group, ExecStart and ReadWritePaths for another
+# machine. The Shanghai copy changes --from and --out; everything else is the same.
+[Unit]
+Description=1ms.dog down probe: one 10-minute round from this machine
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=1ms-down
+Group=1ms-down
+ExecStart=/opt/1ms/down/down-probe --out /srv/1ms-data/down --from "Tokyo, JP" --services /opt/1ms/down/services.json
+TimeoutStartSec=540
+MemoryMax=128M
+ProtectSystem=strict
+ReadWritePaths=/srv/1ms-data/down
+PrivateTmp=yes
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+StandardOutput=null
+StandardError=journal

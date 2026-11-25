@@ -1,7 +1,9 @@
-// The page fills what the build drew: the verdict, the numbers, the two source rows and the outage list. It never
-// invents a state: if the data cannot be loaded, every block says so and the verdict stays "cannot judge".
+// The page fills what the build drew: the summary, every tile, the current state, the 24-hour strip, the two probe
+// rows and the official status. It never invents a state: if the data cannot be loaded, everything says so and the
+// verdict stays "cannot judge".
 import { verdict, summary, STATE, stateClass, duration, errKey } from "./model.mjs";
 import { SERVICES, CATS, byId, byCat } from "./services.mjs";
+import { STATUS } from "./status-sources.mjs";
 
 const D = JSON.parse(document.getElementById("data").textContent);
 const L = window.L || {}, LANG = window.LANG || D.lang || "en";
@@ -20,18 +22,15 @@ const agoIn = (at, f) => {
   const h = Math.round(m / 60);
   return h < 48 ? f.format(-h, "hour") : f.format(-Math.round(h / 24), "day");
 };
-const ago = at => agoIn(at, rtf);
-const agoShort = at => agoIn(at, rtfShort);
+const ago = at => agoIn(at, rtf), agoShort = at => agoIn(at, rtfShort);
 const pct = v => v == null ? L.na : (v >= 99.95 ? "100" : v.toFixed(1)) + "%";
 const durTxt = d => d ? new Intl.NumberFormat(LANG, { style: "unit", unit: d.unit, unitDisplay: "long" }).format(d.n) : L.na;
-const label = state => L["st_" + state] ?? state;
+const label = state => state === STATE.OK ? (L.st_online || "ok") : (L["st_" + state] ?? state);
 const cls = state => stateClass(state);
+const places = v => (v.places || []).map(p => L["loc_" + p] || p).join(L.sep || ", ");
 
-/* ---------- the header: theme and language, as on every 1ms.dog tool ---------- */
-const store = {
-  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
-  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
-};
+/* ---------- header: theme and language, as on every 1ms.dog tool ---------- */
+const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
 const TH = ["system", "light", "dark"], thBtn = $("#theme");
 const applyTheme = th => {
   if (th === "light" || th === "dark") document.documentElement.setAttribute("data-theme", th);
@@ -40,17 +39,10 @@ const applyTheme = th => {
   thBtn.title = t("th_" + th); thBtn.setAttribute("aria-label", t("th_" + th));
 };
 applyTheme(TH.includes(store.get("down:theme")) ? store.get("down:theme") : "system");
-thBtn.onclick = () => {
-  const n = TH[(TH.indexOf(thBtn.dataset.th) + 1) % 3];
-  store.set("down:theme", n); applyTheme(n);
-};
-$("#lang").onchange = e => {
-  const lang = e.target.value;
-  store.set("down:lang", lang);
-  location.href = D.paths[lang] || "/";
-};
+thBtn.onclick = () => { const n = TH[(TH.indexOf(thBtn.dataset.th) + 1) % 3]; store.set("down:theme", n); applyTheme(n); };
+$("#lang").onchange = e => { store.set("down:lang", e.target.value); location.href = D.paths[e.target.value] || "/"; };
 
-/* ---------- the help dialog ---------- */
+/* ---------- help dialog ---------- */
 const help = $("#help");
 let lastFocus = null, helpIdx = 0;
 const qs = $$("#helpNav [data-hq]");
@@ -71,179 +63,284 @@ $("#helpSel").onchange = e => showHelp(+e.target.value);
 help.addEventListener("click", e => { if (e.target === help || e.target.closest("[data-close]")) closeHelp(); });
 addEventListener("keydown", e => { if (e.key === "Escape" && !help.hidden) closeHelp(); });
 
-/* ---------- data ---------- */
-function metaLine(data, failed) {
-  const el = $("#liveMeta");
-  if (!el) return;
-  el.classList.toggle("warn", !!failed);
-  if (failed) { el.textContent = L.meta_fail; return; }
-  const docs = [data.index, data.unlock].filter(Boolean);
-  if (!docs.length) { el.textContent = L.meta_fail; el.classList.add("warn"); return; }
-  const at = Math.max(...docs.map(d => Date.parse(d.at) || 0));
-  const every = Math.max(...docs.map(d => d.every || 3600));
-  const stale = docs.some(d => d.stale) || !at || Date.now() - at > 3 * every * 1000;
-  if (stale) { el.textContent = t("meta_stale", { t: time(at) }); el.classList.add("warn"); return; }
-  el.textContent = t("meta_at", { t: time(at) }) + " · " + ago(at) + " · " + t("meta_interval", { n: Math.round(every / 60) });
-  el.classList.remove("warn");
+/* ---------- drawing helpers ---------- */
+// 144 ten-minute samples → 24 hourly cells: red if any sample failed, green if any answered, grey if only refusals.
+function sparkClasses(h24) {
+  const s = (h24 || "").padStart(144, "-").slice(-144), out = [];
+  for (let h = 0; h < 24; h++) {
+    const g = s.slice(h * 6, h * 6 + 6);
+    out.push(g.includes("x") ? "bad" : g.includes("o") ? "ok" : g.includes("u") ? "unk" : "");
+  }
+  return out;
 }
+function paintSpark(el, h24) {
+  if (!el) return;
+  // a service with almost no history yet gets a plain track, not a barcode of one sample
+  const known = (h24 || "").replace(/-/g, "").length;
+  const cs = known < 6 ? [] : sparkClasses(h24);
+  [...el.children].forEach((i, k) => { i.className = cs[k] || ""; });
+}
+function paintBar(el, h24) {
+  if (!el) return;
+  const s = (h24 || "").padStart(144, "-").slice(-144);
+  [...el.children].forEach((i, k) => {
+    const c = s[k];
+    i.className = c === "o" ? "ok" : c === "x" ? "bad" : c === "u" ? "unk" : "";
+  });
+}
+function probeOf(v, place) { return v.views.find(x => x.kind === "probe" && x.place === place); }
+function bestProbe(v) { return probeOf(v, "tokyo")?.present ? probeOf(v, "tokyo") : probeOf(v, "shanghai"); }
+function newestProbeAt(data) {
+  const times = [];
+  for (const doc of [data?.tokyo, data?.shanghai]) {
+    if (!doc?.services) continue;
+    for (const s of Object.values(doc.services)) if (s.t) times.push(s.t * 1000);
+  }
+  return times.length ? Math.max(...times) : null;
+}
+function newestAt(data) {
+  const times = [];
+  for (const doc of [data?.tokyo, data?.shanghai, data?.official]) {
+    if (!doc?.services) continue;
+    for (const s of Object.values(doc.services)) if (s.t) times.push(s.t * 1000); else if (s.at) times.push(s.at * 1000);
+  }
+  return times.length ? Math.max(...times) : null;
+}
+function ageLine(data, failed) {
+  if (failed) return L.st_stale;
+  const at = newestProbeAt(data) ?? newestAt(data);
+  if (!at) return L.st_stale;
+  return t("updated", { ago: ago(at) });
+}
+function levelState(level) {
+  return level === "none" ? STATE.OK : level === "minor" || level === "maintenance" ? STATE.PARTIAL
+    : level === "major" || level === "critical" ? STATE.FAULT : STATE.UNCONFIRMED;
+}
+function summaryText(c) {
+  if (c.unknown === c.n) return t("sum_unknown", { n: c.n });
+  if (c.bad) return t("sum_some", { n: c.bad });
+  if (c.unknown) return t("sum_unknown", { n: c.unknown });
+  return t("sum_all_ok");
+}
+function summaryClass(c) { return c.bad ? "bad" : c.unknown ? "unknown" : "ok"; }
 
+/* ---------- home: every service, grouped ---------- */
 function homeView(data, failed, now) {
   const c = failed ? { ok: 0, bad: 0, unknown: SERVICES.length, n: SERVICES.length } : summary(SERVICES, data, now);
-  const nTotal = c.n;
-  const v = $("#verdict"), txt = $("#vText");
-  if (!v || !txt) return;
-  if (c.unknown === nTotal) { txt.textContent = t("sum_unknown", { n: nTotal }); v.className = "page-verdict dn-verdict"; }
-  else if (c.bad) { txt.textContent = t("sum_some", { bad: c.bad, n: nTotal }); v.className = "page-verdict dn-verdict bad"; }
-  else { txt.textContent = t("sum_ok", { ok: c.ok, n: nTotal }); v.className = "page-verdict dn-verdict " + (c.unknown ? "" : "ok"); }
+  const box = $("#summary");
+  if (box) {
+    box.className = "dn-summary " + summaryClass(c);
+    $("#sumDot").className = "dot " + (c.bad ? "bad" : c.unknown ? "" : "ok");
+    $("#sumText").textContent = summaryText(c);
+    $("#sumCounts").textContent = t("sum_counts", { ok: c.ok, bad: c.bad, unknown: c.unknown });
+    $("#sumAge").textContent = ageLine(data, failed);
+  }
   for (const s of SERVICES) {
-    const card = document.querySelector(`.dn-svc[data-s="${s.id}"]`);
-    if (!card) continue;
-    const st = failed ? STATE.NODATA : verdict(s, data, now).state;
-    card.querySelector(".dot").className = "dot " + cls(st);
-    const lab = card.querySelector(".dn-svc-st");
-    lab.textContent = label(st);
-    lab.className = "dn-svc-st " + cls(st);
+    const tile = document.querySelector(`.dn-tile[data-s="${s.id}"]`);
+    if (!tile) continue;
+    const v = failed ? verdict(s, null, now) : verdict(s, data, now);
+    const st = v.state;
+    tile.dataset.state = cls(st);
+    tile.querySelector(".dot").className = "dot " + cls(st);
+    const lab = tile.querySelector(".dn-tile-s");
+    lab.textContent = st === STATE.OK ? "" : label(st);
+    lab.className = "dn-tile-s " + cls(st);
+    const p = failed ? null : bestProbe(v);
+    paintSpark(tile.querySelector(".dn-spark"), p?.h24);
   }
-  for (const c of CATS) {
-    const el = document.getElementById("catN-" + c.id);
-    if (!el || failed) continue;
-    const list = byCat(c.id);
-    const cc = summary(list, data, now);
-    el.textContent = `${cc.ok}/${cc.n}`;
+  for (const cat of CATS) {
+    const el = document.getElementById("catSum-" + cat.id);
+    if (!el) continue;
+    const list = byCat(cat.id);
+    const cc = failed ? { ok: 0, bad: 0, unknown: list.length, n: list.length } : summary(list, data, now);
+    el.textContent = summaryText(cc);
+    el.className = "dn-cat-sum " + summaryClass(cc);
   }
+  filter();
 }
 
+/* ---------- category ---------- */
 function catView(data, failed, now) {
   const list = byCat(D.cat);
   const c = failed ? { ok: 0, bad: 0, unknown: list.length, n: list.length } : summary(list, data, now);
-  const v = $("#verdict"), txt = $("#vText");
-  if (v && txt) {
-    if (c.unknown === c.n) { txt.textContent = t("sum_unknown", { n: c.n }); v.className = "page-verdict"; }
-    else if (c.bad) { txt.textContent = t("sum_some", { bad: c.bad, n: c.n }); v.className = "page-verdict bad"; }
-    else { txt.textContent = t("sum_ok", { ok: c.ok, n: c.n }); v.className = "page-verdict " + (c.unknown ? "" : "ok"); }
+  const box = $("#summary");
+  if (box) {
+    box.className = "dn-summary " + summaryClass(c);
+    $("#sumDot").className = "dot " + (c.bad ? "bad" : c.unknown ? "" : "ok");
+    $("#sumText").textContent = summaryText(c);
+    $("#sumCounts").textContent = t("sum_counts", { ok: c.ok, bad: c.bad, unknown: c.unknown });
+    $("#sumAge").textContent = ageLine(data, failed);
   }
   for (const s of list) {
     const row = document.querySelector(`.dn-row[data-s="${s.id}"]`);
     if (!row) continue;
-    const r = failed ? { state: STATE.NODATA, up24: null } : verdict(s, data, now);
-    row.querySelector(".dot").className = "dot " + cls(r.state);
-    const st = row.querySelector(".dn-row-st");
-    st.textContent = label(r.state);
-    st.className = "dn-row-st " + cls(r.state);
-    const u = row.querySelector(".dn-row-u");
-    u.textContent = pct(r.up24);
-    u.className = "dn-row-u " + (r.up24 == null ? "" : r.up24 < 95 ? "bad" : r.up24 < 99.5 ? "warn" : "ok");
+    const v = failed ? verdict(s, null, now) : verdict(s, data, now);
+    row.querySelector(".dot").className = "dot " + cls(v.state);
+    const pill = row.querySelector(".dn-pill");
+    pill.textContent = label(v.state);
+    pill.className = "dn-pill " + cls(v.state);
+    row.querySelector(".dn-row-up b").textContent = pct(v.up24);
+    const p = failed ? null : bestProbe(v);
+    paintSpark(row.querySelector(".dn-spark"), p?.h24);
   }
 }
 
-function lastOk(v) {
-  const times = v.views.filter(x => x.present).map(x => {
-    if (x.ok) return x.okAt || x.at;
-    if (x.kind === "unlock") return x.okAt;
-    return x.since ? x.since - (x.every || 3600) * 1000 : null;
-  }).filter(Boolean);
-  return times.length ? Math.max(...times) : null;
-}
-
-function outagesOf(s, data, v) {
-  const b = v.views.find(x => x.kind === "base" && x.present && x.fresh);
-  const bd = b && data.index && data.index.services[s.src.base];
-  if (bd && Array.isArray(bd.out) && bd.out.length) {
-    return bd.out.slice(0, 12).map(o => ({ from: o.from * 1000, to: o.to * 1000, runs: o.runs, err: o.err || null, at: Date.parse(data.index.at), every: data.index.every || 3600 }));
-  }
-  const u = v.views.find(x => x.kind === "unlock" && x.present && x.fresh && x.h);
-  if (u) {
-    const h = u.h, every = (u.every || 3600) * 1000, at = u.at, out = [];
-    let i = 0;
-    while (i < h.length) {
-      if (h[i] !== "b") { i++; continue; }
-      let j = i;
-      while (j + 1 < h.length && h[j + 1] === "b") j++;
-      out.push({ from: at - (h.length - 1 - i) * every, to: at - (h.length - 1 - j) * every, runs: j - i + 1, err: null, at, every: every / 1000 });
-      i = j + 1;
-    }
-    return out.reverse().slice(0, 12);
-  }
-  return [];
-}
-
+/* ---------- service ---------- */
 function svcView(data, failed, now) {
   const s = byId.get(D.id);
   if (!s) return;
-  const v = failed || !data ? verdict(s, null, now) : verdict(s, data, now);
-  const vd = $("#verdict"), vt = $("#vText");
-  if (vd && vt) {
-    vd.className = "page-verdict " + cls(v.state);
-    if (v.state === STATE.LONGFAIL) vt.textContent = t("v_longfail", { name: s.name, dur: durTxt(duration(now - v.since)) });
-    else if (v.state === STATE.UNREACHABLE) vt.textContent = t("v_unreachable", { name: s.name });
-    else if (v.state === STATE.PARTIAL) vt.textContent = t("v_partial", { name: s.name });
-    else if (v.state === STATE.RECOVERED) vt.textContent = t("v_recovered", { name: s.name });
-    else if (v.state === STATE.OK) vt.textContent = t("v_ok", { name: s.name });
-    else if (v.state === STATE.STALE) vt.textContent = t("v_stale", { name: s.name });
-    else vt.textContent = t("v_nodata", { name: s.name });
+  const v = failed ? verdict(s, null, now) : verdict(s, data, now);
+  const st = v.state, status = $("#status");
+  if (status) {
+    status.className = "dn-status " + cls(st);
+    status.querySelector(".dot").className = "dot " + cls(st);
+    $("#stateText").textContent = label(st);
+    const where = places(v);
+    const when = ageLine(data, failed);
+    $("#statusMeta").textContent = where ? when + " · " + where : when;
   }
-  const up24 = $("#kUp24"), up7 = $("#kUp7"), last = $("#kLast");
-  if (up24) up24.textContent = pct(v.up24);
-  if (up7) up7.textContent = pct(v.up7);
-  if (last) last.textContent = agoShort(lastOk(v));
-  for (const row of $$(".dn-src[data-kind]")) {
-    const view = v.views.find(x => x.kind === row.dataset.kind);
-    const dot = row.querySelector(".dot"), val = row.querySelector(".dn-src-v");
-    if (!view || !view.present) { dot.className = "dot"; val.textContent = L.src_nodata_val; val.className = "dn-src-v"; continue; }
-    dot.className = "dot " + (view.fresh ? cls(view.ok ? STATE.OK : STATE.UNREACHABLE) : "");
-    if (!view.fresh) { val.textContent = `${time(view.at)} · ${L.st_stale}`; val.className = "dn-src-v warn"; continue; }
-    if (view.ok) { val.textContent = view.ms != null ? t("src_ok", { ms: Math.round(view.ms) }) : L.src_no_ms; val.className = "dn-src-v ok"; }
-    else { val.textContent = t("src_err", { err: L[errKey(view.err)] ?? L.err_other }); val.className = "dn-src-v bad"; }
+  const sentence = $("#verdictSentence");
+  if (sentence) {
+    let text;
+    if (st === STATE.LONGFAIL) text = t("v_longfail", { places: places(v), name: s.name, dur: durTxt(duration(now - v.since)) });
+    else if (st === STATE.UNREACHABLE) text = t("v_unreachable", { places: places(v), name: s.name });
+    else if (st === STATE.PARTIAL && v.official?.fresh && v.official.degraded) text = t("v_official_partial", { desc: v.official.description || L.na });
+    else if (st === STATE.PARTIAL && v.official?.fresh && v.official.ok && !v.views.some(x => x.kind === "probe" && x.present && x.fresh && x.ok)) text = t("v_official_ok_unreachable", { places: places(v), name: s.name });
+    else if (st === STATE.PARTIAL) text = t("v_partial", { places: places(v), name: s.name });
+    else if (st === STATE.RECOVERED) text = t("v_recovered", { places: places(v), name: s.name });
+    else if (st === STATE.OK && !v.views.some(x => x.kind === "probe" && x.present && x.fresh)) text = L.v_official_online;
+    else if (st === STATE.OK) text = t("v_online", { places: places(v), name: s.name });
+    else if (st === STATE.FAULT) text = t("v_fault", { desc: v.official?.description || L.na });
+    else if (st === STATE.UNCONFIRMED) text = L.v_unconfirmed;
+    else if (st === STATE.STALE) text = L.v_stale;
+    else text = L.v_nodata;
+    sentence.textContent = text;
   }
-  const outs = $("#outs"), outCount = $("#outCount");
+  const p = failed ? null : bestProbe(v);
+  if ($("#up24")) $("#up24").textContent = pct(p?.up24 ?? null);
+  if ($("#kUp24")) $("#kUp24").textContent = pct(p?.up24 ?? null);
+  if ($("#kUp7")) $("#kUp7").textContent = pct(p?.up7 ?? null);
+  if ($("#kLast")) $("#kLast").textContent = p?.okAt ? agoShort(p.okAt) : L.na;
+  paintBar($("#bar24"), p?.h24);
+
+  for (const row of $$(".dn-loc[data-kind]")) {
+    const view = failed ? null : probeOf(v, row.dataset.kind);
+    const dot = row.querySelector(".dot"), val = row.querySelector(".dn-loc-v"), age = row.querySelector(".dn-loc-age");
+    if (!view || !view.present) {
+      dot.className = "dot"; val.textContent = L.st_nodata; val.className = "dn-loc-v"; age.textContent = ""; continue;
+    }
+    const vs = view.fresh ? (view.ok ? STATE.OK : view.unknown ? STATE.UNCONFIRMED : STATE.UNREACHABLE) : STATE.STALE;
+    dot.className = "dot " + cls(vs);
+    if (!view.fresh) { val.textContent = L.st_stale; val.className = "dn-loc-v"; }
+    else if (view.ok) { val.textContent = view.ms != null ? Math.round(view.ms) + " ms" : L.na; val.className = "dn-loc-v ok"; }
+    else if (view.unknown) { val.textContent = label(STATE.UNCONFIRMED); val.className = "dn-loc-v"; }
+    else { val.textContent = L[errKey(view.err)] ?? L.err_other; val.className = "dn-loc-v bad"; }
+    age.textContent = ago(view.at);
+  }
+
+  const offRow = $("#official");
+  if (offRow) {
+    const o = failed ? null : v.official;
+    const src = STATUS[s.id];
+    const dot = offRow.querySelector(".dot"), b = offRow.querySelector("b"), desc = offRow.querySelector(".dn-off-desc"), age = offRow.querySelector(".dn-off-age");
+    if (o && o.present) {
+      const os = o.fresh ? levelState(o.level) : STATE.STALE;
+      offRow.className = "dn-off " + cls(os);
+      dot.className = "dot " + cls(os);
+      b.textContent = label(os);
+      desc.textContent = o.description || "";
+      age.textContent = ago(o.at);
+    } else {
+      offRow.className = "dn-off";
+      dot.className = "dot";
+      b.textContent = !src ? L.official_none : src.api ? L.st_nodata : L.official_no_api;
+      desc.textContent = "";
+      age.textContent = "";
+    }
+  }
+  const offLink = $("#officialLink");
+  if (offLink) {
+    const src = STATUS[s.id];
+    if (src?.page) { offLink.href = src.page; offLink.hidden = false; }
+    else offLink.hidden = true;
+  }
+
+  const outs = $("#outs");
   if (outs) {
-    const list = failed || !data ? [] : outagesOf(s, data, v);
+    const view = failed ? null : (probeOf(v, "tokyo")?.present ? probeOf(v, "tokyo") : probeOf(v, "shanghai"));
+    const list = !view || !view.fresh ? [] : (view.out || []);
     outs.innerHTML = "";
     if (!list.length) {
       const li = document.createElement("li");
       li.className = "dn-out dn-out-empty";
-      const unknown = failed || v.state === STATE.STALE || v.state === STATE.NODATA;
-      li.textContent = unknown ? L.out_unknown : (v.views.some(x => x.kind === "base" && x.present)) ? L.out_none : L.out_none_window;
+      li.textContent = failed || !view || !view.fresh ? L.incidents_unknown : L.incidents_none;
       outs.appendChild(li);
-      if (outCount) outCount.textContent = "";
     } else {
       for (const o of list.slice(0, 10)) {
         const li = document.createElement("li");
         li.className = "dn-out";
-        const ongoing = o.to >= o.at - (o.every || 3600) * 1500;
+        const ongoing = view.at && o.to * 1000 >= view.at - 1.5 * (view.every || 600) * 1000;
         const b = document.createElement("b");
-        b.textContent = `${time(o.from)} – ${ongoing ? L.out_ongoing : time(o.to)}`;
+        b.textContent = `${time(o.from * 1000)} – ${ongoing ? L.incidents_ongoing : time(o.to * 1000)}`;
         const sp = document.createElement("span");
-        sp.textContent = (o.err ? t(errKey(o.err)) + " · " : "") + t("out_checks", { n: o.runs });
+        sp.textContent = (o.err ? t(errKey(o.err)) + " · " : "") + t("incidents_checks", { n: o.runs });
         li.append(b, sp);
         outs.appendChild(li);
       }
-      if (outCount) outCount.textContent = "";
     }
   }
+
   const retry = $("#retry");
   if (retry) { retry.hidden = !failed; retry.textContent = L.retry; retry.onclick = load; }
   const report = $("#reportBtn");
   if (report) report.hidden = typeof window.msOpenReport !== "function";
   window.msReport = () => ({
-    summary: `${s.name}: ${label(v.state)} · ${t("meta_at", { t: time(v.at) })}`,
-    data: { service: s.id, state: v.state, at: v.at, ageMs: v.ageMs, up24: v.up24, up7: v.up7, views: v.views.map(x => ({ kind: x.kind, ok: x.ok, fresh: x.fresh, at: x.at, ms: x.ms, err: x.err })) },
-    picks: [s.name, label(v.state), t("meta_at", { t: time(v.at) })],
+    summary: `${s.name}: ${label(st)} · ${ageLine(data, failed)}`,
+    data: { service: s.id, state: st, at: v.at, places: v.places, up24: v.up24, up7: v.up7,
+      tokyo: probeOf(v, "tokyo") && { ok: probeOf(v, "tokyo").ok, unknown: probeOf(v, "tokyo").unknown, at: probeOf(v, "tokyo").at, ms: probeOf(v, "tokyo").ms, err: probeOf(v, "tokyo").err },
+      shanghai: probeOf(v, "shanghai") && { ok: probeOf(v, "shanghai").ok, unknown: probeOf(v, "shanghai").unknown, at: probeOf(v, "shanghai").at, ms: probeOf(v, "shanghai").ms, err: probeOf(v, "shanghai").err },
+      official: v.official?.present ? { level: v.official.level, at: v.official.at, description: v.official.description } : null },
+    picks: [s.name, label(st), ageLine(data, failed)],
   });
 }
 
+/* ---------- the search box and "only problems" ---------- */
+let filterBound = false;
+function filter() {
+  const q = ($("#q")?.value || "").trim().toLowerCase();
+  const only = !!$("#onlyIssues")?.checked;
+  let shown = 0;
+  for (const cat of $$(".dn-cat")) {
+    let inCat = 0;
+    for (const li of cat.querySelectorAll(".dn-tile")) {
+      const hay = li.dataset.name || "";
+      const issue = li.dataset.state !== "ok";
+      const ok = (!q || hay.includes(q)) && (!only || issue);
+      li.parentElement.hidden = !ok;
+      if (ok) inCat++;
+    }
+    cat.hidden = inCat === 0;
+    shown += inCat;
+  }
+  if ($("#noResults")) $("#noResults").hidden = shown !== 0;
+}
+function bindFilter() {
+  if (filterBound) return;
+  filterBound = true;
+  $("#q")?.addEventListener("input", filter);
+  $("#onlyIssues")?.addEventListener("change", filter);
+}
+
+/* ---------- links to the other tools ---------- */
 function wireTools() {
   const tool = id => { const m = document.querySelector(`meta[name="${id}"]`); return m ? m.content.replace(/\/+$/, "") : null; };
   const dir = D.lang === "en" ? "" : D.lang.toLowerCase() + "/";
-  const links = $$(".dn-cross-link");
-  for (const a of links) {
+  for (const a of $$(".dn-cross-link")) {
     const id = a.dataset.tool, base = tool(id);
     if (!base) continue;
     let href = base + "/" + dir;
     if (id === "home" && a.dataset.id) href = base + "/" + dir + a.dataset.id + "/";
-    a.href = href;
-    a.target = "_blank"; a.rel = "noopener";
-    a.hidden = false;
+    a.href = href; a.target = "_blank"; a.rel = "noopener"; a.hidden = false;
   }
 }
 
@@ -259,13 +356,11 @@ async function load() {
     if (!r.ok) throw new Error("http " + r.status);
     const data = await r.json();
     const now = Date.now();
-    metaLine(data, false);
     if (D.type === "home") homeView(data, false, now);
     else if (D.type === "cat") catView(data, false, now);
     else svcView(data, false, now);
   } catch {
     const now = Date.now();
-    metaLine(null, true);
     if (D.type === "home") homeView(null, true, now);
     else if (D.type === "cat") catView(null, true, now);
     else svcView(null, true, now);
@@ -274,4 +369,5 @@ async function load() {
     wireTools();
   }
 }
+bindFilter();
 load();

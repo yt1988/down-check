@@ -1,0 +1,1080 @@
+[
+ {
+  "id": "chatgpt",
+  "name": "ChatGPT",
+  "cat": "ai",
+  "site": "https://chatgpt.com/",
+  "only": null
+ },
+ {
+  "id": "claude",
+  "name": "Claude",
+  "cat": "ai",
+  "site": "https://claude.ai/",
+  "only": null
+ },
+ {
+  "id": "gemini",
+  "name": "Gemini",
+  "cat": "ai",
+  "site": "https://gemini.google.com/",
+  "only": null
+ },
+ {
+  "id": "copilot",
+  "name": "Copilot",
+  "cat": "ai",
+  "site": "https://copilot.microsoft.com/",
+  "only": null
+ },
+ {
+  "id": "grok",
+  "name": "Grok",
+  "cat": "ai",
+  "site": "https://grok.com/",
+  "only": null
+ },
+ {
+  "id": "perplexity",
+  "name": "Perplexity",
+  "cat": "ai",
+  "site": "https://www.perplexity.ai/",
+  "only": null
+ },
+ {
+  "id": "mistral",
+  "name": "Le Chat",
+  "cat": "ai",
+  "site": "https://chat.mistral.ai/",
+  "only": null
+ },
+ {
+  "id": "poe",
+  "name": "Poe",
+  "cat": "ai",
+  "site": "https://poe.com/",
+  "only": null
+ },
+ {
+  "id": "characterai",
+  "name": "Character.AI",
+  "cat": "ai",
+  "site": "https://character.ai/",
+  "only": null
+ },
+ {
+  "id": "metaai",
+  "name": "Meta AI",
+  "cat": "ai",
+  "site": "https://www.meta.ai/",
+  "only": null
+ },
+ {
+  "id": "netflix",
+  "name": "Netflix",
+  "cat": "video",
+  "site": "https://www.netflix.com/",
+  "only": null
+ },
+ {
+  "id": "disney",
+  "name": "Disney+",
+  "cat": "video",
+  "site": "https://www.disneyplus.com/",
+  "only": null
+ },
+ {
+  "id": "dazn",
+  "name": "DAZN",
+  "cat": "video",
+  "site": "https://www.dazn.com/",
+  "only": null
+ },
+ {
+  "id": "crunchyroll",
+  "name": "Crunchyroll",
+  "cat": "video",
+  "site": "https://www.crunchyroll.com/",
+  "only": null
+ },
+ {
+  "id": "peacock",
+  "name": "Peacock",
+  "cat": "video",
+  "site": "https://www.peacocktv.com/",
+  "only": "US"
+ },
+ {
+  "id": "philo",
+  "name": "Philo",
+  "cat": "video",
+  "site": "https://www.philo.com/",
+  "only": "US"
+ },
+ {
+  "id": "nbc",
+  "name": "NBC",
+  "cat": "video",
+  "site": "https://www.nbc.com/",
+  "only": "US"
+ },
+ {
+  "id": "shudder",
+  "name": "Shudder",
+  "cat": "video",
+  "site": "https://www.shudder.com/",
+  "only": null
+ },
+ {
+  "id": "bein",
+  "name": "beIN CONNECT",
+  "cat": "video",
+  "site": "https://connect.beinsports.com/",
+  "only": null
+ },
+ {
+  "id": "twitch",
+  "name": "Twitch",
+  "cat": "video",
+  "site": "https://www.twitch.tv/",
+  "only": null
+ },
+ {
+  "id": "primevideo",
+  "name": "Prime Video",
+  "cat": "video",
+  "site": "https://www.primevideo.com/",
+  "only": null
+ },
+ {
+  "id": "appletv",
+  "name": "Apple TV+",
+  "cat": "video",
+  "site": "https://tv.apple.com/",
+  "only": null
+ },
+ {
+  "id": "max",
+  "name": "HBO Max",
+  "cat": "video",
+  "site": "https://www.hbomax.com/",
+  "only": null
+ },
+ {
+  "id": "hulu",
+  "name": "Hulu",
+  "cat": "video",
+  "site": "https://www.hulu.com/",
+  "only": "US"
+ },
+ {
+  "id": "paramount",
+  "name": "Paramount+",
+  "cat": "video",
+  "site": "https://www.paramountplus.com/",
+  "only": null
+ },
+ {
+  "id": "tubi",
+  "name": "Tubi",
+  "cat": "video",
+  "site": "https://tubitv.com/",
+  "only": null
+ },
+ {
+  "id": "pluto",
+  "name": "Pluto TV",
+  "cat": "video",
+  "site": "https://pluto.tv/",
+  "only": null
+ },
+ {
+  "id": "espn",
+  "name": "ESPN+",
+  "cat": "video",
+  "site": "https://plus.espn.com/",
+  "only": "US"
+ },
+ {
+  "id": "fubo",
+  "name": "Fubo",
+  "cat": "video",
+  "site": "https://www.fubo.tv/",
+  "only": null
+ },
+ {
+  "id": "viu",
+  "name": "Viu",
+  "cat": "video",
+  "site": "https://www.viu.com/",
+  "only": null
+ },
+ {
+  "id": "viki",
+  "name": "Viki",
+  "cat": "video",
+  "site": "https://www.viki.com/",
+  "only": null
+ },
+ {
+  "id": "bilibilitv",
+  "name": "Bilibili TV",
+  "cat": "video",
+  "site": "https://www.bilibili.tv/",
+  "only": null
+ },
+ {
+  "id": "viaplay",
+  "name": "Viaplay",
+  "cat": "video",
+  "site": "https://viaplay.com/",
+  "only": null
+ },
+ {
+  "id": "skyshowtime",
+  "name": "SkyShowtime",
+  "cat": "video",
+  "site": "https://www.skyshowtime.com/",
+  "only": null
+ },
+ {
+  "id": "acorn",
+  "name": "Acorn TV",
+  "cat": "video",
+  "site": "https://acorn.tv/",
+  "only": null
+ },
+ {
+  "id": "catchplay",
+  "name": "CATCHPLAY+",
+  "cat": "video",
+  "site": "https://www.catchplay.com/",
+  "only": null
+ },
+ {
+  "id": "docplay",
+  "name": "DocPlay",
+  "cat": "video",
+  "site": "https://www.docplay.com/",
+  "only": null
+ },
+ {
+  "id": "nowtv",
+  "name": "NOW",
+  "cat": "video",
+  "site": "https://www.nowtv.com/",
+  "only": null
+ },
+ {
+  "id": "spotify",
+  "name": "Spotify",
+  "cat": "video",
+  "site": "https://open.spotify.com/",
+  "only": null
+ },
+ {
+  "id": "pandora",
+  "name": "Pandora",
+  "cat": "video",
+  "site": "https://www.pandora.com/",
+  "only": "US"
+ },
+ {
+  "id": "deezer",
+  "name": "Deezer",
+  "cat": "video",
+  "site": "https://www.deezer.com/",
+  "only": null
+ },
+ {
+  "id": "soundcloud",
+  "name": "SoundCloud",
+  "cat": "video",
+  "site": "https://soundcloud.com/",
+  "only": null
+ },
+ {
+  "id": "tiktok",
+  "name": "TikTok",
+  "cat": "social",
+  "site": "https://www.tiktok.com/",
+  "only": null
+ },
+ {
+  "id": "youtube",
+  "name": "YouTube",
+  "cat": "social",
+  "site": "https://www.youtube.com/",
+  "only": null
+ },
+ {
+  "id": "x",
+  "name": "X",
+  "cat": "social",
+  "site": "https://x.com/",
+  "only": null
+ },
+ {
+  "id": "instagram",
+  "name": "Instagram",
+  "cat": "social",
+  "site": "https://www.instagram.com/",
+  "only": null
+ },
+ {
+  "id": "telegram",
+  "name": "Telegram",
+  "cat": "social",
+  "site": "https://telegram.org/",
+  "only": null
+ },
+ {
+  "id": "whatsapp",
+  "name": "WhatsApp",
+  "cat": "social",
+  "site": "https://web.whatsapp.com/",
+  "only": null
+ },
+ {
+  "id": "discord",
+  "name": "Discord",
+  "cat": "social",
+  "site": "https://discord.com/",
+  "only": null
+ },
+ {
+  "id": "reddit",
+  "name": "Reddit",
+  "cat": "social",
+  "site": "https://www.reddit.com/",
+  "only": null
+ },
+ {
+  "id": "facebook",
+  "name": "Facebook",
+  "cat": "social",
+  "site": "https://www.facebook.com/",
+  "only": null
+ },
+ {
+  "id": "messenger",
+  "name": "Messenger",
+  "cat": "social",
+  "site": "https://www.messenger.com/",
+  "only": null
+ },
+ {
+  "id": "threads",
+  "name": "Threads",
+  "cat": "social",
+  "site": "https://www.threads.com/",
+  "only": null
+ },
+ {
+  "id": "signal",
+  "name": "Signal",
+  "cat": "social",
+  "site": "https://signal.org/",
+  "only": null
+ },
+ {
+  "id": "line",
+  "name": "LINE",
+  "cat": "social",
+  "site": "https://line.me/",
+  "only": null
+ },
+ {
+  "id": "snapchat",
+  "name": "Snapchat",
+  "cat": "social",
+  "site": "https://www.snapchat.com/",
+  "only": null
+ },
+ {
+  "id": "pinterest",
+  "name": "Pinterest",
+  "cat": "social",
+  "site": "https://www.pinterest.com/",
+  "only": null
+ },
+ {
+  "id": "google",
+  "name": "Google",
+  "cat": "social",
+  "site": "https://www.google.com/",
+  "only": null
+ },
+ {
+  "id": "wikipedia",
+  "name": "Wikipedia",
+  "cat": "social",
+  "site": "https://www.wikipedia.org/",
+  "only": null
+ },
+ {
+  "id": "roblox",
+  "name": "Roblox",
+  "cat": "social",
+  "site": "https://www.roblox.com/",
+  "only": null
+ },
+ {
+  "id": "kktv",
+  "name": "KKTV",
+  "cat": "local",
+  "site": "https://www.kktv.me/",
+  "only": "TW"
+ },
+ {
+  "id": "tvb",
+  "name": "TVB Anywhere+",
+  "cat": "local",
+  "site": "https://www.tvbanywhere.com/",
+  "only": null
+ },
+ {
+  "id": "sbs",
+  "name": "SBS On Demand",
+  "cat": "local",
+  "site": "https://www.sbs.com.au/ondemand/",
+  "only": "AU"
+ },
+ {
+  "id": "fod",
+  "name": "FOD",
+  "cat": "local",
+  "site": "https://fod.fujitv.co.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "dmm",
+  "name": "DMM TV",
+  "cat": "local",
+  "site": "https://tv.dmm.com/",
+  "only": "JP"
+ },
+ {
+  "id": "zdf",
+  "name": "ZDF",
+  "cat": "local",
+  "site": "https://www.zdf.de/",
+  "only": "DE"
+ },
+ {
+  "id": "bbc",
+  "name": "BBC iPlayer",
+  "cat": "local",
+  "site": "https://www.bbc.co.uk/iplayer",
+  "only": "GB"
+ },
+ {
+  "id": "nhk",
+  "name": "NHK ONE",
+  "cat": "local",
+  "site": "https://www.nhk.or.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "telasa",
+  "name": "TELASA",
+  "cat": "local",
+  "site": "https://www.telasa.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "jcom",
+  "name": "J:COM STREAM",
+  "cat": "local",
+  "site": "https://linkvod.myjcom.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "abema",
+  "name": "ABEMA",
+  "cat": "local",
+  "site": "https://abema.tv/",
+  "only": "JP"
+ },
+ {
+  "id": "unext",
+  "name": "U-NEXT",
+  "cat": "local",
+  "site": "https://video.unext.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "tver",
+  "name": "TVer",
+  "cat": "local",
+  "site": "https://tver.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "hulujp",
+  "name": "Hulu Japan",
+  "cat": "local",
+  "site": "https://www.hulu.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "lemino",
+  "name": "Lemino",
+  "cat": "local",
+  "site": "https://lemino.docomo.ne.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "danime",
+  "name": "d Anime Store",
+  "cat": "local",
+  "site": "https://animestore.docomo.ne.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "wowow",
+  "name": "WOWOW",
+  "cat": "local",
+  "site": "https://www.wowow.co.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "radiko",
+  "name": "radiko",
+  "cat": "local",
+  "site": "https://radiko.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "videomarket",
+  "name": "VideoMarket",
+  "cat": "local",
+  "site": "https://www.videomarket.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "rakutenjp",
+  "name": "Rakuten TV Japan",
+  "cat": "local",
+  "site": "https://tv.rakuten.co.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "mora",
+  "name": "mora",
+  "cat": "local",
+  "site": "https://mora.jp/",
+  "only": "JP"
+ },
+ {
+  "id": "wavve",
+  "name": "Wavve",
+  "cat": "local",
+  "site": "https://www.wavve.com/",
+  "only": "KR"
+ },
+ {
+  "id": "tving",
+  "name": "TVING",
+  "cat": "local",
+  "site": "https://www.tving.com/",
+  "only": "KR"
+ },
+ {
+  "id": "coupang",
+  "name": "Coupang Play",
+  "cat": "local",
+  "site": "https://www.coupangplay.com/",
+  "only": "KR"
+ },
+ {
+  "id": "watcha",
+  "name": "Watcha",
+  "cat": "local",
+  "site": "https://watcha.com/",
+  "only": "KR"
+ },
+ {
+  "id": "spotv",
+  "name": "SPOTV NOW",
+  "cat": "local",
+  "site": "https://www.spotvnow.co.kr/",
+  "only": "KR"
+ },
+ {
+  "id": "4gtv",
+  "name": "4GTV",
+  "cat": "local",
+  "site": "https://www.4gtv.tv/",
+  "only": "TW"
+ },
+ {
+  "id": "litv",
+  "name": "LiTV",
+  "cat": "local",
+  "site": "https://www.litv.tv/",
+  "only": "TW"
+ },
+ {
+  "id": "bahamut",
+  "name": "Bahamut Anime Crazy",
+  "cat": "local",
+  "site": "https://ani.gamer.com.tw/",
+  "only": null
+ },
+ {
+  "id": "hami",
+  "name": "Hami Video",
+  "cat": "local",
+  "site": "https://hamivideo.hinet.net/",
+  "only": "TW"
+ },
+ {
+  "id": "myvideo",
+  "name": "myVideo",
+  "cat": "local",
+  "site": "https://www.myvideo.net.tw/",
+  "only": "TW"
+ },
+ {
+  "id": "friday",
+  "name": "friDay Video",
+  "cat": "local",
+  "site": "https://video.friday.tw/",
+  "only": "TW"
+ },
+ {
+  "id": "ofiii",
+  "name": "ofiii",
+  "cat": "local",
+  "site": "https://www.ofiii.com/",
+  "only": "TW"
+ },
+ {
+  "id": "linetv",
+  "name": "LINE TV",
+  "cat": "local",
+  "site": "https://www.linetv.tw/",
+  "only": "TW"
+ },
+ {
+  "id": "mytvsuper",
+  "name": "myTV SUPER",
+  "cat": "local",
+  "site": "https://www.mytvsuper.com/",
+  "only": "HK"
+ },
+ {
+  "id": "nowe",
+  "name": "Now E",
+  "cat": "local",
+  "site": "https://www.nowe.com/",
+  "only": "HK"
+ },
+ {
+  "id": "viutv",
+  "name": "ViuTV",
+  "cat": "local",
+  "site": "https://viu.tv/",
+  "only": "HK"
+ },
+ {
+  "id": "hoytv",
+  "name": "HOY TV",
+  "cat": "local",
+  "site": "https://hoy.tv/",
+  "only": "HK"
+ },
+ {
+  "id": "hotstar",
+  "name": "JioHotstar",
+  "cat": "local",
+  "site": "https://www.hotstar.com/",
+  "only": "IN"
+ },
+ {
+  "id": "sonyliv",
+  "name": "Sony LIV",
+  "cat": "local",
+  "site": "https://www.sonyliv.com/",
+  "only": "IN"
+ },
+ {
+  "id": "tataplay",
+  "name": "Tata Play Binge",
+  "cat": "local",
+  "site": "https://www.tataplaybinge.com/",
+  "only": "IN"
+ },
+ {
+  "id": "mxplayer",
+  "name": "MX Player",
+  "cat": "local",
+  "site": "https://www.mxplayer.in/",
+  "only": "IN"
+ },
+ {
+  "id": "mewatch",
+  "name": "meWATCH",
+  "cat": "local",
+  "site": "https://www.mewatch.sg/",
+  "only": "SG"
+ },
+ {
+  "id": "starhub",
+  "name": "StarHub TV+",
+  "cat": "local",
+  "site": "https://www.starhubtvplus.com/",
+  "only": "SG"
+ },
+ {
+  "id": "vidio",
+  "name": "Vidio",
+  "cat": "local",
+  "site": "https://www.vidio.com/",
+  "only": "ID"
+ },
+ {
+  "id": "trueid",
+  "name": "TrueID",
+  "cat": "local",
+  "site": "https://tv.trueid.net/",
+  "only": "TH"
+ },
+ {
+  "id": "aisplay",
+  "name": "AIS PLAY",
+  "cat": "local",
+  "site": "https://aisplay.ais.co.th/",
+  "only": "TH"
+ },
+ {
+  "id": "sooka",
+  "name": "sooka",
+  "cat": "local",
+  "site": "https://sooka.my/",
+  "only": "MY"
+ },
+ {
+  "id": "galaxyplay",
+  "name": "Galaxy Play",
+  "cat": "local",
+  "site": "https://galaxyplay.vn/",
+  "only": "VN"
+ },
+ {
+  "id": "tv360",
+  "name": "TV360",
+  "cat": "local",
+  "site": "https://tv360.vn/",
+  "only": "VN"
+ },
+ {
+  "id": "kplus",
+  "name": "K+",
+  "cat": "local",
+  "site": "https://www.kplus.vn/",
+  "only": "VN"
+ },
+ {
+  "id": "tenplay",
+  "name": "10 Play",
+  "cat": "local",
+  "site": "https://10play.com.au/",
+  "only": "AU"
+ },
+ {
+  "id": "stan",
+  "name": "Stan",
+  "cat": "local",
+  "site": "https://www.stan.com.au/",
+  "only": "AU"
+ },
+ {
+  "id": "binge",
+  "name": "Binge",
+  "cat": "local",
+  "site": "https://binge.com.au/",
+  "only": "AU"
+ },
+ {
+  "id": "kayo",
+  "name": "Kayo Sports",
+  "cat": "local",
+  "site": "https://kayosports.com.au/",
+  "only": "AU"
+ },
+ {
+  "id": "7plus",
+  "name": "7plus",
+  "cat": "local",
+  "site": "https://7plus.com.au/",
+  "only": "AU"
+ },
+ {
+  "id": "iview",
+  "name": "ABC iview",
+  "cat": "local",
+  "site": "https://iview.abc.net.au/",
+  "only": "AU"
+ },
+ {
+  "id": "9now",
+  "name": "9Now",
+  "cat": "local",
+  "site": "https://www.9now.com.au/",
+  "only": "AU"
+ },
+ {
+  "id": "threenow",
+  "name": "ThreeNow",
+  "cat": "local",
+  "site": "https://www.threenow.co.nz/",
+  "only": "NZ"
+ },
+ {
+  "id": "neon",
+  "name": "Neon",
+  "cat": "local",
+  "site": "https://www.neontv.co.nz/",
+  "only": "NZ"
+ },
+ {
+  "id": "skygonz",
+  "name": "Sky Go NZ",
+  "cat": "local",
+  "site": "https://www.skygo.co.nz/",
+  "only": "NZ"
+ },
+ {
+  "id": "itvx",
+  "name": "ITVX",
+  "cat": "local",
+  "site": "https://www.itv.com/",
+  "only": "GB"
+ },
+ {
+  "id": "channel4",
+  "name": "Channel 4",
+  "cat": "local",
+  "site": "https://www.channel4.com/",
+  "only": "GB"
+ },
+ {
+  "id": "my5",
+  "name": "My5",
+  "cat": "local",
+  "site": "https://www.channel5.com/",
+  "only": "GB"
+ },
+ {
+  "id": "skygo",
+  "name": "Sky Go",
+  "cat": "local",
+  "site": "https://www.sky.com/watch/sky-go",
+  "only": null
+ },
+ {
+  "id": "molotov",
+  "name": "Molotov",
+  "cat": "local",
+  "site": "https://www.molotov.tv/",
+  "only": "FR"
+ },
+ {
+  "id": "francetv",
+  "name": "france.tv",
+  "cat": "local",
+  "site": "https://www.france.tv/",
+  "only": "FR"
+ },
+ {
+  "id": "joyn",
+  "name": "Joyn",
+  "cat": "local",
+  "site": "https://www.joyn.de/",
+  "only": null
+ },
+ {
+  "id": "rtlplus",
+  "name": "RTL+",
+  "cat": "local",
+  "site": "https://plus.rtl.de/",
+  "only": "DE"
+ },
+ {
+  "id": "skyde",
+  "name": "Sky Go Germany",
+  "cat": "local",
+  "site": "https://www.sky.de/",
+  "only": null
+ },
+ {
+  "id": "skych",
+  "name": "Sky Switzerland",
+  "cat": "local",
+  "site": "https://www.sky.ch/",
+  "only": "CH"
+ },
+ {
+  "id": "raiplay",
+  "name": "RaiPlay",
+  "cat": "local",
+  "site": "https://www.raiplay.it/",
+  "only": "IT"
+ },
+ {
+  "id": "movistar",
+  "name": "Movistar Plus+",
+  "cat": "local",
+  "site": "https://www.movistarplus.es/",
+  "only": "ES"
+ },
+ {
+  "id": "npo",
+  "name": "NPO Start",
+  "cat": "local",
+  "site": "https://npo.nl/",
+  "only": "NL"
+ },
+ {
+  "id": "videoland",
+  "name": "Videoland",
+  "cat": "local",
+  "site": "https://www.videoland.com/",
+  "only": "NL"
+ },
+ {
+  "id": "nlziet",
+  "name": "NLZIET",
+  "cat": "local",
+  "site": "https://www.nlziet.nl/",
+  "only": "NL"
+ },
+ {
+  "id": "amediateka",
+  "name": "Amediateka",
+  "cat": "local",
+  "site": "https://www.amediateka.ru/",
+  "only": "RU"
+ },
+ {
+  "id": "sling",
+  "name": "Sling TV",
+  "cat": "local",
+  "site": "https://www.sling.com/",
+  "only": "US"
+ },
+ {
+  "id": "starz",
+  "name": "STARZ",
+  "cat": "local",
+  "site": "https://www.starz.com/",
+  "only": "US"
+ },
+ {
+  "id": "aetv",
+  "name": "A&E",
+  "cat": "local",
+  "site": "https://play.aetv.com/",
+  "only": "US"
+ },
+ {
+  "id": "cw",
+  "name": "The CW",
+  "cat": "local",
+  "site": "https://www.cwtv.com/",
+  "only": "US"
+ },
+ {
+  "id": "directv",
+  "name": "DIRECTV Stream",
+  "cat": "local",
+  "site": "https://stream.directv.com/",
+  "only": "US"
+ },
+ {
+  "id": "mgmplus",
+  "name": "MGM+",
+  "cat": "local",
+  "site": "https://www.mgmplus.com/",
+  "only": "US"
+ },
+ {
+  "id": "fxnow",
+  "name": "FX",
+  "cat": "local",
+  "site": "https://www.fxnetworks.com/",
+  "only": "US"
+ },
+ {
+  "id": "nflplus",
+  "name": "NFL+",
+  "cat": "local",
+  "site": "https://www.nfl.com/plus/",
+  "only": "US"
+ },
+ {
+  "id": "tlc",
+  "name": "TLC GO",
+  "cat": "local",
+  "site": "https://go.tlc.com/",
+  "only": "US"
+ },
+ {
+  "id": "cbcgem",
+  "name": "CBC Gem",
+  "cat": "local",
+  "site": "https://gem.cbc.ca/",
+  "only": "CA"
+ },
+ {
+  "id": "crave",
+  "name": "Crave",
+  "cat": "local",
+  "site": "https://www.crave.ca/",
+  "only": "CA"
+ },
+ {
+  "id": "mgtv",
+  "name": "Mango TV",
+  "cat": "local",
+  "site": "https://www.mgtv.com/",
+  "only": "CN"
+ },
+ {
+  "id": "tencent",
+  "name": "Tencent Video",
+  "cat": "local",
+  "site": "https://v.qq.com/",
+  "only": "CN"
+ },
+ {
+  "id": "bilibili",
+  "name": "Bilibili",
+  "cat": "local",
+  "site": "https://www.bilibili.com/",
+  "only": "CN"
+ },
+ {
+  "id": "iqiyi",
+  "name": "iQIYI",
+  "cat": "local",
+  "site": "https://www.iqiyi.com/",
+  "only": "CN"
+ },
+ {
+  "id": "youku",
+  "name": "Youku",
+  "cat": "local",
+  "site": "https://www.youku.com/",
+  "only": "CN"
+ },
+ {
+  "id": "netease",
+  "name": "NetEase Cloud Music",
+  "cat": "local",
+  "site": "https://music.163.com/",
+  "only": "CN"
+ }
+]

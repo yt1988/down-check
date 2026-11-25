@@ -1,0 +1,746 @@
+[
+ {
+  "id": "chatgpt",
+  "name": "ChatGPT",
+  "names": null,
+  "cat": "ai",
+  "url": "https://chatgpt.com/cdn-cgi/trace",
+  "pack": null
+ },
+ {
+  "id": "claude",
+  "name": "Claude",
+  "names": null,
+  "cat": "ai",
+  "url": "https://claude.ai/cdn-cgi/trace",
+  "pack": null
+ },
+ {
+  "id": "gemini",
+  "name": "Gemini",
+  "names": null,
+  "cat": "ai",
+  "url": "https://gemini.google.com/generate_204",
+  "pack": null
+ },
+ {
+  "id": "copilot",
+  "name": "Copilot",
+  "names": null,
+  "cat": "ai",
+  "url": "https://copilot.microsoft.com/cdn-cgi/trace",
+  "pack": null
+ },
+ {
+  "id": "grok",
+  "name": "Grok",
+  "names": null,
+  "cat": "ai",
+  "url": "https://grok.com/cdn-cgi/trace",
+  "pack": null
+ },
+ {
+  "id": "deepseek",
+  "name": "DeepSeek",
+  "names": null,
+  "cat": "ai",
+  "url": "https://fe-static.deepseek.com/chat/favicon.svg",
+  "pack": null
+ },
+ {
+  "id": "google",
+  "name": "Google",
+  "names": null,
+  "cat": "web",
+  "url": "https://www.google.com/generate_204",
+  "pack": null
+ },
+ {
+  "id": "apple",
+  "name": "Apple",
+  "names": null,
+  "cat": "web",
+  "url": "https://www.apple.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "microsoft",
+  "name": "Microsoft",
+  "names": null,
+  "cat": "web",
+  "url": "https://www.microsoft.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "wikipedia",
+  "name": "Wikipedia",
+  "names": null,
+  "cat": "web",
+  "url": "https://upload.wikimedia.org/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "amazon",
+  "name": "Amazon",
+  "names": null,
+  "cat": "web",
+  "url": "https://www.amazon.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "zoom",
+  "name": "Zoom",
+  "names": null,
+  "cat": "web",
+  "url": "https://zoom.us/cdn-cgi/trace",
+  "pack": null
+ },
+ {
+  "id": "youtube",
+  "name": "YouTube",
+  "names": null,
+  "cat": "video",
+  "url": "https://www.youtube.com/generate_204",
+  "pack": null
+ },
+ {
+  "id": "netflix",
+  "name": "Netflix",
+  "names": null,
+  "cat": "video",
+  "url": "https://www.netflix.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "tiktok",
+  "name": "TikTok",
+  "names": null,
+  "cat": "video",
+  "url": "https://www.tiktok.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "twitch",
+  "name": "Twitch",
+  "names": null,
+  "cat": "video",
+  "url": "https://www.twitch.tv/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "spotify",
+  "name": "Spotify",
+  "names": null,
+  "cat": "video",
+  "url": "https://open.spotify.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "x",
+  "name": "X",
+  "names": null,
+  "cat": "social",
+  "url": "https://abs.twimg.com/favicons/twitter.3.ico",
+  "pack": null
+ },
+ {
+  "id": "instagram",
+  "name": "Instagram",
+  "names": null,
+  "cat": "social",
+  "url": "https://scontent.cdninstagram.com/",
+  "pack": null
+ },
+ {
+  "id": "facebook",
+  "name": "Facebook",
+  "names": null,
+  "cat": "social",
+  "url": "https://www.facebook.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "whatsapp",
+  "name": "WhatsApp",
+  "names": null,
+  "cat": "social",
+  "url": "https://web.whatsapp.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "telegram",
+  "name": "Telegram",
+  "names": null,
+  "cat": "social",
+  "url": "https://venus.web.telegram.org/apiw1",
+  "pack": null
+ },
+ {
+  "id": "discord",
+  "name": "Discord",
+  "names": null,
+  "cat": "social",
+  "url": "https://discord.com/cdn-cgi/trace",
+  "pack": null
+ },
+ {
+  "id": "reddit",
+  "name": "Reddit",
+  "names": null,
+  "cat": "social",
+  "url": "https://www.reddit.com/robots.txt",
+  "pack": null
+ },
+ {
+  "id": "github",
+  "name": "GitHub",
+  "names": null,
+  "cat": "dev",
+  "url": "https://github.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "npm",
+  "name": "npm",
+  "names": null,
+  "cat": "dev",
+  "url": "https://registry.npmjs.org/-/ping",
+  "pack": null
+ },
+ {
+  "id": "dockerhub",
+  "name": "Docker Hub",
+  "names": null,
+  "cat": "dev",
+  "url": "https://registry-1.docker.io/v2/",
+  "pack": null
+ },
+ {
+  "id": "pypi",
+  "name": "PyPI",
+  "names": null,
+  "cat": "dev",
+  "url": "https://pypi.org/static/images/favicon.35549fe8.ico",
+  "pack": null
+ },
+ {
+  "id": "huggingface",
+  "name": "Hugging Face",
+  "names": null,
+  "cat": "dev",
+  "url": "https://huggingface.co/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "steam",
+  "name": "Steam",
+  "names": null,
+  "cat": "game",
+  "url": "https://store.steampowered.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "playstation",
+  "name": "PlayStation",
+  "names": null,
+  "cat": "game",
+  "url": "https://www.playstation.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "xbox",
+  "name": "Xbox",
+  "names": null,
+  "cat": "game",
+  "url": "https://www.xbox.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "nintendo",
+  "name": "Nintendo",
+  "names": null,
+  "cat": "game",
+  "url": "https://www.nintendo.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "epic",
+  "name": "Epic Games",
+  "names": null,
+  "cat": "game",
+  "url": "https://store.epicgames.com/cdn-cgi/trace",
+  "pack": null
+ },
+ {
+  "id": "cloudflare",
+  "name": "Cloudflare",
+  "names": null,
+  "cat": "cdn",
+  "url": "https://www.cloudflare.com/cdn-cgi/trace",
+  "pack": null
+ },
+ {
+  "id": "akamai",
+  "name": "Akamai",
+  "names": null,
+  "cat": "cdn",
+  "url": "https://store.akamai.steamstatic.com/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "cloudfront",
+  "name": "Amazon CloudFront",
+  "names": null,
+  "cat": "cdn",
+  "url": "https://a0.awsstatic.com/libra-css/images/site/fav/favicon.ico",
+  "pack": null
+ },
+ {
+  "id": "google-cdn",
+  "name": "Google Cloud CDN",
+  "names": null,
+  "cat": "cdn",
+  "url": "https://www.gstatic.com/generate_204",
+  "pack": null
+ },
+ {
+  "id": "fastly",
+  "name": "Fastly",
+  "names": null,
+  "cat": "cdn",
+  "url": "https://fastly.jsdelivr.net/npm/jquery@3.7.1/package.json",
+  "pack": null
+ },
+ {
+  "id": "azure",
+  "name": "Azure Front Door",
+  "names": null,
+  "cat": "cdn",
+  "url": "https://assets.xboxservices.com/assets/f8/67/f86740d7-eedd-4d9c-a963-76af7e36c4b2.svg?n=Xbox-Follow-Footer_Image-0_Mail_32x32_02.svg",
+  "pack": null
+ },
+ {
+  "id": "baidu",
+  "name": "百度",
+  "names": {
+   "en": "Baidu",
+   "zh-CN": "百度",
+   "zh-TW": "百度",
+   "ja": "Baidu",
+   "ko": "바이두",
+   "es": "Baidu",
+   "fr": "Baidu",
+   "de": "Baidu",
+   "pt": "Baidu",
+   "ru": "Baidu"
+  },
+  "cat": "local",
+  "url": "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
+  "pack": "cn"
+ },
+ {
+  "id": "bilibili",
+  "name": "哔哩哔哩",
+  "names": {
+   "en": "Bilibili",
+   "zh-CN": "哔哩哔哩",
+   "zh-TW": "嗶哩嗶哩",
+   "ja": "ビリビリ",
+   "ko": "빌리빌리",
+   "es": "Bilibili",
+   "fr": "Bilibili",
+   "de": "Bilibili",
+   "pt": "Bilibili",
+   "ru": "Bilibili"
+  },
+  "cat": "local",
+  "url": "https://www.bilibili.com/favicon.ico",
+  "pack": "cn"
+ },
+ {
+  "id": "wechat",
+  "name": "微信",
+  "names": {
+   "en": "WeChat",
+   "zh-CN": "微信",
+   "zh-TW": "微信",
+   "ja": "WeChat",
+   "ko": "위챗",
+   "es": "WeChat",
+   "fr": "WeChat",
+   "de": "WeChat",
+   "pt": "WeChat",
+   "ru": "WeChat"
+  },
+  "cat": "local",
+  "url": "https://weixin.qq.com/favicon.ico",
+  "pack": "cn"
+ },
+ {
+  "id": "douyin",
+  "name": "抖音",
+  "names": {
+   "en": "Douyin",
+   "zh-CN": "抖音",
+   "zh-TW": "抖音",
+   "ja": "Douyin",
+   "ko": "더우인",
+   "es": "Douyin",
+   "fr": "Douyin",
+   "de": "Douyin",
+   "pt": "Douyin",
+   "ru": "Douyin"
+  },
+  "cat": "local",
+  "url": "https://lf1-cdn-tos.bytegoofy.com/goofy/ies/douyin_web/public/favicon.ico",
+  "pack": "cn"
+ },
+ {
+  "id": "yahoo-tw",
+  "name": "Yahoo奇摩",
+  "names": {
+   "en": "Yahoo Kimo",
+   "zh-CN": "Yahoo奇摩",
+   "zh-TW": "Yahoo奇摩",
+   "ja": "Yahoo Kimo",
+   "ko": "Yahoo Kimo",
+   "es": "Yahoo Kimo",
+   "fr": "Yahoo Kimo",
+   "de": "Yahoo Kimo",
+   "pt": "Yahoo Kimo",
+   "ru": "Yahoo Kimo"
+  },
+  "cat": "local",
+  "url": "https://tw.yahoo.com/favicon.ico",
+  "pack": "tw"
+ },
+ {
+  "id": "line",
+  "name": "LINE",
+  "names": null,
+  "cat": "local",
+  "url": "https://line.me/favicon.ico",
+  "pack": "sea"
+ },
+ {
+  "id": "ettoday",
+  "name": "ETtoday",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.ettoday.net/favicon.ico",
+  "pack": "tw"
+ },
+ {
+  "id": "ptt",
+  "name": "PTT",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.ptt.cc/cdn-cgi/trace",
+  "pack": "tw"
+ },
+ {
+  "id": "yahoo-jp",
+  "name": "Yahoo! JAPAN",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.yahoo.co.jp/favicon.ico",
+  "pack": "jp"
+ },
+ {
+  "id": "rakuten",
+  "name": "楽天",
+  "names": {
+   "en": "Rakuten",
+   "zh-CN": "Rakuten",
+   "zh-TW": "Rakuten",
+   "ja": "楽天",
+   "ko": "라쿠텐",
+   "es": "Rakuten",
+   "fr": "Rakuten",
+   "de": "Rakuten",
+   "pt": "Rakuten",
+   "ru": "Rakuten"
+  },
+  "cat": "local",
+  "url": "https://www.rakuten.co.jp/favicon.ico",
+  "pack": "jp"
+ },
+ {
+  "id": "niconico",
+  "name": "ニコニコ",
+  "names": {
+   "en": "Niconico",
+   "zh-CN": "Niconico",
+   "zh-TW": "Niconico",
+   "ja": "ニコニコ",
+   "ko": "니코니코",
+   "es": "Niconico",
+   "fr": "Niconico",
+   "de": "Niconico",
+   "pt": "Niconico",
+   "ru": "Niconico"
+  },
+  "cat": "local",
+  "url": "https://resource.video.nimg.jp/web/images/favicon_uni/favicon.ico",
+  "pack": "jp"
+ },
+ {
+  "id": "naver",
+  "name": "NAVER",
+  "names": null,
+  "cat": "local",
+  "url": "https://s.pstatic.net/static/www/u/2014/0328/mma_204243574.png",
+  "pack": "kr"
+ },
+ {
+  "id": "kakao",
+  "name": "Kakao",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.kakaocorp.com/robots.txt",
+  "pack": "kr"
+ },
+ {
+  "id": "coupang",
+  "name": "Coupang",
+  "names": null,
+  "cat": "local",
+  "url": "https://image7.coupangcdn.com/image/coupang/favicon/v2/favicon.ico",
+  "pack": "kr"
+ },
+ {
+  "id": "daum",
+  "name": "Daum",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.daum.net/favicon.ico",
+  "pack": "kr"
+ },
+ {
+  "id": "yandex",
+  "name": "Яндекс",
+  "names": {
+   "en": "Yandex",
+   "zh-CN": "Yandex",
+   "zh-TW": "Yandex",
+   "ja": "Yandex",
+   "ko": "Yandex",
+   "es": "Yandex",
+   "fr": "Yandex",
+   "de": "Yandex",
+   "pt": "Yandex",
+   "ru": "Яндекс"
+  },
+  "cat": "local",
+  "url": "https://yandex.ru/favicon.ico",
+  "pack": "ru"
+ },
+ {
+  "id": "vk",
+  "name": "VK",
+  "names": null,
+  "cat": "local",
+  "url": "https://vk.com/favicon.ico",
+  "pack": "ru"
+ },
+ {
+  "id": "wildberries",
+  "name": "Wildberries",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.wildberries.ru/favicon.ico",
+  "pack": "ru"
+ },
+ {
+  "id": "mailru",
+  "name": "Mail.ru",
+  "names": null,
+  "cat": "local",
+  "url": "https://mail.ru/favicon.ico",
+  "pack": "ru"
+ },
+ {
+  "id": "flipkart",
+  "name": "Flipkart",
+  "names": null,
+  "cat": "local",
+  "url": "https://static-assets-web.flixcart.com/favicon.ico",
+  "pack": "in"
+ },
+ {
+  "id": "hotstar",
+  "name": "JioHotstar",
+  "names": null,
+  "cat": "local",
+  "url": "https://img.hotstar.com/image/upload/v1711625492/feature/rebranding/disney-plus-favicon.ico",
+  "pack": "in"
+ },
+ {
+  "id": "paytm",
+  "name": "Paytm",
+  "names": null,
+  "cat": "local",
+  "url": "https://paytm.com/favicon.ico",
+  "pack": "in"
+ },
+ {
+  "id": "amazon-in",
+  "name": "Amazon.in",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.amazon.in/favicon.ico",
+  "pack": "in"
+ },
+ {
+  "id": "shopee",
+  "name": "Shopee",
+  "names": null,
+  "cat": "local",
+  "url": "https://shopee.sg/favicon.ico",
+  "pack": "sea"
+ },
+ {
+  "id": "lazada",
+  "name": "Lazada",
+  "names": null,
+  "cat": "local",
+  "url": "https://laz-img-cdn.alicdn.com/tfs/TB1PApewFT7gK0jSZFpXXaTkpXa-200-200.png",
+  "pack": "sea"
+ },
+ {
+  "id": "grab",
+  "name": "Grab",
+  "names": null,
+  "cat": "local",
+  "url": "https://assets.grab.com/wp-content/uploads/media/footer/AppStore.png",
+  "pack": "sea"
+ },
+ {
+  "id": "bbc",
+  "name": "BBC",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.bbc.co.uk/favicon.ico",
+  "pack": "eu"
+ },
+ {
+  "id": "booking",
+  "name": "Booking.com",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.booking.com/robots.txt",
+  "pack": "eu"
+ },
+ {
+  "id": "zalando",
+  "name": "Zalando",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.zalando.com/favicon.ico",
+  "pack": "eu"
+ },
+ {
+  "id": "allegro",
+  "name": "Allegro",
+  "names": null,
+  "cat": "local",
+  "url": "https://allegro.pl/favicon.ico",
+  "pack": "eu"
+ },
+ {
+  "id": "mercadolibre",
+  "name": "Mercado Libre",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.mercadolibre.com/favicon.ico",
+  "pack": "latam"
+ },
+ {
+  "id": "globo",
+  "name": "Globo",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.globo.com/favicon.ico",
+  "pack": "latam"
+ },
+ {
+  "id": "nubank",
+  "name": "Nubank",
+  "names": null,
+  "cat": "local",
+  "url": "https://nubank.com.br/favicon.ico",
+  "pack": "latam"
+ },
+ {
+  "id": "ifood",
+  "name": "iFood",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.ifood.com.br/cdn-cgi/trace",
+  "pack": "latam"
+ },
+ {
+  "id": "espn",
+  "name": "ESPN",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.espn.com/favicon.ico",
+  "pack": "na"
+ },
+ {
+  "id": "disneyplus",
+  "name": "Disney+",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.disneyplus.com/favicon.ico",
+  "pack": "na"
+ },
+ {
+  "id": "yahoo",
+  "name": "Yahoo",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.yahoo.com/favicon.ico",
+  "pack": "na"
+ },
+ {
+  "id": "target",
+  "name": "Target",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.target.com/favicon.ico",
+  "pack": "na"
+ },
+ {
+  "id": "talabat",
+  "name": "talabat",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.talabat.com/cdn-cgi/trace",
+  "pack": "me"
+ },
+ {
+  "id": "careem",
+  "name": "Careem",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.careem.com/cdn-cgi/trace",
+  "pack": "me"
+ },
+ {
+  "id": "aljazeera",
+  "name": "Al Jazeera",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.aljazeera.com/favicon_aje.ico",
+  "pack": "me"
+ },
+ {
+  "id": "trendyol",
+  "name": "Trendyol",
+  "names": null,
+  "cat": "local",
+  "url": "https://www.trendyol.com/cdn-cgi/trace",
+  "pack": "me"
+ }
+]
