@@ -2,6 +2,8 @@
    largest thing on it, the summary is a panel, and every status is a shape first and a word second. */
 
 html { scrollbar-gutter: stable; }
+/* Safari parks focus on html/body/main after a modal dialog closes; the page must not wear a ring. */
+html:focus-visible, body:focus-visible, main:focus-visible, dialog:focus-visible { outline: none; }
 body { -webkit-text-size-adjust: 100%; }
 a { color: var(--ink); text-decoration: none; }
 a:hover { text-decoration: underline; }

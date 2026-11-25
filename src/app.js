@@ -76,6 +76,14 @@ async function openShare() {
 }
 $("#shareBtn")?.addEventListener("click", openShare);
 
+// WebKit leaves focus on <main> or <body> after a modal closes; the tool's universal focus ring would paint the page.
+document.addEventListener("close", e => {
+  const t = e.target;
+  if (!t || t.tagName !== "DIALOG") return;
+  const a = document.activeElement;
+  if (a && (a === document.body || a === document.documentElement || a.tagName === "MAIN")) a.blur();
+}, true);
+
 /* ---------- header: theme and language, as on every 1ms.dog tool ---------- */
 const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
 const TH = ["system", "light", "dark"], thBtn = $("#theme");
