@@ -90,5 +90,9 @@ test("a service without an official status page says so instead of linking nothi
 });
 
 test("the upstream data address never reaches a visitor's page", async () => {
-  for (const p of pages) assert.ok(!(await readFile(new URL(p, pub), "utf8")).includes("data.1ms.dog"), p);
+  for (const p of pages) {
+    const html = await readFile(new URL(p, pub), "utf8");
+    assert.ok(!html.includes("/down/latest.json"), p);
+    assert.ok(!html.includes("PROBE_TOKYO_URL"), p);
+  }
 });

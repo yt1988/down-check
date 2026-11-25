@@ -55,7 +55,8 @@ another service's page.
 
 1. `probe/` runs every 10 minutes on each machine and writes `latest.json` (plus `days/`) with per-service `t`, `h`,
    `up24`, `up7`, `out`.
-2. `src/worker.js` fetches Tokyo and Shanghai (`PROBE_TOKYO_URL`, `PROBE_SHANGHAI_URL`), trims them with
+2. `src/worker.js` fetches Tokyo and Shanghai (`PROBE_TOKYO_URL`, `PROBE_SHANGHAI_URL`; no default — set them in the
+   deployment, never in this repository), trims them with
    `src/data.mjs` (published ids, last 144 samples only), caches 60 s, and keeps the last good copy for a week. If both
    are missing it returns 503. There is no cron and no KV.
 3. The page fetches `/api/status.json` once and fills the build's placeholders. It never talks to an upstream directly.

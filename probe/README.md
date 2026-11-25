@@ -54,12 +54,12 @@ Flags: `--out` (required), `--from` (label shown on the page), `--services`, `--
 3. Copy `1ms-down-probe.service` and `1ms-down-probe.timer` to `/etc/systemd/system/`, then
    `systemctl daemon-reload && systemctl enable --now 1ms-down-probe.timer`.
 4. The result folder is published read-only by the data host at `/down/latest.json` (the
-   Worker's default `TOKYO_URL` is `https://data.1ms.dog:2083/down/latest.json`).
+   Worker's `PROBE_TOKYO_URL` points at the published `down/latest.json` on your data host).
 5. Shanghai: the same binary and `services.json`, `--from "Shanghai, CN"`, its own output folder, and a URL the Worker
    can read (`PROBE_SHANGHAI_URL`). The Worker merges the two; neither overwrites the other.
 
 Verify: `systemctl start 1ms-down-probe`, then
-`curl -s https://data.1ms.dog:2083/down/latest.json | head -c 200` — `at` is recent, `count` is 210, `complete` true.
+`curl -s https://<your-data-host>/down/latest.json | head -c 200` — `at` is recent, `count` is 210, `complete` true.
 
 ## License
 

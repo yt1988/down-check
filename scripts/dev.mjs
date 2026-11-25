@@ -33,13 +33,14 @@ async function probe(env, fallback) {
 }
 
 // Dev only: the probe has just started, so its 24-hour strip is almost empty. Fill the part it does not have from the
-// existing hourly baseline (index/summary.json) — the real hourly uptime — and use the baseline's up24/up7. Production
-// does not do this; after a day the probe's own 10-minute history fills the strip.
+// existing hourly summary — the real hourly uptime — and use its up24/up7. Set DOWN_BASELINE_URL to that JSON (the
+// address is not in this repository); without it the strip simply starts empty. Production does not do this.
 let baselineCache = null, baselineAt = 0;
 async function baseline() {
+  if (!process.env.DOWN_BASELINE_URL) return null;
   if (baselineCache && Date.now() - baselineAt < 10 * 60e3) return baselineCache;
   try {
-    const r = await fetch("https://data.1ms.dog:2083/index/summary.json", { signal: AbortSignal.timeout(5000) });
+    const r = await fetch(process.env.DOWN_BASELINE_URL, { signal: AbortSignal.timeout(5000) });
     baselineCache = r.ok ? await r.json() : null;
   } catch { baselineCache = null; }
   baselineAt = Date.now();
