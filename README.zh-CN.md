@@ -74,11 +74,14 @@ Worker 只做两件事：提供静态页面，以及用一个 `/api/status.json`
 
 ## 数据
 
-接口输出是 `{ v: 4, generated, losangeles, tokyo, shanghai }`；部署里没配地址的那份是 `null`，三份都拿不到才返回 503。
+接口输出是 `{ v: 5, generated, losangeles, tokyo, shanghai, merged }`。每个地点带当前样本和最近 24 小时（`h24`）；
+`merged` 是 `src/series.mjs` 把三个地点合成的一条时间线：同一个 10 分钟里只要有一个地点有回应就算在线，三个地点都没有
+回应才算一次中断。条形图、24 小时和 7 天在线率、中断列表、「在线 / 已恢复」全部来自这一条序列，所以不会互相矛盾。
+部署里没配地址的那份是 `null`，三份都拿不到才返回 503。
 
 `probe/latest.json`（每台机器一份，共三台）：`at`、`every`、`from`、`complete`，以及每个服务的 `ok`、`unknown`、`ms`、
 `http`、`err`、`t`（这个服务自己的测量时间）、`h`（10 分钟一格的历史）、`up24`、`up7`、`out`。Worker 只保留
-已发布的服务和最近 144 格（`h24`）之后才发给浏览器。不收集访客信息：页面只读一个同源 JSON，不设 cookie。
+已发布的服务，保留 7 天历史用于合并；浏览器拿到的是每个地点最近 144 格和合并序列。不收集访客信息：页面只读一个同源 JSON，不设 cookie。
 
 ## 目录
 

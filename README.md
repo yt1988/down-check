@@ -82,12 +82,17 @@ verdict uses only what the two probe machines wrote.
 
 ## Data
 
-`/api/status.json` is `{ v: 4, generated, losangeles, tokyo, shanghai }`; a source the deployment has no address for
-is `null`, and only all three missing is a 503.
+`/api/status.json` is `{ v: 5, generated, losangeles, tokyo, shanghai, merged }`. Each place carries its current sample
+and its last 24 hours (`h24`); `merged` is one timeline per service, built from all three places by
+`src/series.mjs` — a ten-minute bucket counts as answered if any place answered, and only a bucket where nobody
+answered is an interruption. The bar, the 24-hour and 7-day figures, the interruption list and "online / recovered"
+all come from that one series, so they cannot disagree. A place the deployment has no address for is `null`; only all
+three missing is a 503.
 
 `probe/latest.json` (one per machine, three machines): `at`, `every`, `from`, `complete`, and per service `ok`, `unknown`, `ms`,
 `http`, `err`, `t` (this service's own measurement time), `h` (history, 10-minute samples), `up24`, `up7`, `out`.
-The Worker trims it to the published services and the last 144 samples (`h24`) before any browser sees it. Nothing
+The Worker trims it to the published services and keeps 7 days of history for the merge; a browser gets each place's
+last 144 samples and the merged series. Nothing
 about visitors is collected: the page reads one same-origin JSON and sets no cookies.
 
 ## Layout

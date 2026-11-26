@@ -136,7 +136,21 @@ a.icon-btn:hover { background: var(--soft); }
 .dn-history-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .dn-history-h h2 { font-size: var(--fs-title); }
 .dn-history-h .dn-up { font: 600 var(--fs-num)/1 var(--f-num); font-variant-numeric: tabular-nums; }
-.dn-bar { display: flex; align-items: stretch; gap: 1px; height: 26px; }
+.dn-bar { display: flex; align-items: stretch; gap: 1px; height: 26px; position: relative; }
+.dn-bar:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 3px; }
+/* the hover card: which place saw what, for one ten-minute bucket */
+.dn-bar-tip { position: absolute; z-index: 5; top: 0; left: 0; box-sizing: border-box; transform: translateY(calc(-100% - 8px)); min-width: 190px;
+  padding: 9px 11px; border: 1px solid var(--line); border-radius: var(--r); background: var(--panel); color: var(--fg);
+  box-shadow: 0 8px 24px rgba(0,0,0,.14); font-size: var(--fs-small); line-height: 1.45; pointer-events: none; }
+.dn-bar-tip[hidden] { display: none; }
+.dn-bar-tip.dn-tip-below { top: 100%; transform: translateY(8px); }
+@media (pointer: coarse) { .dn-bar-tip { min-width: 0; max-width: none; } }
+.dn-tip-h { display: block; font-size: var(--fs-micro); color: var(--muted); font-variant-numeric: tabular-nums; margin-bottom: 4px; }
+.dn-tip-p { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+.dn-tip-p b { margin-left: auto; font-weight: 600; }
+.dn-tip-f { width: 14px; height: 10px; border-radius: 2px; object-fit: cover; flex: none; box-shadow: 0 0 0 1px rgba(0,0,0,.1); }
+[data-theme="dark"] .dn-tip-f { box-shadow: 0 0 0 1px rgba(255,255,255,.16); }
+.dn-tip-m { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); color: var(--muted); }
 .dn-bar i { flex: 1; border-radius: 1px; background: var(--line); }
 .dn-bar i.ok { background: var(--t1); }
 .dn-bar i.warn { background: var(--warn); }
@@ -258,3 +272,28 @@ a.icon-btn:hover { background: var(--soft); }
 @media (pointer: coarse) {
   .dn-cat-h h2 a { display: inline-flex; align-items: center; min-height: 40px; }
 }
+
+/* ---------- auto refresh: a ring that fills over the 300 s, and the seconds left ---------- */
+.dn-refresh { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-caption);
+  color: var(--muted); font-variant-numeric: tabular-nums; vertical-align: middle; }
+.dn-refresh #refreshText { color: var(--fg); opacity: .72; }
+.dn-refresh.is-soon #refreshText { color: var(--t1); opacity: 1; }
+/* on the age line it follows the text after a quiet separator */
+.dn-refresh-in::before { content: "·"; margin: 0 6px 0 2px; color: var(--line); }
+.dn-age .dn-refresh, .dn-status-meta .dn-refresh { margin-left: 0; }
+.dn-refresh[hidden] { display: none; }
+.dn-ring { width: 16px; height: 16px; flex: none; display: block; }
+.dn-ring svg { width: 16px; height: 16px; transform: rotate(-90deg); display: block; }
+.dn-ring-bg, .dn-ring-fg { fill: none; stroke-width: 3; }
+.dn-ring-bg { stroke: var(--line); }
+.dn-ring-fg { stroke: var(--muted); stroke-linecap: round; transition: stroke-dashoffset .9s linear, stroke .3s; }
+.dn-refresh.is-soon .dn-ring-fg { stroke: var(--t1); }
+.dn-refresh.is-failed { color: var(--warn); }
+.dn-refresh.is-failed .dn-ring-fg { stroke: var(--warn); }
+.dn-refresh.is-paused .dn-ring-fg { stroke: var(--line); }
+.dn-refresh.is-paused { opacity: .8; }
+@media (prefers-reduced-motion: reduce) { .dn-ring-fg { transition: none; } }
+/* the age line gives one quiet pulse when a refresh actually landed */
+@keyframes dn-flash { from { color: var(--t1); } to { color: inherit; } }
+.dn-age.dn-flash { animation: dn-flash 1.6s ease-out 1; }
+@media (prefers-reduced-motion: reduce) { .dn-age.dn-flash { animation: none; } }

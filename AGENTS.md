@@ -72,7 +72,14 @@ another service's page. There is no state that renders an official verdict; do n
    last 144 samples only), caches 60 s, and keeps the last good copy for a week. Only when all three are missing does
    it return 503; a source that is missing alone is `null` in the JSON. Secrets survive a deploy. There is no cron and
    no KV.
-3. The page fetches `/api/status.json` once and fills the build's placeholders. It never talks to an upstream directly.
+3. `src/series.mjs` builds one timeline per service from the three places: a ten-minute bucket is "answered" if any
+   place answered, "unconfirmed" if nobody answered but somebody refused, and an interruption only when nobody answered.
+   The Worker sends it as `merged`; the bar, the 24 h and 7 d figures, the interruption list and "recovered" all come
+   from it, never from one place's own `up24`. Reading one place's number beside another place's state is how a page
+   ends up saying "recovered, 100%, no interruptions" (issue #146 follow-up, 2026-11-26).
+4. The page fetches `/api/status.json`, fills the build's placeholders, and — on a category and a service page — asks
+   again every 300 s without reloading, with a ring on the age line and a countdown in seconds. The home page does not
+   poll (owner's call). It never talks to an upstream directly.
 
 The upstream data address never appears in a page (a test checks it). A 403/429 must stay unconfirmed end to end.
 
@@ -94,7 +101,8 @@ The upstream data address never appears in a page (a test checks it). A 403/429 
   offline, grey filled unconfirmed/stale. No other shapes.
 - The hero is centred; the search (home) is left and the legend right on one row; the age line reserves its height so
   nothing moves when the data arrives. There is no summary block and no "only problems" filter.
-- The 24-hour strip is one cell per hour (six 10-minute samples); the service page shows the last 144 samples. No chart
+- The 24-hour strip is one cell per hour (six 10-minute samples); the service page shows the last 144 ten-minute
+  buckets of the merged series, and hovering, ←/→ or a tap on one reads what each place saw in that window. No chart
   library, no axes.
 - Ten languages, every key and the same `{placeholders}` (`npm test`); no English fallback at runtime. Runtime strings
   are the `RUNTIME` set in `scripts/build.mjs`; everything else is written into the HTML.

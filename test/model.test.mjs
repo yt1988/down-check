@@ -9,7 +9,9 @@ const svc = { id: "x", name: "X" };
 const probeDoc = (services, { from = "Tokyo, JP", age = 120 } = {}) => ({ at: new Date(NOW - age * 1000).toISOString(), every: 600, from, services });
 const p = (o = {}) => ({ ok: true, unknown: false, ms: 20, http: 200, t: SEC - 120, ok_at: SEC - 120, up24: 100, up7: 100, h24: "o".repeat(144), out: [], ...o });
 const LOSANGELES = { from: "Los Angeles, US" };
-const data = (tokyo, shanghai, losangeles = null) => ({ losangeles, tokyo, shanghai });
+// The verdict reads the numbers from the merged series the Worker sends (`merged`), not from one place's up24.
+const merged = (o = {}) => ({ id: "x", up24: 100, up7: 100, h24: "o".repeat(144), downs24: 0, out: [], since: null, ...o });
+const data = (tokyo, shanghai, losangeles = null, m = merged()) => ({ losangeles, tokyo, shanghai, merged: { x: m } });
 
 test("all three places answer: ok", () => {
   const v = verdict(svc, data(probeDoc({ x: p() }), probeDoc({ x: p() }, { from: "Shanghai, CN" }), probeDoc({ x: p() }, LOSANGELES)), NOW);
@@ -83,9 +85,17 @@ test("one place missing, the other answers: ok, and the page shows the missing o
   assert.deepEqual(v.places, ["tokyo"]);
 });
 
-test("an interruption within 24 hours: recovered", () => {
-  const v = verdict(svc, data(probeDoc({ x: p({ out: [{ from: SEC - 4 * 3600, to: SEC - 2 * 3600, runs: 12, err: "timeout" }] }) }), null), NOW);
+test("an interruption within 24 hours, in the merged series: recovered", () => {
+  const v = verdict(svc, data(probeDoc({ x: p() }), null, null, merged({ downs24: 12 })), NOW);
   assert.equal(v.state, STATE.RECOVERED);
+});
+
+test("a place that dipped while another answered is not 'recovered' — the merged series has no interruption", () => {
+  // this is the VK page from the owner's screenshot: Tokyo had one timeout, the merged timeline has none
+  const tokyo = probeDoc({ x: p({ up24: 99.1, out: [{ from: SEC - 6 * 3600, to: SEC - 6 * 3600, runs: 1, err: "timeout" }] }) });
+  const v = verdict(svc, data(tokyo, null, null, merged({ downs24: 0 })), NOW);
+  assert.equal(v.state, STATE.OK);
+  assert.equal(v.up24, 100);
 });
 
 test("summary counts problems separately from unconfirmed", () => {

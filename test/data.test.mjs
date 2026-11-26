@@ -12,14 +12,20 @@ const raw = {
   },
 };
 
-test("the probe trim keeps published services, the last 144 samples and no full history", () => {
+test("the probe trim keeps published services and their history, without the fields a page never shows", () => {
   const d = trimProbe(raw);
   assert.deepEqual(Object.keys(d.services), ["chatgpt"]);
   assert.equal(d.services.chatgpt.ms, 42);
-  assert.equal(d.services.chatgpt.h24, "o".repeat(144));
-  assert.equal("h" in d.services.chatgpt, false);
+  // the history stays whole: the page merges it and draws 24 h from the same series
+  assert.equal(d.services.chatgpt.h, "o".repeat(200));
+  assert.equal("h24" in d.services.chatgpt, false);
   assert.equal(d.every, 600);
   assert.equal(d.complete, true);
+});
+
+test("a history longer than a week is cut to the newest 1008 samples", () => {
+  const long = { ...raw, services: { chatgpt: { ...raw.services.chatgpt, h: "o".repeat(2000) } } };
+  assert.equal(trimProbe(long).services.chatgpt.h.length, 1008);
 });
 
 test("a document without services is null", () => {

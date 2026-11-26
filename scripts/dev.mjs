@@ -8,7 +8,7 @@ import { readFile, stat } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { extname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { trimProbe } from "../src/data.mjs";
+import { trimProbe, merge, pagePayload } from "../src/data.mjs";
 
 const PORT = Number(process.env.PORT || 8791);
 const ROOT = new URL("../public/", import.meta.url);
@@ -68,7 +68,7 @@ const server = createServer(async (req, res) => {
   if (url.pathname === "/api/status.json") {
     const [losangeles, tokyo, shanghai] = await Promise.all([probe("DOWN_PROBE_LAX", DEFAULT_LOSANGELES), probe("DOWN_PROBE_TOKYO", DEFAULT_TOKYO), probe("DOWN_PROBE_SHANGHAI", DEFAULT_SH)]);
     const any = losangeles || tokyo || shanghai;
-    const body = { v: 4, generated: new Date().toISOString(), losangeles, tokyo, shanghai };
+    const body = pagePayload({ losangeles, tokyo, shanghai }, merge({ losangeles, tokyo, shanghai }));
     res.writeHead(any ? 200 : 503, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
     res.end(JSON.stringify(any ? body : { error: "unavailable" }));
     return;

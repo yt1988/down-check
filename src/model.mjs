@@ -36,17 +36,21 @@ export function probeView(doc, id, now, place = "") {
   const v = { kind: "probe", place, from: doc.from || "", present: true, fresh, at, ageMs, ok: !!s.ok, unknown: !!s.unknown,
     ms: typeof s.ms === "number" ? s.ms : null, http: s.http || null, err: s.err || null,
     up24: s.up24 ?? null, up7: s.up7 ?? null, since: null, okAt: s.ok_at ? s.ok_at * 1000 : null,
-    recent: false, out: Array.isArray(s.out) ? s.out : [], h: s.h || "", h24: s.h24 || null, every: doc.every || EXPECTED_EVERY };
+    out: Array.isArray(s.out) ? s.out : [], h: s.h || "", h24: s.h24 || null, every: doc.every || EXPECTED_EVERY };
+  // a place's own current run of "no answer", for its row's age and for the all-places-failed case
   if (!v.ok && !v.unknown) {
     const o = v.out[0];
     if (o && o.from) v.since = o.from * 1000;
-  } else if (v.ok) {
-    v.recent = v.out.some(o => o.to * 1000 >= now - DAY) || (v.up24 != null && v.up24 < 99.5);
   }
   return v;
 }
 
 // The verdict for one service, from our three probes.
+//
+// The current state is decided per place (a place answering now, a place refusing, a place with no answer), and the
+// numbers — 24 h, 7 days, interruptions, "recovered" — come from the merged series the Worker built, which is also what
+// the bar draws. Reading one place's numbers next to another place's state is exactly how a page ends up saying
+// "recovered, 100%, no interruptions".
 export const PLACES = ["losangeles", "tokyo", "shanghai"];
 export function verdict(service, data, now = Date.now()) {
   const views = PLACES.map(p => probeView(data && data[p], service.id, now, p));
@@ -54,8 +58,14 @@ export function verdict(service, data, now = Date.now()) {
   const probes = present.filter(v => v.fresh);
   const at = present.length ? Math.max(...present.map(v => v.at || 0)) : null;
   const ageMs = at ? Math.max(0, now - at) : null;
-  const up24 = pickUp(probes, "up24"), up7 = pickUp(probes, "up7");
-  const base = { views, at, ageMs, since: null, up24, up7, places: probes.map(v => v.place).filter(Boolean) };
+  const m = (data && data.merged && data.merged[service.id]) || null;
+  const base = {
+    views, at, ageMs, since: null, places: probes.map(v => v.place).filter(Boolean),
+    // Merged figures; every place agrees on them because they are computed once, over all places.
+    up24: m ? m.up24 ?? null : null, up7: m ? m.up7 ?? null : null,
+    h24: m ? m.h24 || null : null, downs24: m ? m.downs24 ?? 0 : 0,
+    out: m && Array.isArray(m.out) ? m.out : [], merged: m,
+  };
 
   if (!probes.length) return { ...base, state: present.length ? STATE.STALE : STATE.NODATA };
 
@@ -64,22 +74,18 @@ export function verdict(service, data, now = Date.now()) {
   const unknown = probes.filter(v => v.unknown);
   // One place answering is enough: some services are genuinely unreachable from some regions.
   if (ok.length) {
-    const state = ok.some(v => v.recent) ? STATE.RECOVERED : STATE.OK;
+    // "Recovered" is a fact about the merged timeline: answering now, but a stretch where nobody answered in the last
+    // 24 h. Not "one place dipped" — that is a place's own row.
+    const state = base.downs24 > 0 ? STATE.RECOVERED : STATE.OK;
     return { ...base, state, places: ok.map(v => v.place) };
   }
   // A refusal at one place means we cannot call it down even if another place failed.
   if (fail.length) {
     if (unknown.length) return { ...base, state: STATE.UNCONFIRMED, places: [...fail, ...unknown].map(v => v.place) };
-    const since = Math.max(...fail.map(v => v.since || 0)) || null;
+    const since = (m && m.since) || Math.max(...fail.map(v => v.since || 0)) || null;
     return { ...base, state: since && now - since >= DAY ? STATE.LONGFAIL : STATE.UNREACHABLE, since, places: fail.map(v => v.place) };
   }
   return { ...base, state: STATE.UNCONFIRMED, places: unknown.map(v => v.place) };
-}
-
-// Prefer a place that answered; otherwise the first place with a number.
-function pickUp(views, key) {
-  const withNumber = views.filter(v => v[key] != null);
-  return (withNumber.find(v => v.ok) || withNumber[0])?.[key] ?? null;
 }
 
 export function summary(list, data, now = Date.now()) {

@@ -8,7 +8,7 @@
 // The verdict comes from these probes only; the service's own status page is a link on the page, not a factor.
 // If a probe machine is down, the last good copy keeps being served for a week (marked `stale`), so a page can say
 // "data is old" instead of "down". If there is no copy at all, the page gets a 503 and says it cannot read the data.
-import { trimProbe } from "./data.mjs";
+import { trimProbe, merge, pagePayload } from "./data.mjs";
 
 const FRESH = 60;          // seconds an upstream answer is reused
 const KEEP = 7 * 86400;    // seconds the last good answer is kept
@@ -31,7 +31,8 @@ async function status(env) {
   ]);
   if (!losangeles && !tokyo && !shanghai) return json({ error: "unavailable" }, 503, "no-store");
   const stale = [losangeles, tokyo, shanghai].some(d => d && d.stale);
-  return json({ v: 4, generated: new Date().toISOString(), losangeles, tokyo, shanghai }, 200, stale ? "no-store" : "public, max-age=30");
+  const body = pagePayload({ losangeles, tokyo, shanghai }, merge({ losangeles, tokyo, shanghai }));
+  return json(body, 200, stale ? "no-store" : "public, max-age=30");
 }
 
 async function source(cache, name, url, trim) {
