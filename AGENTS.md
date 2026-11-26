@@ -72,9 +72,15 @@ The upstream data address never appears in a page (a test checks it). A 403/429 
 
 ## Page rules
 
-- One `<h1>` and one `<main>`; the shell injects the bar, the footer line and the tool list.
+- One `<h1>` and one `<main>`; the shell injects the bar, the foot and the tool list, and is the page's only
+  `contentinfo`. No `<header>` landmark inside `main`; every `<nav>` has an `aria-label` or `aria-labelledby`.
 - Current state first: the full-width state banner on a service page, the pill on a group row, the icon badge on the
-  board. Online tiles do not repeat a word; issues are marked by the dot/border.
+  board. Online tiles do not repeat a word; issues are marked by the dot/border. The probe-place rows carry the place's
+  flag (`/assets/flags/`, from flag-icons, MIT) before the city name.
+- "Wrong result?" (`#reportBtn`, the shell's dialog) sits next to Share — in the status banner on a service page, in
+  the hero on home and category pages — not at the bottom of the page. It is shown only when the shell's
+  `msOpenReport` exists.
+- A control under a coarse pointer is at least 40px tall; the tile name may wrap to two lines on a small phone.
 - Every service shows its own icon before its name in every list (board tiles, group rows, related chips, the service
   H1). The icons are served from `/icons/`; `node scripts/icons.mjs` fetches missing ones at build time. Audit them
   when adding services: a favicon service can return a placeholder or another brand's icon.
