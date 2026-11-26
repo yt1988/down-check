@@ -14,6 +14,8 @@ status page is a link, not a factor. Never turn a probe failure or a refusal int
   cannot be reached from some regions. When some places answered and others could not, the service page's sentence
   says which (`v_online_some`); a place that was **refused** stays out of that sentence and only its row says
   "unconfirmed", because that is a different fact.
+- A place row is **never red on its own**: grey with a qualifier (`loc_fail`, "timeout · cannot reach it from here")
+  when only that place failed, red only when every fresh place failed — then the rows and the banner agree.
 - Only when **no place answers**: offline (or offline for days after 24 h); if any place refused, unconfirmed.
 - A service has fallback addresses of its own (`alt` in `probe/services.json`: usually `robots.txt` and the front page,
   or an API host for a few). They are tried only when the usual URL refuses or times out, and any one answering makes
@@ -56,8 +58,9 @@ never changes after its page is published.
 ## Status pages
 
 `src/status-sources.mjs` maps a service to its own status page, linked at the bottom of the service page. It is not
-fetched and not part of the verdict. Add only a page that really covers that service; do not point a service at
-another service's page.
+fetched and not part of the verdict — and the page says exactly that (`official_note`, and `a3` in the help): a
+reference link, not a source we read. Add only a page that really covers that service; do not point a service at
+another service's page. There is no state that renders an official verdict; do not add copy for one.
 
 ## Data flow
 
