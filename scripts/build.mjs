@@ -42,7 +42,7 @@ const RUNTIME = new Set(["name", "lang_label", "a_lang", "a_theme", "a_help", "a
   "sum_all_ok", "sum_some", "sum_unknown", "sum_counts", "k_up24", "k_up7", "updated",
   "st_online", "st_recovered", "st_partial", "st_unreachable", "st_longfail", "st_fault", "st_unconfirmed", "st_stale", "st_nodata", "st_loading",
   "v_online", "v_recovered", "v_partial", "v_official_partial", "v_official_online", "v_official_ok_unreachable", "v_unreachable", "v_longfail", "v_fault", "v_unconfirmed", "v_stale", "v_nodata",
-  "loc_tokyo", "loc_shanghai",
+  "loc_lax", "loc_tokyo", "loc_shanghai",
   "official_none", "official_no_api",
   "incidents_none", "incidents_unknown", "incidents_ongoing", "incidents_checks",
   "err_challenge", "err_timeout", "err_reset", "err_http", "err_eof", "err_dns", "err_tls", "err_refused", "err_unreachable", "err_cancel", "err_other", "chip_official",
@@ -118,7 +118,7 @@ const crumbs = (items, Tt) => `<nav class="dn-crumbs" aria-label="${esc(Tt("a_cr
 
 
 // the two probe places: a flag, then the city in the page's language. The flags are the same SVGs the other tools use.
-const PLACE_FLAG = { tokyo: "jp", shanghai: "cn" };
+const PLACE_FLAG = { lax: "us", tokyo: "jp", shanghai: "cn" };
 const placeFlag = p => `<img class="dn-flag" src="/assets/flags/${PLACE_FLAG[p]}.svg" alt="" width="18" height="13" loading="lazy">`;
 const reportBtn = Tt => `<button class="btn sm dn-report-btn" id="reportBtn" type="button" data-ms-report="${esc(Tt("report_prefill"))}" hidden>${esc(Tt("report_result"))}</button>`;
 
@@ -203,6 +203,7 @@ function svcMain(Tt, lang, s) {
     </section>
     <section class="card card-pad">
       <h2>${esc(Tt("loc_h"))}</h2>
+      <div class="dn-loc" data-kind="lax"><span class="ic"></span><b>${placeFlag("lax")}${esc(Tt("loc_lax"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
       <div class="dn-loc" data-kind="tokyo"><span class="ic"></span><b>${placeFlag("tokyo")}${esc(Tt("loc_tokyo"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
       <div class="dn-loc" data-kind="shanghai"><span class="ic"></span><b>${placeFlag("shanghai")}${esc(Tt("loc_shanghai"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
     </section>

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// Local preview: serves public/ and answers /api/status.json from the two probe files.
-// By default it reads probe/out/latest.json (Tokyo) and probe/out/sh/latest.json (Shanghai) if they exist; set
-// DOWN_PROBE_TOKYO / DOWN_PROBE_SHANGHAI to another path or URL. Usage: npm run dev, open http://localhost:8791/
+// Local preview: serves public/ and answers /api/status.json from the three probe files.
+// By default it reads probe/out/la/latest.json (Los Angeles), probe/out/latest.json (Tokyo) and
+// probe/out/sh/latest.json (Shanghai) if they exist; set DOWN_PROBE_LAX / DOWN_PROBE_TOKYO / DOWN_PROBE_SHANGHAI to
+// another path or URL. Usage: npm run dev, open http://localhost:8791/
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { existsSync } from "node:fs";
@@ -15,6 +16,7 @@ const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=
   ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon",
   ".woff2": "font/woff2", ".txt": "text/plain; charset=utf-8", ".xml": "application/xml; charset=utf-8" };
 
+const DEFAULT_LAX = fileURLToPath(new URL("../probe/out/la/latest.json", import.meta.url));
 const DEFAULT_TOKYO = fileURLToPath(new URL("../probe/out/latest.json", import.meta.url));
 const DEFAULT_SH = fileURLToPath(new URL("../probe/out/sh/latest.json", import.meta.url));
 
@@ -64,10 +66,11 @@ async function enrich(doc) {
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, "http://localhost");
   if (url.pathname === "/api/status.json") {
-    const [tokyo, shanghai] = await Promise.all([probe("DOWN_PROBE_TOKYO", DEFAULT_TOKYO), probe("DOWN_PROBE_SHANGHAI", DEFAULT_SH)]);
-    const body = { v: 3, generated: new Date().toISOString(), tokyo, shanghai };
-    res.writeHead(tokyo || shanghai ? 200 : 503, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
-    res.end(JSON.stringify(tokyo || shanghai ? body : { error: "unavailable" }));
+    const [lax, tokyo, shanghai] = await Promise.all([probe("DOWN_PROBE_LAX", DEFAULT_LAX), probe("DOWN_PROBE_TOKYO", DEFAULT_TOKYO), probe("DOWN_PROBE_SHANGHAI", DEFAULT_SH)]);
+    const any = lax || tokyo || shanghai;
+    const body = { v: 4, generated: new Date().toISOString(), lax, tokyo, shanghai };
+    res.writeHead(any ? 200 : 503, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
+    res.end(JSON.stringify(any ? body : { error: "unavailable" }));
     return;
   }
   let rel = decodeURIComponent(url.pathname);

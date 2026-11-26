@@ -5,12 +5,12 @@ the deployment on 1ms.dog (hostname, shell entry, probe timers) is in the privat
 
 ## The rule this tool exists for
 
-The verdict comes **only from our probes in Tokyo and Shanghai**. The service's own status page is a link, not a
-factor. Never turn a probe failure or a refusal into "down":
+The verdict comes **only from our probes in Los Angeles, Tokyo and Shanghai** (that order everywhere). The service's own
+status page is a link, not a factor. Never turn a probe failure or a refusal into "down":
 
 - `403`, `429`, `cf-mitigated: challenge`, a challenge page, a 5xx response → **unconfirmed** (grey dot), not offline.
 - **One place answering is enough: online** (or recovered if the answering place had an interruption in the last 24
-  hours). A failure in the other place is shown on that place's row, not as a service state — some services genuinely
+  hours). A failure in another place is shown on that place's row, not as a service state — some services genuinely
   cannot be reached from some regions.
 - Only when **no place answers**: offline (or offline for days after 24 h); if any place refused, unconfirmed.
 - A service has fallback addresses of its own (`alt` in `probe/services.json`: usually `robots.txt` and the front page,

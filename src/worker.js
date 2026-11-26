@@ -1,8 +1,9 @@
-// The only thing this Worker does: one small JSON for the pages, merged from the two probe files (Tokyo, Shanghai) and
-// cut down to the services this site publishes. Every page is a static asset and never reaches this code.
+// The only thing this Worker does: one small JSON for the pages, merged from the three probe files (Los Angeles,
+// Tokyo, Shanghai) and cut down to the services this site publishes. Every page is a static asset and never reaches
+// this code.
 //
-// The two upstream addresses come from the deployment (`PROBE_TOKYO_URL`, `PROBE_SHANGHAI_URL`); they are deliberately
-// not in this repository. Without them the page says it cannot read the data.
+// The upstream addresses come from the deployment (`PROBE_LAX_URL`, `PROBE_TOKYO_URL`, `PROBE_SHANGHAI_URL`); they are
+// deliberately not in this repository. Without them the page says it cannot read the data.
 //
 // The verdict comes from these probes only; the service's own status page is a link on the page, not a factor.
 // If a probe machine is down, the last good copy keeps being served for a week (marked `stale`), so a page can say
@@ -23,13 +24,14 @@ export default {
 
 async function status(env) {
   const cache = caches.default;
-  const [tokyo, shanghai] = await Promise.all([
+  const [lax, tokyo, shanghai] = await Promise.all([
+    source(cache, "lax", env.PROBE_LAX_URL, trimProbe),
     source(cache, "tokyo", env.PROBE_TOKYO_URL, trimProbe),
     source(cache, "shanghai", env.PROBE_SHANGHAI_URL, trimProbe),
   ]);
-  if (!tokyo && !shanghai) return json({ error: "unavailable" }, 503, "no-store");
-  const stale = [tokyo, shanghai].some(d => d && d.stale);
-  return json({ v: 3, generated: new Date().toISOString(), tokyo, shanghai }, 200, stale ? "no-store" : "public, max-age=30");
+  if (!lax && !tokyo && !shanghai) return json({ error: "unavailable" }, 503, "no-store");
+  const stale = [lax, tokyo, shanghai].some(d => d && d.stale);
+  return json({ v: 4, generated: new Date().toISOString(), lax, tokyo, shanghai }, 200, stale ? "no-store" : "public, max-age=30");
 }
 
 async function source(cache, name, url, trim) {

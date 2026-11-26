@@ -50,7 +50,7 @@ async function card(lang, d) {
 <image x="72" y="56" width="180" height="72" href="data:image/svg+xml;base64,${logo}"/>
 ${app}${h1}${sub}${dots}
 <text x="72" y="596" font-size="24" font-weight="600" fill="${ACCENT}">${HOST}</text>
-<text x="1128" y="596" font-size="20" fill="${MUTED}" text-anchor="end">Tokyo · hourly</text>
+<text x="1128" y="596" font-size="20" fill="${MUTED}" text-anchor="end">${esc(d.from_places)}</text>
 </svg>`;
 }
 

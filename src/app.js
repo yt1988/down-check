@@ -149,11 +149,13 @@ function paintBar(el, h24) {
     i.className = c === "o" ? "ok" : c === "x" ? "bad" : c === "u" ? "unk" : "";
   });
 }
+const PLACES = ["lax", "tokyo", "shanghai"];
 function probeOf(v, place) { return v.views.find(x => x.kind === "probe" && x.place === place); }
-function bestProbe(v) { return probeOf(v, "tokyo")?.present ? probeOf(v, "tokyo") : probeOf(v, "shanghai"); }
+function bestProbe(v) { return PLACES.map(p => probeOf(v, p)).find(x => x?.present) || null; }
 function newestProbeAt(data) {
   const times = [];
-  for (const doc of [data?.tokyo, data?.shanghai]) {
+  for (const place of PLACES) {
+    const doc = data?.[place];
     if (!doc?.services) continue;
     for (const s of Object.values(doc.services)) if (s.t) times.push(s.t * 1000);
   }
@@ -161,7 +163,8 @@ function newestProbeAt(data) {
 }
 function newestAt(data) {
   const times = [];
-  for (const doc of [data?.tokyo, data?.shanghai]) {
+  for (const place of PLACES) {
+    const doc = data?.[place];
     if (!doc?.services) continue;
     for (const s of Object.values(doc.services)) if (s.t) times.push(s.t * 1000);
   }
@@ -271,7 +274,7 @@ function svcView(data, failed, now) {
 
   const outs = $("#outs");
   if (outs) {
-    const view = failed ? null : (probeOf(v, "tokyo")?.present ? probeOf(v, "tokyo") : probeOf(v, "shanghai"));
+    const view = failed ? null : bestProbe(v);
     const list = !view || !view.fresh ? [] : (view.out || []);
     outs.innerHTML = "";
     if (!list.length) {
@@ -298,6 +301,7 @@ function svcView(data, failed, now) {
   if (retry) { retry.hidden = !failed; retry.textContent = L.retry; retry.onclick = load; }
   wireReport(`${nameOf(s)}: ${label(st)} · ${ageLine(data, failed)}`,
     { service: s.id, state: st, at: v.at, places: v.places, up24: v.up24, up7: v.up7,
+      lax: probeOf(v, "lax") && { ok: probeOf(v, "lax").ok, unknown: probeOf(v, "lax").unknown, at: probeOf(v, "lax").at, ms: probeOf(v, "lax").ms, err: probeOf(v, "lax").err },
       tokyo: probeOf(v, "tokyo") && { ok: probeOf(v, "tokyo").ok, unknown: probeOf(v, "tokyo").unknown, at: probeOf(v, "tokyo").at, ms: probeOf(v, "tokyo").ms, err: probeOf(v, "tokyo").err },
       shanghai: probeOf(v, "shanghai") && { ok: probeOf(v, "shanghai").ok, unknown: probeOf(v, "shanghai").unknown, at: probeOf(v, "shanghai").at, ms: probeOf(v, "shanghai").ms, err: probeOf(v, "shanghai").err } },
     [label(st), placeText(v), ageLine(data, failed)]);

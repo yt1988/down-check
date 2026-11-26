@@ -1,10 +1,12 @@
 // The verdict, as pure functions: the build and the tests use this file, and scripts/build.mjs inlines it into the
 // browser bundle. Nothing here knows about the DOM or about 1ms.dog.
 //
-// The verdict comes only from our own probes in Tokyo and Shanghai. A probe that cannot reach a service proves "we
-// cannot reach it from here"; a 403, 429 or a challenge page proves nothing either way (`unconfirmed`). The service's
-// official status page is a link on the page, not a factor here. Missing or stale data is `stale`/`nodata`, never
-// "down".
+// The verdict comes only from our own probes in Los Angeles, Tokyo and Shanghai. A probe that cannot reach a service
+// proves "we cannot reach it from here"; a 403, 429 or a challenge page proves nothing either way (`unconfirmed`). The
+// service's official status page is a link on the page, not a factor here. Missing or stale data is `stale`/`nodata`,
+// never "down".
+//
+// The order is fixed everywhere: Los Angeles, Tokyo, Shanghai (docs/processes.md in the shell).
 
 export const STATE = {
   OK: "ok",                 // at least one probe answered just now
@@ -44,11 +46,10 @@ export function probeView(doc, id, now, place = "") {
   return v;
 }
 
-// The verdict for one service, from our two probes.
+// The verdict for one service, from our three probes.
+export const PLACES = ["lax", "tokyo", "shanghai"];
 export function verdict(service, data, now = Date.now()) {
-  const tokyo = probeView(data && data.tokyo, service.id, now, "tokyo");
-  const shanghai = probeView(data && data.shanghai, service.id, now, "shanghai");
-  const views = [tokyo, shanghai];
+  const views = PLACES.map(p => probeView(data && data[p], service.id, now, p));
   const present = views.filter(v => v.present);
   const probes = present.filter(v => v.fresh);
   const at = present.length ? Math.max(...present.map(v => v.at || 0)) : null;
@@ -75,10 +76,10 @@ export function verdict(service, data, now = Date.now()) {
   return { ...base, state: STATE.UNCONFIRMED, places: unknown.map(v => v.place) };
 }
 
-// Prefer Tokyo's numbers; Shanghai is the fallback when Tokyo has none.
+// Prefer a place that answered; otherwise the first place with a number.
 function pickUp(views, key) {
   const withNumber = views.filter(v => v[key] != null);
-  return withNumber.length ? withNumber[0][key] : null;
+  return (withNumber.find(v => v.ok) || withNumber[0])?.[key] ?? null;
 }
 
 export function summary(list, data, now = Date.now()) {
