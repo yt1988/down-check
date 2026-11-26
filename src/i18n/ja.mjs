@@ -5,7 +5,7 @@ export default {
   lang_label: "言語", a_lang: "言語", a_theme: "テーマ", a_help: "ヘルプ", a_close: "閉じる", a_prev: "前へ", a_next: "次へ", a_crumbs: "パンくずリスト",
   th_system: "システムに合わせる", th_light: "ライト", th_dark: "ダーク", just_now: "たった今", na: "—", retry: "もう一度", loading: "読み込み中…",
   sep: "、",
-  places_sep: "と",
+  places_sep: "・",
 
   seo_title_home: "サービス状況：ChatGPT、GitHub、Discord は今ダウンしてる？",
   seo_desc_home: "障害時によく検索される 210 サービスのリアルタイム状況。当サイトのロサンゼルス・東京・上海の計測点が 10 分ごとに確認します。データが取得できないときは「確認できない」と表示し、「ダウン」とは書きません。",
