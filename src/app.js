@@ -52,7 +52,10 @@ function shareHeadline(c) {
 async function openShare() {
   if (!lastData) return;
   const now = Date.now(), url = location.origin + location.pathname;
-  if (!shareMod) shareMod = await import("/assets/share/share.js?v=10");
+  if (!shareMod) {
+    shareMod = await import("/assets/share/share.js?v=11").catch(() => null);
+    if (!shareMod) { window.msShareDown && window.msShareDown(); return; }
+  }
   const fg = () => cssVar("--fg") || "#141416", muted = () => cssVar("--muted") || "#6e6e78";
   const base = { lang: LANG, name: L.app_name, file: "down-check", show: [], never: [], canShow: false,
     link: () => url, home: url, ts: newestProbeAt(lastData) || now, height: 630, foot: () => [L.share_foot] };
