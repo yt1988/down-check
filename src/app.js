@@ -527,13 +527,11 @@ function paintRefresh() {
   else if (refreshState === "paused") text.textContent = t("refresh_paused");
   else if (refreshing) text.textContent = t("refresh_ready");
   else text.textContent = t("refresh_next", { n: left });
-  // the ring: full at the start of the wait, empty when the next fetch is due
+  // the slow fill: full at the start of the wait, empty when the next fetch is due (the spinning arc says "alive")
   const fg = $("#ringFg");
   if (fg) {
-    const C = 2 * Math.PI * 6.4;   // r in the 16×16 viewBox
-    fg.style.strokeDasharray = C;
     const frac = refreshState === "paused" ? 1 : Math.max(0, Math.min(1, left * 1000 / REFRESH_MS));
-    fg.style.strokeDashoffset = C * (1 - frac);
+    fg.style.strokeDashoffset = 40.21 * (1 - frac);
   }
 }
 

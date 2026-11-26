@@ -44,7 +44,7 @@ const RUNTIME = new Set(["name", "lang_label", "a_lang", "a_theme", "a_help", "a
   "v_online", "v_online_some", "v_recovered", "v_unreachable", "v_longfail", "v_unconfirmed", "v_stale", "v_nodata",
   "loc_losangeles", "loc_tokyo", "loc_shanghai", "loc_fail",
   "bar_label", "tip_head", "tip_merged", "tip_ok", "tip_refused", "tip_none", "tip_notmeasured", "tip_incident",
-  "tip_hint", "refresh_ready", "refresh_next", "refresh_paused", "refresh_failed", "refreshed_now",
+  "tip_hint", "refresh_ready", "refresh_next", "refresh_paused", "refresh_failed", "refreshed_now", "refresh_title",
   "official_none", "official_no_api",
   "incidents_none", "incidents_unknown", "incidents_ongoing", "incidents_checks",
   "err_challenge", "err_timeout", "err_reset", "err_http", "err_eof", "err_dns", "err_tls", "err_refused", "err_unreachable", "err_cancel", "err_other",
@@ -155,9 +155,11 @@ function homeMain(Tt, lang) {
 // The age line on a category or a service page: what we have, then a ring that fills over the 300 s until the next
 // fetch and the seconds left. The ring is the page's own heartbeat — a still page would leave "how do I know it is
 // live?" unanswered.
-function refreshLine(inline) {
+function refreshLine(Tt, inline) {
   return `<span class="dn-refresh${inline ? " dn-refresh-in" : ""}" id="refreshLine" hidden>
-      <span class="dn-ring" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.4" class="dn-ring-bg"/><circle cx="8" cy="8" r="6.4" class="dn-ring-fg" id="ringFg"/></svg></span>
+      <span class="dn-ring" id="refreshRing" aria-hidden="true" title="${esc(Tt("refresh_title"))}"><svg viewBox="0 0 16 16">
+        <circle cx="8" cy="8" r="6.4" class="dn-ring-bg"/><circle cx="8" cy="8" r="6.4" class="dn-ring-fill" id="ringFg"/><circle cx="8" cy="8" r="6.4" class="dn-arc"/>
+      </svg></span>
       <span id="refreshText"></span>
     </span>`;
 }
@@ -173,7 +175,7 @@ function catMain(Tt, lang, cat) {
     <div class="dn-hero">
       <h1 class="page-h">${esc(fill(Tt("h1_cat"), { cat: catName(Tt, cat) }))}</h1>
       <p class="dn-intro">${esc(catDesc(Tt, cat, lang))}</p>
-      <div class="dn-hero-tools"><span class="dn-age"><span id="sumAge">${esc(Tt("loading"))}</span>${refreshLine(true)}</span><div class="dn-hero-right">${legend(Tt)}<button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button>${reportBtn(Tt)}</div></div>
+      <div class="dn-hero-tools"><span class="dn-age"><span id="sumAge">${esc(Tt("loading"))}</span>${refreshLine(Tt, true)}</span><div class="dn-hero-right">${legend(Tt)}<button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button>${reportBtn(Tt)}</div></div>
     </div>
     <div class="dn-list-h" aria-hidden="true"><span>${esc(Tt("h_service"))}</span><span>${esc(Tt("h_status"))}</span><span>${esc(Tt("h_24h"))}</span><span>${esc(Tt("h_uptime"))}</span></div>
     <ul class="dn-list">${rows}</ul>`;
@@ -198,7 +200,7 @@ function svcMain(Tt, lang, s) {
     <div class="dn-status-banner" id="statusPanel">
       <span class="ic" id="stateIcon"></span>
       <b id="stateText">${esc(Tt("st_loading"))}</b>
-      <span class="dn-status-meta"><span id="statusMeta"></span>${refreshLine(true)}</span>
+      <span class="dn-status-meta"><span id="statusMeta"></span>${refreshLine(Tt, true)}</span>
       <div class="dn-status-acts">
         <button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button>
         ${reportBtn(Tt)}

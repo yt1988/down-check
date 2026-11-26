@@ -273,26 +273,40 @@ a.icon-btn:hover { background: var(--soft); }
   .dn-cat-h h2 a { display: inline-flex; align-items: center; min-height: 40px; }
 }
 
-/* ---------- auto refresh: a ring that fills over the 300 s, and the seconds left ---------- */
+/* ---------- auto refresh ----------
+   A 300 s progress ring turns 1.2° a second: nobody sees that, and a full ring is just a circle. So the meaning is in
+   the words ("242 秒后自动刷新"), and the sign of life is an arc that spins fast enough for the eye to catch. The same
+   ring also fills slowly over the cycle, which is what a second glance shows. */
 .dn-refresh { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-caption);
   color: var(--muted); font-variant-numeric: tabular-nums; vertical-align: middle; }
-.dn-refresh #refreshText { color: var(--fg); opacity: .72; }
+.dn-refresh #refreshText { color: var(--fg); opacity: .78; }
 .dn-refresh.is-soon #refreshText { color: var(--t1); opacity: 1; }
 /* on the age line it follows the text after a quiet separator */
 .dn-refresh-in::before { content: "·"; margin: 0 6px 0 2px; color: var(--line); }
 .dn-age .dn-refresh, .dn-status-meta .dn-refresh { margin-left: 0; }
 .dn-refresh[hidden] { display: none; }
-.dn-ring { width: 16px; height: 16px; flex: none; display: block; }
+.dn-ring { width: 16px; height: 16px; flex: none; display: block; cursor: help; }
 .dn-ring svg { width: 16px; height: 16px; transform: rotate(-90deg); display: block; }
-.dn-ring-bg, .dn-ring-fg { fill: none; stroke-width: 3; }
+.dn-ring-bg, .dn-arc, .dn-ring-fill { fill: none; stroke-width: 3; }
 .dn-ring-bg { stroke: var(--line); }
-.dn-ring-fg { stroke: var(--muted); stroke-linecap: round; transition: stroke-dashoffset .9s linear, stroke .3s; }
-.dn-refresh.is-soon .dn-ring-fg { stroke: var(--t1); }
-.dn-refresh.is-failed { color: var(--warn); }
-.dn-refresh.is-failed .dn-ring-fg { stroke: var(--warn); }
-.dn-refresh.is-paused .dn-ring-fg { stroke: var(--line); }
-.dn-refresh.is-paused { opacity: .8; }
-@media (prefers-reduced-motion: reduce) { .dn-ring-fg { transition: none; } }
+/* motion the eye catches without being told to look: a quarter-circle going round every 2.4 s */
+.dn-arc { stroke: var(--muted); stroke-linecap: round; stroke-dasharray: 10 30.2;
+  animation: dn-spin 2.4s linear infinite;
+  /* without this the circle spins about the SVG's corner and leaves the ring entirely */
+  transform-box: view-box; transform-origin: 8px 8px; }
+/* the cycle itself, as a slow fill under the arc */
+.dn-ring-fill { stroke: var(--line); stroke-linecap: round; stroke-dasharray: 40.2; transition: stroke-dashoffset .9s linear; }
+.dn-refresh.is-soon .dn-arc { stroke: var(--t1); }
+.dn-refresh.is-soon .dn-ring-fill { stroke: color-mix(in srgb, var(--t1) 55%, var(--line)); }
+.dn-refresh.is-failed .dn-arc { stroke: var(--warn); animation-duration: 1s; }
+.dn-refresh.is-failed #refreshText { color: var(--warn); opacity: 1; }
+.dn-refresh.is-paused .dn-arc { animation: none; stroke: var(--muted); opacity: .35; }
+.dn-refresh.is-paused { opacity: .85; }
+@keyframes dn-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .dn-arc { animation: none; stroke-dasharray: 30.2 40.2; }
+  .dn-ring-fill { transition: none; }
+}
 /* the age line gives one quiet pulse when a refresh actually landed */
 @keyframes dn-flash { from { color: var(--t1); } to { color: inherit; } }
 .dn-age.dn-flash { animation: dn-flash 1.6s ease-out 1; }
