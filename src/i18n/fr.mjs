@@ -2,9 +2,10 @@
 export default {
   name: "Français",
   app_name: "C'est en panne ?",
-  lang_label: "Langue", a_lang: "Langue", a_theme: "Thème", a_help: "Aide", a_close: "Fermer", a_prev: "Précédent", a_next: "Suivant",
+  lang_label: "Langue", a_lang: "Langue", a_theme: "Thème", a_help: "Aide", a_close: "Fermer", a_prev: "Précédent", a_next: "Suivant", a_crumbs: "Fil d’Ariane",
   th_system: "Thème du système", th_light: "Thème clair", th_dark: "Thème sombre", just_now: "à l'instant", na: "—", retry: "Réessayer", loading: "Lecture…",
   sep: ", ",
+  places_sep: " et ",
 
   seo_title_home: "État des services : ChatGPT, GitHub ou Discord sont-ils en panne ?",
   seo_desc_home: "État en direct de 210 services que l'on recherche quand quelque chose tombe. Nos sondes à Tokyo et Shanghai vérifient toutes les 10 minutes ; des données manquantes sont affichées comme « impossible à confirmer », jamais « en panne ».",
@@ -51,7 +52,7 @@ export default {
 
   h_service: "Service",
   h_status: "État",
-  h_24h: "24 heures",
+  h_24h: "24 heures", h_uptime: "Disponibilité",
   chip_official: "Officiel : {state}",
   st_online: "En ligne", st_recovered: "Rétabli", st_partial: "Partiel", st_unreachable: "Hors ligne", st_longfail: "Hors ligne depuis des jours",
   st_fault: "Panne officielle", st_unconfirmed: "Non confirmé", st_stale: "Données périmées", st_nodata: "Pas de données", st_loading: "Lecture…",
@@ -106,4 +107,5 @@ export default {
   share_btn: "Partager",
   share_foot: "État en direct, vérifié toutes les 10 minutes",
   foot_src: "Données : nos sondes à Tokyo et Shanghai, toutes les 10 minutes.",
+  js_required: "L’état en direct est lu par cette page dans un JSON de même origine ; sans JavaScript, la liste des services et le lien vers leur page d’état restent.",
 };

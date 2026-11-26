@@ -100,4 +100,5 @@ static/assets/share/    公共分享组件，从 shell 原样复制（不要在�
 
 ## 许可
 
-MIT。服务名称和图标归各自的所有者，这里只用来标识被检测的服务。
+MIT。服务名称和图标归各自的所有者，这里只用来标识被检测的服务。`static/assets/flags/` 里的两面国旗来自
+[flag-icons](https://github.com/lipis/flag-icons)，MIT。

@@ -31,6 +31,15 @@ const ONLY_REGION = {
   DE: "eu", FR: "eu", CH: "eu", IT: "eu", ES: "eu", NL: "eu",
   US: "na", CA: "na",
 };
+// Brands the vendored lists carry in Latin only, and the Chinese-script names Japanese also reads. Merged into the
+// baseline's own `names`; a key here wins.
+const EXTRA_NAMES = {
+  bahamut: { en: "Bahamut Anime Crazy", "zh-CN": "巴哈姆特动画疯", "zh-TW": "巴哈姆特動畫瘋", ja: "バハムートアニメ", ko: "바하무트 애니", es: "Bahamut Anime Crazy", fr: "Bahamut Anime Crazy", de: "Bahamut Anime Crazy", pt: "Bahamut Anime Crazy", ru: "Bahamut Anime Crazy" },
+  // the Chinese brands keep their Chinese name in Japanese: 百度, 微信, 抖音 are what Japanese pages write
+  baidu: { ja: "百度" }, wechat: { ja: "微信" }, douyin: { ja: "抖音" }, bilibili: { ja: "ビリビリ" },
+};
+const namesFor = (id, own) => (own || EXTRA_NAMES[id]) ? { ...(own || {}), ...(EXTRA_NAMES[id] || {}) } : null;
+
 // brands whose own script is not Latin need a name per language, like the baseline's Entries for 百度 and 微信
 const NAMES = {
   tencent: { en: "Tencent Video", "zh-CN": "腾讯视频", "zh-TW": "騰訊視頻", ja: "Tencent Video", ko: "텐센트 비디오", es: "Tencent Video", fr: "Tencent Video", de: "Tencent Video", pt: "Tencent Video", ru: "Tencent Video" },
@@ -49,6 +58,21 @@ const PROBE = {
 
 // brand spellings the source list names by their product instead
 const DISPLAY = { mistral: "Mistral" };
+
+// Other names people type for a service: the old brand, the company behind it, the thing it is known as. Search only;
+// they are not shown. Keep them lowercase, and only where they really mean this page.
+const ALIAS = {
+  x: ["twitter"], chatgpt: ["openai", "chat gpt"], metaai: ["meta", "facebook ai"],
+  grok: ["xai", "x ai"], copilot: ["bing copilot", "microsoft copilot"], perplexity: ["pplx"],
+  gemini: ["bard", "google ai"], claude: ["anthropic"],
+  facebook: ["fb"], instagram: ["ig", "insta"], youtube: ["yt"], whatsapp: ["wa"],
+  disneyplus: ["disney plus", "disney+"], max: ["hbo", "hbo max"], paramount: ["paramount+"],
+  youku: ["youku tudou"], mgtv: ["mango tv"], tencent: ["tencent"], netease: ["netease"],
+  bilibili: ["b站"], douyin: ["tiktok china"], wechat: ["weixin"],
+  naver: ["네이버"], kakao: ["카카오톡", "kakaotalk"], line: ["line app"],
+  yandex: ["яндекс"], vk: ["vkontakte"],
+  playstation: ["psn", "ps5", "ps4"], xbox: ["xbox live"], nintendo: ["switch online"],
+};
 
 // The probe asks one small URL per service. When that URL refuses or times out, it tries these in order, so a blocked
 // favicon or a challenge page on the front page is not reported as a service problem. The default fallbacks are the
@@ -83,7 +107,7 @@ for (const s of baseline) {
   const cat = s.pack ? PACK_REGION[s.pack] : s.cat;
   if (!cat || (!GLOBAL.includes(cat) && !REGIONS.includes(cat))) throw new Error(`no group for ${s.id} (${s.cat}/${s.pack})`);
   const site = new URL(s.url).origin + "/";
-  add({ id: s.id, name: s.name, names: s.names || null, cat, site, probe: s.url, alt: altsFor(s.id, site, s.url) });
+  add({ id: s.id, name: s.name, names: namesFor(s.id, s.names), alias: ALIAS[s.id] || null, cat, site, probe: s.url, alt: altsFor(s.id, site, s.url) });
 }
 for (const s of unlock) {
   if (byId.has(s.id) || MERGE_INTO[s.id]) continue;
@@ -92,7 +116,7 @@ for (const s of unlock) {
   const cat = region || (GLOBAL.includes(s.cat) ? s.cat : "video");
   const base = s.site.endsWith("/") ? s.site : s.site + "/";
   const probe = PROBE[id] || new URL("favicon.ico", base).href;
-  add({ id, name: DISPLAY[id] || s.name, names: NAMES[id] || null, cat, site: s.site, probe, alt: altsFor(id, s.site, probe) });
+  add({ id, name: DISPLAY[id] || s.name, names: NAMES[id] || namesFor(id, null), alias: ALIAS[id] || null, cat, site: s.site, probe, alt: altsFor(id, s.site, probe) });
 }
 
 const CATS = [...GLOBAL, ...REGIONS].map(id => ({ id }));
@@ -111,8 +135,9 @@ export const CATS = ${JSON.stringify(CATS, null, 2)};
 export const SERVICES = [
 ${out.map(s => {
   const names = s.names ? `, names: ${JSON.stringify(s.names)}` : "";
+  const alias = s.alias && s.alias.length ? `, alias: ${JSON.stringify(s.alias)}` : "";
   const alt = s.alt && s.alt.length ? `, alt: ${JSON.stringify(s.alt)}` : "";
-  return `  { id: ${JSON.stringify(s.id)}, name: ${JSON.stringify(s.name)}${names}, cat: ${JSON.stringify(s.cat)}, site: ${JSON.stringify(s.site)}, probe: ${JSON.stringify(s.probe)}${alt} },`;
+  return `  { id: ${JSON.stringify(s.id)}, name: ${JSON.stringify(s.name)}${names}${alias}, cat: ${JSON.stringify(s.cat)}, site: ${JSON.stringify(s.site)}, probe: ${JSON.stringify(s.probe)}${alt} },`;
 }).join("\n")}
 ];
 

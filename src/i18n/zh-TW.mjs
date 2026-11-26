@@ -2,9 +2,10 @@
 export default {
   name: "繁體中文",
   app_name: "掛了嗎？",
-  lang_label: "語言", a_lang: "語言", a_theme: "主題", a_help: "說明", a_close: "關閉", a_prev: "上一則", a_next: "下一則",
+  lang_label: "語言", a_lang: "語言", a_theme: "主題", a_help: "說明", a_close: "關閉", a_prev: "上一則", a_next: "下一則", a_crumbs: "目前位置",
   th_system: "跟隨系統", th_light: "淺色", th_dark: "深色", just_now: "剛剛", na: "—", retry: "重試", loading: "讀取中…",
   sep: "、",
+  places_sep: "、",
 
   seo_title_home: "服務狀態：ChatGPT、GitHub、Discord 現在掛了嗎？",
   seo_desc_home: "210 個大家在故障時最常搜尋的服務的即時狀態：本站的東京、上海探測點每 10 分鐘各測一次。資料拿不到時顯示「無法確認」，不會寫成「掛了」。",
@@ -51,7 +52,7 @@ export default {
 
   h_service: "服務",
   h_status: "狀態",
-  h_24h: "24 小時",
+  h_24h: "24 小時", h_uptime: "上線率",
   chip_official: "官方：{state}",
   st_online: "線上", st_recovered: "已恢復", st_partial: "部分異常", st_unreachable: "離線", st_longfail: "離線多日",
   st_fault: "官方故障", st_unconfirmed: "無法確認", st_stale: "資料過期", st_nodata: "沒有資料", st_loading: "讀取中…",
@@ -106,4 +107,5 @@ export default {
   share_btn: "分享",
   share_foot: "即時狀態，每 10 分鐘偵測一次",
   foot_src: "資料：本站東京、上海探測點，每 10 分鐘一次。",
+  js_required: "即時狀態由頁面讀取一份同源 JSON 顯示；沒有 JavaScript 時，頁面仍列出全部服務，並保留各服務自己的狀態頁連結。",
 };

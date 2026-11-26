@@ -2,9 +2,10 @@
 export default {
   name: "Português",
   app_name: "Está fora do ar?",
-  lang_label: "Idioma", a_lang: "Idioma", a_theme: "Tema", a_help: "Ajuda", a_close: "Fechar", a_prev: "Anterior", a_next: "Próximo",
+  lang_label: "Idioma", a_lang: "Idioma", a_theme: "Tema", a_help: "Ajuda", a_close: "Fechar", a_prev: "Anterior", a_next: "Próximo", a_crumbs: "Trilha de navegação",
   th_system: "Tema do sistema", th_light: "Tema claro", th_dark: "Tema escuro", just_now: "agora mesmo", na: "—", retry: "Tentar de novo", loading: "Lendo…",
   sep: ", ",
+  places_sep: " e ",
 
   seo_title_home: "Status dos serviços: o ChatGPT, GitHub ou Discord estão fora do ar agora?",
   seo_desc_home: "Status ao vivo de 210 serviços que as pessoas procuram quando algo cai. Nossas sondas em Tóquio e Xangai verificam a cada 10 minutos; dados ausentes aparecem como «não dá para confirmar», nunca «fora do ar».",
@@ -51,7 +52,7 @@ export default {
 
   h_service: "Serviço",
   h_status: "Status",
-  h_24h: "24 horas",
+  h_24h: "24 horas", h_uptime: "Disponibilidade",
   chip_official: "Oficial: {state}",
   st_online: "No ar", st_recovered: "Recuperado", st_partial: "Parcial", st_unreachable: "Fora do ar", st_longfail: "Fora do ar há dias",
   st_fault: "Falha oficial", st_unconfirmed: "Sem confirmação", st_stale: "Dados desatualizados", st_nodata: "Sem dados", st_loading: "Lendo…",
@@ -106,4 +107,5 @@ export default {
   share_btn: "Compartilhar",
   share_foot: "Status ao vivo, verificado a cada 10 minutos",
   foot_src: "Dados: nossas sondas em Tóquio e Xangai, a cada 10 minutos.",
+  js_required: "O estado ao vivo é lido por esta página de um JSON da mesma origem; sem JavaScript, a lista de serviços e os links para as páginas de status continuam.",
 };

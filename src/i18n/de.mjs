@@ -2,9 +2,10 @@
 export default {
   name: "Deutsch",
   app_name: "Ist es down?",
-  lang_label: "Sprache", a_lang: "Sprache", a_theme: "Design", a_help: "Hilfe", a_close: "Schließen", a_prev: "Zurück", a_next: "Weiter",
+  lang_label: "Sprache", a_lang: "Sprache", a_theme: "Design", a_help: "Hilfe", a_close: "Schließen", a_prev: "Zurück", a_next: "Weiter", a_crumbs: "Brotkrümelpfad",
   th_system: "Systemdesign", th_light: "Helles Design", th_dark: "Dunkles Design", just_now: "gerade eben", na: "—", retry: "Noch einmal", loading: "Wird gelesen…",
   sep: ", ",
+  places_sep: " und ",
 
   seo_title_home: "Dienststatus: Sind ChatGPT, GitHub oder Discord gerade down?",
   seo_desc_home: "Live-Status von 210 Diensten, die man bei einer Störung sucht. Unsere Prüfungen in Tokio und Shanghai laufen alle 10 Minuten; fehlende Daten stehen als „nicht bestätigt“, nie als „down“.",
@@ -51,7 +52,7 @@ export default {
 
   h_service: "Dienst",
   h_status: "Status",
-  h_24h: "24 Stunden",
+  h_24h: "24 Stunden", h_uptime: "Verfügbarkeit",
   chip_official: "Offiziell: {state}",
   st_online: "Online", st_recovered: "Wieder da", st_partial: "Teilweise", st_unreachable: "Offline", st_longfail: "Seit Tagen offline",
   st_fault: "Offizieller Ausfall", st_unconfirmed: "Nicht bestätigt", st_stale: "Daten veraltet", st_nodata: "Keine Daten", st_loading: "Wird gelesen…",
@@ -106,4 +107,5 @@ export default {
   share_btn: "Teilen",
   share_foot: "Live-Status, alle 10 Minuten geprüft",
   foot_src: "Daten: unsere Prüfungen in Tokio und Shanghai, alle 10 Minuten.",
+  js_required: "Der Live-Status wird von dieser Seite aus einem JSON derselben Quelle gelesen; ohne JavaScript bleiben die Dienstliste und die Links zu den Statusseiten.",
 };

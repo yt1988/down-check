@@ -2,9 +2,10 @@
 export default {
   name: "English",
   app_name: "Is It Down?",
-  lang_label: "Language", a_lang: "Language", a_theme: "Theme", a_help: "Help", a_close: "Close", a_prev: "Previous", a_next: "Next",
+  lang_label: "Language", a_lang: "Language", a_theme: "Theme", a_help: "Help", a_close: "Close", a_prev: "Previous", a_next: "Next", a_crumbs: "Breadcrumb",
   th_system: "System theme", th_light: "Light theme", th_dark: "Dark theme", just_now: "just now", na: "—", retry: "Try again", loading: "Reading…",
   sep: ", ",
+  places_sep: " and ",
 
   seo_title_home: "Service status: is ChatGPT, GitHub or Discord down right now?",
   seo_desc_home: "Live status of 210 services people search for during an outage. Our probes in Tokyo and Shanghai check every 10 minutes, and missing data is shown as unknown — never as down.",
@@ -51,7 +52,7 @@ export default {
 
   h_service: "Service",
   h_status: "Status",
-  h_24h: "24 hours",
+  h_24h: "24 hours", h_uptime: "Uptime",
   chip_official: "Official: {state}",
   st_online: "Online", st_recovered: "Recovered", st_partial: "Partial", st_unreachable: "Offline", st_longfail: "Offline for days",
   st_fault: "Official outage", st_unconfirmed: "Unconfirmed", st_stale: "Data is stale", st_nodata: "No data", st_loading: "Reading…",
@@ -106,4 +107,5 @@ export default {
   share_btn: "Share",
   share_foot: "Live status, checked every 10 minutes",
   foot_src: "Data: our probes in Tokyo and Shanghai, every 10 minutes.",
+  js_required: "The live state is read by this page as JSON; without JavaScript the pages still list every service and its own status page link.",
 };

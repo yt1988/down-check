@@ -2,9 +2,10 @@
 export default {
   name: "简体中文",
   app_name: "挂了吗？",
-  lang_label: "语言", a_lang: "语言", a_theme: "主题", a_help: "帮助", a_close: "关闭", a_prev: "上一条", a_next: "下一条",
+  lang_label: "语言", a_lang: "语言", a_theme: "主题", a_help: "帮助", a_close: "关闭", a_prev: "上一条", a_next: "下一条", a_crumbs: "当前位置",
   th_system: "跟随系统", th_light: "浅色", th_dark: "深色", just_now: "刚刚", na: "—", retry: "重试", loading: "读取中…",
   sep: "、",
+  places_sep: "、",
 
   seo_title_home: "服务状态：ChatGPT、GitHub、Discord 现在挂了吗？",
   seo_desc_home: "210 个大家在故障时最常搜的服务的实时状态：本站的东京、上海探针每 10 分钟各测一次。数据拿不到时显示「无法确认」，不会写成「挂了」。",
@@ -51,7 +52,7 @@ export default {
 
   h_service: "服务",
   h_status: "状态",
-  h_24h: "24 小时",
+  h_24h: "24 小时", h_uptime: "在线率",
   chip_official: "官方：{state}",
   st_online: "在线", st_recovered: "已恢复", st_partial: "部分异常", st_unreachable: "离线", st_longfail: "离线多日",
   st_fault: "官方故障", st_unconfirmed: "无法确认", st_stale: "数据过期", st_nodata: "没有数据", st_loading: "读取中…",
@@ -106,4 +107,5 @@ export default {
   share_btn: "分享",
   share_foot: "实时状态，每 10 分钟检测一次",
   foot_src: "数据：本站东京、上海探针，每 10 分钟一次。",
+  js_required: "实时状态由页面读取一份同源 JSON 显示；没有 JavaScript 时，页面仍列出全部服务，并保留各服务自己的状态页链接。",
 };

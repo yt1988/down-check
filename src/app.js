@@ -26,7 +26,12 @@ const pct = v => v == null ? L.na : (v >= 99.95 ? "100" : v.toFixed(1)) + "%";
 const durTxt = d => d ? new Intl.NumberFormat(LANG, { style: "unit", unit: d.unit, unitDisplay: "long" }).format(d.n) : L.na;
 const label = state => state === STATE.OK ? (L.st_online || "ok") : (L["st_" + state] ?? state);
 const cls = state => stateClass(state);
-const places = v => (v.places || []).map(p => L["loc_" + p] || p).join(L.sep || ", ");
+// "Tokyo and Shanghai", not "Tokyo, Shanghai": the sentence reads "From {places}, X is not answering"
+const places = v => (v.places || []).map(p => L["loc_" + p] || p).join(L.places_sep || L.sep || ", ");
+// one line per place, as the place rows show it, for the report dialog's one-tap answers
+const placeText = v => (v.views || []).filter(x => x.kind === "probe" && x.present)
+  .map(x => `${L["loc_" + x.place] || x.place}: ${x.ok ? (x.ms != null ? Math.round(x.ms) + " ms" : L.na) : x.unknown ? label(STATE.UNCONFIRMED) : t(errKey(x.err))}`)
+  .join(" · ");
 const nameOf = s => (s.names && s.names[LANG]) || s.name;
 
 /* ---------- share: the public dialog, with the live page as the link ---------- */
@@ -190,6 +195,9 @@ function homeView(data, failed, now) {
     paintSpark(tile.querySelector(".dn-spark"), p?.h24);
   }
   filter();
+  const c = summary(SERVICES, failed ? null : data, now);
+  wireReport(`${L.app_name} · ${ageLine(data, failed)}`,
+    { page: "home", at: data ? newestProbeAt(data) : null, counts: c }, [ageLine(data, failed)]);
 }
 
 /* ---------- category ---------- */
@@ -207,6 +215,9 @@ function catView(data, failed, now) {
     const p = failed ? null : bestProbe(v);
     paintSpark(row.querySelector(".dn-spark"), p?.h24);
   }
+  const c = summary(list, failed ? null : data, now);
+  wireReport(`${L.app_name} · ${ageLine(data, failed)}`,
+    { page: "cat", group: D.cat, at: data ? newestProbeAt(data) : null, counts: c }, [ageLine(data, failed)]);
 }
 
 /* ---------- service ---------- */
@@ -285,15 +296,24 @@ function svcView(data, failed, now) {
 
   const retry = $("#retry");
   if (retry) { retry.hidden = !failed; retry.textContent = L.retry; retry.onclick = load; }
-  const report = $("#reportBtn");
-  if (report) report.hidden = typeof window.msOpenReport !== "function";
-  window.msReport = () => ({
-    summary: `${nameOf(s)}: ${label(st)} · ${ageLine(data, failed)}`,
-    data: { service: s.id, state: st, at: v.at, places: v.places, up24: v.up24, up7: v.up7,
+  wireReport(`${nameOf(s)}: ${label(st)} · ${ageLine(data, failed)}`,
+    { service: s.id, state: st, at: v.at, places: v.places, up24: v.up24, up7: v.up7,
       tokyo: probeOf(v, "tokyo") && { ok: probeOf(v, "tokyo").ok, unknown: probeOf(v, "tokyo").unknown, at: probeOf(v, "tokyo").at, ms: probeOf(v, "tokyo").ms, err: probeOf(v, "tokyo").err },
       shanghai: probeOf(v, "shanghai") && { ok: probeOf(v, "shanghai").ok, unknown: probeOf(v, "shanghai").unknown, at: probeOf(v, "shanghai").at, ms: probeOf(v, "shanghai").ms, err: probeOf(v, "shanghai").err } },
-    picks: [nameOf(s), label(st), ageLine(data, failed)],
-  });
+    [label(st), placeText(v), ageLine(data, failed)]);
+}
+
+/* ---------- "Wrong result?": the shell's report dialog, next to the result ---------- */
+// The button sits with the share button, where the visitor is reading the answer. It is shown only when the shell's
+// dialog exists (not in embed mode) and there is a result to be wrong. `picks` are one-tap answers, in the visitor's
+// language, for when they send the button's own words and nothing else.
+function wireReport(summary, data, picks) {
+  const btn = $("#reportBtn");
+  if (!btn) return;
+  const can = typeof window.msOpenReport === "function";
+  btn.hidden = !can;
+  if (!can) return;
+  window.msReport = () => ({ summary, data, picks: picks.filter(Boolean).slice(0, 8) });
 }
 
 /* ---------- the search box ---------- */
@@ -316,7 +336,17 @@ function filter() {
 function bindFilter() {
   if (filterBound) return;
   filterBound = true;
-  $("#q")?.addEventListener("input", filter);
+  const q = $("#q");
+  if (!q) return;
+  q.addEventListener("input", filter);
+  // "/" is what people try when they want to find one service: focus the box, unless they are already typing in a field
+  document.addEventListener("keydown", e => {
+    if (e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey) return;
+    const a = document.activeElement, tag = a && a.tagName;
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || (a && a.isContentEditable)) return;
+    e.preventDefault();
+    q.focus(); q.select();
+  });
 }
 
 /* ---------- links to the other tools ---------- */

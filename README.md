@@ -113,4 +113,5 @@ not a frozen result; the card shows the state and the measurement date at share 
 
 ## License
 
-MIT. The service names and icons belong to their owners; this page uses them to identify the services it checks.
+MIT. The service names and icons belong to their owners; this page uses them to identify the services it checks. The two
+place flags in `static/assets/flags/` come from [flag-icons](https://github.com/lipis/flag-icons), MIT.

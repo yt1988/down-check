@@ -74,6 +74,7 @@ a.icon-btn:hover { background: var(--soft); }
 .dn-tile[data-state="bad"] { border-color: color-mix(in srgb, var(--t5) 45%, var(--line)); }
 .dn-tile[data-state="warn"] { border-color: color-mix(in srgb, var(--warn) 40%, var(--line)); }
 .dn-empty { padding: 20px 0; color: var(--muted); font-size: var(--fs-small); text-align: center; }
+.dn-noscript { padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--soft); color: var(--muted); font-size: var(--fs-small); }
 
 /* a 24-hour strip: one cell per hour, green / red / grey, no axes */
 .dn-spark { display: flex; align-items: stretch; gap: 1px; height: 12px; width: 46px; flex: none; }
@@ -87,6 +88,7 @@ a.icon-btn:hover { background: var(--soft); }
 /* ---------- category page: aligned columns, status next to the name ---------- */
 .dn-list-h { display: grid; grid-template-columns: minmax(180px, 230px) 84px minmax(120px, 1fr) 60px; gap: 14px;
   padding: 0 16px 6px; font-size: var(--fs-micro); color: var(--muted); }
+.dn-list-h span:last-child { text-align: right; }
 .dn-list { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--panel); overflow: hidden; }
 .dn-list li + li { border-top: 1px solid var(--line); }
 .dn-row { display: grid; grid-template-columns: minmax(180px, 230px) 84px minmax(120px, 1fr) 60px; align-items: center; gap: 14px;
@@ -112,6 +114,12 @@ a.icon-btn:hover { background: var(--soft); }
 .dn-status-banner .ic { width: 16px; height: 16px; }
 .dn-status-banner b { font-size: clamp(26px, 3.4vw, 34px); font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
 .dn-status-banner .dn-status-meta { margin-left: auto; font-size: var(--fs-small); color: var(--muted); font-variant-numeric: tabular-nums; }
+.dn-status-acts { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dn-status-banner:has(.dn-status-acts) { row-gap: 12px; }
+/* the report entry: quiet, but a real target beside the share button */
+.dn-report-btn { color: var(--muted); }
+.dn-report-btn:hover { color: var(--fg); background: var(--soft); }
+@media (pointer: coarse) { .dn-report-btn, .dn-hero-right #reportBtn { height: 36px; padding: 0 12px; } }
 .dn-status-banner.ok { background: color-mix(in srgb, var(--t1) 7%, var(--panel)); border-color: color-mix(in srgb, var(--t1) 28%, var(--line)); }
 .dn-status-banner.warn { background: color-mix(in srgb, var(--warn) 9%, var(--panel)); border-color: color-mix(in srgb, var(--warn) 32%, var(--line)); }
 .dn-status-banner.bad { background: color-mix(in srgb, var(--t5) 8%, var(--panel)); border-color: color-mix(in srgb, var(--t5) 30%, var(--line)); }
@@ -142,7 +150,9 @@ a.icon-btn:hover { background: var(--soft); }
 
 .dn-loc { display: grid; grid-template-columns: 9px minmax(0, 1fr) auto auto; align-items: center; gap: 10px; min-height: 40px; border-bottom: 1px solid var(--line); font-size: var(--fs-small); }
 .dn-loc:last-child { border-bottom: 0; }
-.dn-loc b { font-weight: 600; }
+.dn-loc b { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; }
+.dn-flag { width: 18px; height: 13px; border-radius: 2px; object-fit: cover; box-shadow: 0 0 0 1px rgba(0,0,0,.08); flex: none; }
+[data-theme="dark"] .dn-flag { box-shadow: 0 0 0 1px rgba(255,255,255,.14); }
 .dn-loc-v { font-family: var(--f-num); font-variant-numeric: tabular-nums; color: var(--muted); text-align: right; }
 .dn-loc-v.ok { color: var(--t1); } .dn-loc-v.bad { color: var(--t5); } .dn-loc-v.warn { color: var(--warn); }
 .dn-loc-age { font-size: var(--fs-caption); color: var(--muted); text-align: right; min-width: 74px; }
@@ -175,6 +185,8 @@ a.icon-btn:hover { background: var(--soft); }
 .dn-cross-link svg, .dn-ext svg { width: 11px; height: 11px; flex: none; }
 .dn-ext { display: inline-flex; align-items: center; gap: 3px; }
 .dn-report { display: flex; }
+/* the share dialog draws its card after the link is shortened: a soft surface meanwhile, not a white hole */
+.dialog.ms-share .ms-share-img { background: var(--soft); }
 .dn-foot { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; font-size: var(--fs-small); color: var(--muted); padding: 2px 4px; }
 .dn-foot p { margin: 0; }
 .dn-p { color: var(--fg); max-width: none; }
@@ -183,7 +195,10 @@ a.icon-btn:hover { background: var(--soft); }
 /* help dialog, the same shape as the other tools */
 .scrim { position: fixed; inset: 0; z-index: 40; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; padding: 16px; }
 .scrim[hidden] { display: none; }
-.dialog { width: min(760px, 100%); max-height: min(86vh, 720px); background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-lg); display: flex; flex-direction: column; overflow: hidden; }
+/* min-width:0 and max-width:100%: a flex child is as wide as its widest content unless told otherwise, and a long
+   question or a <select> with a long option was pushing the dialog past the screen edge */
+.dialog { width: min(760px, 100%); min-width: 0; max-width: 100%; max-height: min(86vh, 720px); background: var(--panel);
+  border: 1px solid var(--line); border-radius: var(--r-lg); display: flex; flex-direction: column; overflow: hidden; }
 .dlg-h { display: flex; align-items: center; gap: 10px; padding: 10px 12px 10px 18px; border-bottom: 1px solid var(--line); }
 .dlg-h h2 { margin: 0; font-size: var(--fs-title); flex: 1; }
 .help-b { display: grid; grid-template-columns: 240px 1fr; min-height: 0; flex: 1; }
@@ -199,6 +214,7 @@ a.icon-btn:hover { background: var(--soft); }
 
 @media (max-width: 600px) {
   .dn-status-banner .dn-status-meta { margin-left: 0; width: 100%; }
+  .dn-status-acts { width: 100%; }
   .dn-hero-tools { flex-direction: column; align-items: stretch; gap: 10px; }
   .dn-hero-tools input[type="search"] { flex: 1 1 auto; max-width: none; }
   .dn-hero-tools .dn-legend { justify-content: center; }
@@ -217,10 +233,18 @@ a.icon-btn:hover { background: var(--soft); }
   .help-b { display: flex; flex-direction: column; }
   .help-nav { display: none; }
   .help-pick { display: flex; gap: 8px; align-items: center; padding: 8px 10px; border-bottom: 1px solid var(--line); }
-  .help-pick select { flex: 1; height: 36px; font-size: 16px; border-radius: var(--r-ctl-sm); border: 1px solid var(--line); background: var(--panel); color: var(--fg); padding: 0 8px; }
+  /* a <select> is as wide as its longest option, whatever the container: without min-width:0 it pushes out of the dialog */
+  .help-pick select { flex: 1 1 auto; min-width: 0; width: 100%; max-width: 100%; height: 36px; font-size: 16px; border-radius: var(--r-ctl-sm);
+    border: 1px solid var(--line); background: var(--panel); color: var(--fg); padding: 0 8px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
   .help-c { padding: 12px 14px; }
 }
 @media (max-width: 460px) {
   .dn-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dn-status-panel b { font-size: 28px; }
+}
+
+/* touch: breadcrumb and cross links are text, but on a phone they still need a real target */
+@media (pointer: coarse) {
+  .dn-crumbs a, .dn-crumbs .dn-crumb-here, .dn-src-link, .dn-ext, .dn-cross-link, .dn-chip { min-height: 40px; display: inline-flex; align-items: center; }
+  .dn-crumbs { gap: 4px 8px; }
 }

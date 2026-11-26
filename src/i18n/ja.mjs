@@ -2,9 +2,10 @@
 export default {
   name: "日本語",
   app_name: "ダウンしてる？",
-  lang_label: "言語", a_lang: "言語", a_theme: "テーマ", a_help: "ヘルプ", a_close: "閉じる", a_prev: "前へ", a_next: "次へ",
+  lang_label: "言語", a_lang: "言語", a_theme: "テーマ", a_help: "ヘルプ", a_close: "閉じる", a_prev: "前へ", a_next: "次へ", a_crumbs: "パンくずリスト",
   th_system: "システムに合わせる", th_light: "ライト", th_dark: "ダーク", just_now: "たった今", na: "—", retry: "もう一度", loading: "読み込み中…",
   sep: "、",
+  places_sep: "と",
 
   seo_title_home: "サービス状況：ChatGPT、GitHub、Discord は今ダウンしてる？",
   seo_desc_home: "障害時によく検索される 210 サービスのリアルタイム状況。当サイトの東京・上海の計測点が 10 分ごとに確認します。データが取得できないときは「確認できない」と表示し、「ダウン」とは書きません。",
@@ -51,7 +52,7 @@ export default {
 
   h_service: "サービス",
   h_status: "状態",
-  h_24h: "24 時間",
+  h_24h: "24 時間", h_uptime: "稼働率",
   chip_official: "公式：{state}",
   st_online: "オンライン", st_recovered: "復旧", st_partial: "一部異常", st_unreachable: "オフライン", st_longfail: "数日オフライン",
   st_fault: "公式障害", st_unconfirmed: "確認できない", st_stale: "データが古い", st_nodata: "データなし", st_loading: "読み込み中…",
@@ -106,4 +107,5 @@ export default {
   share_btn: "共有",
   share_foot: "リアルタイム状況、10 分ごとに確認",
   foot_src: "データ：当サイトの東京・上海の計測、10 分ごと。",
+  js_required: "最新の状態はページが同一オリジンの JSON を読んで表示します。JavaScript が無効でも、各サービスの一覧と公式ステータスページへのリンクは残ります。",
 };

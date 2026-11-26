@@ -2,9 +2,10 @@
 export default {
   name: "Español",
   app_name: "¿Está caído?",
-  lang_label: "Idioma", a_lang: "Idioma", a_theme: "Tema", a_help: "Ayuda", a_close: "Cerrar", a_prev: "Anterior", a_next: "Siguiente",
+  lang_label: "Idioma", a_lang: "Idioma", a_theme: "Tema", a_help: "Ayuda", a_close: "Cerrar", a_prev: "Anterior", a_next: "Siguiente", a_crumbs: "Ruta de navegación",
   th_system: "Tema del sistema", th_light: "Tema claro", th_dark: "Tema oscuro", just_now: "ahora mismo", na: "—", retry: "Reintentar", loading: "Leyendo…",
   sep: ", ",
+  places_sep: " y ",
 
   seo_title_home: "Estado de servicios: ¿ChatGPT, GitHub o Discord están caídos ahora?",
   seo_desc_home: "Estado en vivo de 210 servicios que la gente busca cuando algo falla. Nuestras sondas en Tokio y Shanghái comprueban cada 10 minutos; si faltan datos, se muestra «no se puede confirmar», nunca «caído».",
@@ -51,7 +52,7 @@ export default {
 
   h_service: "Servicio",
   h_status: "Estado",
-  h_24h: "24 horas",
+  h_24h: "24 horas", h_uptime: "Disponibilidad",
   chip_official: "Oficial: {state}",
   st_online: "En línea", st_recovered: "Recuperado", st_partial: "Parcial", st_unreachable: "Caído", st_longfail: "Caído desde hace días",
   st_fault: "Avería oficial", st_unconfirmed: "Sin confirmar", st_stale: "Datos desactualizados", st_nodata: "Sin datos", st_loading: "Leyendo…",
@@ -106,4 +107,5 @@ export default {
   share_btn: "Compartir",
   share_foot: "Estado en vivo, comprobado cada 10 minutos",
   foot_src: "Datos: nuestras sondas en Tokio y Shanghái, cada 10 minutos.",
+  js_required: "El estado en vivo lo lee esta página de un JSON del mismo origen; sin JavaScript siguen estando la lista de servicios y el enlace a su página de estado.",
 };

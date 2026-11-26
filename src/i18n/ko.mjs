@@ -2,9 +2,10 @@
 export default {
   name: "한국어",
   app_name: "다운됐나요?",
-  lang_label: "언어", a_lang: "언어", a_theme: "테마", a_help: "도움말", a_close: "닫기", a_prev: "이전", a_next: "다음",
+  lang_label: "언어", a_lang: "언어", a_theme: "테마", a_help: "도움말", a_close: "닫기", a_prev: "이전", a_next: "다음", a_crumbs: "현재 위치",
   th_system: "시스템 설정", th_light: "라이트", th_dark: "다크", just_now: "방금", na: "—", retry: "다시 시도", loading: "읽는 중…",
   sep: " · ",
+  places_sep: "와 ",
 
   seo_title_home: "서비스 상태: ChatGPT, GitHub, Discord 지금 다운됐나요?",
   seo_desc_home: "장애 때 많이 검색되는 210개 서비스의 실시간 상태. 이 사이트의 도쿄·상하이 측정 지점이 10분마다 확인합니다. 데이터가 없으면 '확인할 수 없음'으로 표시하고 '다운'이라고 쓰지 않습니다.",
@@ -51,7 +52,7 @@ export default {
 
   h_service: "서비스",
   h_status: "상태",
-  h_24h: "24시간",
+  h_24h: "24시간", h_uptime: "가동률",
   chip_official: "공식: {state}",
   st_online: "온라인", st_recovered: "복구됨", st_partial: "일부 이상", st_unreachable: "오프라인", st_longfail: "며칠째 오프라인",
   st_fault: "공식 장애", st_unconfirmed: "확인 불가", st_stale: "데이터 오래됨", st_nodata: "데이터 없음", st_loading: "읽는 중…",
@@ -106,4 +107,5 @@ export default {
   share_btn: "공유",
   share_foot: "실시간 상태, 10분마다 확인",
   foot_src: "데이터: 이 사이트의 도쿄·상하이 측정, 10분마다.",
+  js_required: "실시간 상태는 페이지가 같은 출처의 JSON을 읽어 표시합니다. JavaScript가 없어도 모든 서비스와 각 서비스의 공식 상태 페이지 링크는 그대로 있습니다.",
 };

@@ -30,13 +30,15 @@
   <main id="main" tabindex="-1">
 {{main}}
   </main>
+  <noscript><p class="dn-noscript">{{js_required}}</p></noscript>
 
   <div data-ms-more></div>
   <div class="dn-cross dn-cross-foot">
     <a class="dn-cross-link" data-tool="ping" hidden>{{cross_ping}}<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
     <a class="dn-cross-link" data-tool="reach" hidden>{{cross_reach}}<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
   </div>
-  <footer class="dn-foot"><p>{{foot_src}}</p></footer>
+  <!-- a div, not a footer: the shell's own foot is the page's only contentinfo (docs/tool-contract.md) -->
+  <div class="dn-foot"><p>{{foot_src}}</p></div>
 </div>
 
 <div class="scrim" id="help" hidden>

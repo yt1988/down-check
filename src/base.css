@@ -103,6 +103,8 @@ svg[viewBox="0 0 16 16"] { fill: none; stroke: currentColor; stroke-width: 1.4; 
 .brand-name { font-size: var(--fs-brand); font-weight: 700; letter-spacing: -.02em; white-space: nowrap; }
 @media (max-width: 720px) { .brand-name { font-size: var(--fs-lead); } }
 @media (max-width: 520px) { .brand-name { display: none; } .brand { flex: none; } }
+/* a 320px phone: the logo and the four actions do not fit side by side at full size */
+@media (max-width: 380px) { .logo, .logo img { width: 62px; height: 25px; } .top { gap: 8px; flex-wrap: wrap; } .top-acts { gap: 6px; margin-left: auto; } }
 .logo-dark { display: none !important; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo-light { display: none !important; } :root:not([data-theme="light"]) .logo-dark { display: block !important; } }
 :root[data-theme="dark"] .logo-light { display: none !important; }
@@ -143,7 +145,7 @@ h2 { font-size: var(--fs-title); font-weight: 700; }
 .btn.ghost { border-color: transparent; background: none; }
 .btn.sm { height: 30px; padding: 0 10px; border-radius: var(--r-ctl-sm); font-size: var(--fs-small); }
 .btn:disabled { opacity: .5; cursor: default; }
-@media (pointer: coarse) { .btn { height: 44px; } }
+@media (pointer: coarse) { .btn { height: 44px; } .btn.sm { height: 40px; padding: 0 14px; } .icon-btn { width: 44px; height: 44px; } .sel { height: 40px; } }
 
 /* key numbers: a row of tiles, label under value, every figure in --f-num so columns line up */
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 12px; }

@@ -38,7 +38,7 @@ const cells = n => "<i></i>".repeat(n);
 
 // What the browser needs at runtime; everything else is written into the page at build time.
 const RUNTIME = new Set(["name", "lang_label", "a_lang", "a_theme", "a_help", "a_close", "a_prev", "a_next",
-  "th_system", "th_light", "th_dark", "just_now", "na", "retry", "loading", "sep",
+  "th_system", "th_light", "th_dark", "just_now", "na", "retry", "loading", "sep", "places_sep",
   "sum_all_ok", "sum_some", "sum_unknown", "sum_counts", "k_up24", "k_up7", "updated",
   "st_online", "st_recovered", "st_partial", "st_unreachable", "st_longfail", "st_fault", "st_unconfirmed", "st_stale", "st_nodata", "st_loading",
   "v_online", "v_recovered", "v_partial", "v_official_partial", "v_official_online", "v_official_ok_unreachable", "v_unreachable", "v_longfail", "v_fault", "v_unconfirmed", "v_stale", "v_nodata",
@@ -94,13 +94,16 @@ function helpParts(Tt) {
 }
 
 const catName = (Tt, cat) => Tt("cat_" + cat.id);
-function catDesc(Tt, cat) {
+function catDesc(Tt, cat, lang) {
   if (GLOBAL.has(cat.id)) return Tt("cat_desc_" + cat.id);
   const all = byCat(cat.id);
-  const list = all.length <= 6 ? all.map(s => s.name) : all.slice(0, 4).map(s => s.name).concat("…");
-  return fill(Tt("cat_desc_region"), { region: catName(Tt, cat), list: list.join(Tt("sep")) });
+  const cut = all.length > 6;
+  const list = (cut ? all.slice(0, 4) : all).map(s => nameOf(s, lang)).join(Tt("sep")) + (cut ? "…" : "");
+  // no sentence-ending period after an ellipsis: "A、B、C、D…" not "A、B、C、D、…。"
+  const desc = fill(Tt("cat_desc_region"), { region: catName(Tt, cat), list });
+  return cut ? desc.replace(/[。.]\s*$/, "") : desc;
 }
-const searchOf = s => [s.name, s.id, ...(s.names ? Object.values(s.names) : [])].join(" ").toLowerCase();
+const searchOf = s => [s.name, s.id, ...(s.alias || []), ...(s.names ? Object.values(s.names) : [])].join(" ").toLowerCase();
 let ICONS = new Set();
 const initials = (s, lang) => {
   const n = nameOf(s, lang), latin = n.replace(/[^A-Za-z0-9]/g, "");
@@ -111,8 +114,13 @@ const iconHtml = (s, lang, extra = "") => ICONS.has(s.id)
   : `<span class="svc-mono ${extra}" aria-hidden="true">${esc(initials(s, lang))}</span>`;
 
 const nameOf = (s, lang) => (s.names && s.names[lang]) || s.name;
-const crumbs = items => `<nav class="dn-crumbs">${items.map((x, i) => (i ? '<span class="dn-sep" aria-hidden="true">›</span>' : "") + x).join("")}</nav>`;
+const crumbs = (items, Tt) => `<nav class="dn-crumbs" aria-label="${esc(Tt("a_crumbs"))}">${items.map((x, i) => (i ? '<span class="dn-sep" aria-hidden="true">›</span>' : "") + x).join("")}</nav>`;
 
+
+// the two probe places: a flag, then the city in the page's language. The flags are the same SVGs the other tools use.
+const PLACE_FLAG = { tokyo: "jp", shanghai: "cn" };
+const placeFlag = p => `<img class="dn-flag" src="/assets/flags/${PLACE_FLAG[p]}.svg" alt="" width="18" height="13" loading="lazy">`;
+const reportBtn = Tt => `<button class="btn sm dn-report-btn" id="reportBtn" type="button" data-ms-report="${esc(Tt("report_prefill"))}" hidden>${esc(Tt("report_result"))}</button>`;
 
 function legend(Tt) {
   return `<div class="dn-legend">
@@ -127,7 +135,7 @@ function homeMain(Tt, lang) {
   const cats = CATS.map(cat => {
     const list = byCat(cat.id);
     const tiles = list.map(s => `<li><a class="dn-tile" href="${svcPath(lang, s)}" data-s="${s.id}" data-name="${esc(searchOf(s))}" data-state="loading" aria-label="${esc(nameOf(s, lang))}"><span class="svc-wrap">${iconHtml(s, lang)}<span class="ic st"></span></span><span class="dn-tile-n">${esc(nameOf(s, lang))}</span><span class="dn-spark" aria-hidden="true"></span></a></li>`).join("");
-    return `<section class="dn-cat" data-cat="${cat.id}"><header class="dn-cat-h"><h2><a href="${catPath(lang, cat.id)}">${esc(catName(Tt, cat))}</a></h2></header><ul class="dn-tiles">${tiles}</ul></section>`;
+    return `<section class="dn-cat" data-cat="${cat.id}"><div class="dn-cat-h"><h2><a href="${catPath(lang, cat.id)}">${esc(catName(Tt, cat))}</a></h2></div><ul class="dn-tiles">${tiles}</ul></section>`;
   }).join("");
   return `<section class="dn-hero">
       <h1 class="page-h">${esc(Tt("h1_home"))}</h1>
@@ -135,7 +143,7 @@ function homeMain(Tt, lang) {
       <p class="dn-age" id="sumAge">${esc(Tt("loading"))}</p>
       <div class="dn-hero-tools">
         <input id="q" type="search" placeholder="${esc(Tt("filter_ph"))}" aria-label="${esc(Tt("filter_ph"))}" autocomplete="off" spellcheck="false">
-        <div class="dn-hero-right">${legend(Tt)}<button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button></div>
+        <div class="dn-hero-right">${legend(Tt)}<button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button>${reportBtn(Tt)}</div>
       </div>
     </section>
     <div class="dn-board" id="board">${cats}</div>
@@ -149,13 +157,13 @@ function catMain(Tt, lang, cat) {
       <span class="dn-pill">${esc(Tt("st_loading"))}</span>
       <span class="dn-spark" aria-hidden="true"></span>
       <span class="dn-row-up"><i>24h</i><b>—</b></span></a></li>`).join("");
-  return `${crumbs([`<a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a>`, `<span class="dn-crumb-here">${esc(catName(Tt, cat))}</span>`])}
-    <header class="dn-hero">
+  return `${crumbs([`<a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a>`, `<span class="dn-crumb-here">${esc(catName(Tt, cat))}</span>`], Tt)}
+    <div class="dn-hero">
       <h1 class="page-h">${esc(fill(Tt("h1_cat"), { cat: catName(Tt, cat) }))}</h1>
-      <p class="dn-intro">${esc(catDesc(Tt, cat))}</p>
-      <div class="dn-hero-tools"><span class="dn-age" id="sumAge">${esc(Tt("loading"))}</span><div class="dn-hero-right">${legend(Tt)}<button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button></div></div>
-    </header>
-    <div class="dn-list-h" aria-hidden="true"><span>${esc(Tt("h_service"))}</span><span>${esc(Tt("h_status"))}</span><span>${esc(Tt("h_24h"))}</span><span></span></div>
+      <p class="dn-intro">${esc(catDesc(Tt, cat, lang))}</p>
+      <div class="dn-hero-tools"><span class="dn-age" id="sumAge">${esc(Tt("loading"))}</span><div class="dn-hero-right">${legend(Tt)}<button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button>${reportBtn(Tt)}</div></div>
+    </div>
+    <div class="dn-list-h" aria-hidden="true"><span>${esc(Tt("h_service"))}</span><span>${esc(Tt("h_status"))}</span><span>${esc(Tt("h_24h"))}</span><span>${esc(Tt("h_uptime"))}</span></div>
     <ul class="dn-list">${rows}</ul>`;
 }
 
@@ -170,16 +178,19 @@ function svcMain(Tt, lang, s) {
   const offBlock = src?.page
     ? `<p class="dn-p">${esc(Tt("official_note"))}</p><a class="dn-src-link" id="officialLink" href="${esc(src.page)}" target="_blank" rel="noopener">${esc(Tt("official_go"))}${EXT}</a>`
     : `<p class="dn-p hint">${esc(Tt("official_none"))}</p>`;
-  return `${crumbs([`<a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a>`, `<a href="${catPath(lang, s.cat)}">${esc(catName(Tt, cat))}</a>`, `<span class="dn-crumb-here">${esc(name)}</span>`])}
-    <header class="dn-svc-head">
+  return `${crumbs([`<a href="${pathOf(lang)}">${esc(Tt("back_home"))}</a>`, `<a href="${catPath(lang, s.cat)}">${esc(catName(Tt, cat))}</a>`, `<span class="dn-crumb-here">${esc(name)}</span>`], Tt)}
+    <div class="dn-svc-head">
       <h1 class="page-h"><span class="svc-lg">${iconHtml(s, lang)}</span>${esc(fill(Tt("h1_svc"), { name }))}</h1>
       <p class="dn-p" id="verdictSentence"></p>
-    </header>
+    </div>
     <div class="dn-status-banner" id="statusPanel">
       <span class="ic" id="stateIcon"></span>
       <b id="stateText">${esc(Tt("st_loading"))}</b>
       <span class="dn-status-meta" id="statusMeta"></span>
-      <button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button>
+      <div class="dn-status-acts">
+        <button class="btn sm" id="shareBtn" type="button" hidden>${esc(Tt("share_btn"))}</button>
+        ${reportBtn(Tt)}
+      </div>
     </div>
     <section class="card card-pad dn-history">
       <div class="dn-history-h"><h2>${esc(Tt("k_up24"))}</h2><span class="dn-up" id="up24">—</span></div>
@@ -192,8 +203,8 @@ function svcMain(Tt, lang, s) {
     </section>
     <section class="card card-pad">
       <h2>${esc(Tt("loc_h"))}</h2>
-      <div class="dn-loc" data-kind="tokyo"><span class="ic"></span><b>${esc(Tt("loc_tokyo"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
-      <div class="dn-loc" data-kind="shanghai"><span class="ic"></span><b>${esc(Tt("loc_shanghai"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
+      <div class="dn-loc" data-kind="tokyo"><span class="ic"></span><b>${placeFlag("tokyo")}${esc(Tt("loc_tokyo"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
+      <div class="dn-loc" data-kind="shanghai"><span class="ic"></span><b>${placeFlag("shanghai")}${esc(Tt("loc_shanghai"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
     </section>
     <section class="card card-pad">
       <h2>${esc(Tt("official_h"))}</h2>
@@ -204,13 +215,12 @@ function svcMain(Tt, lang, s) {
       <ul class="dn-outs" id="outs"><li class="dn-out dn-out-empty">${esc(Tt("st_loading"))}</li></ul>
     </section>
     <section class="card card-pad"><h2>${esc(Tt("what_h"))}</h2><p class="dn-p">${what}</p></section>
-    <nav class="dn-related"><h2>${esc(Tt("related_h"))}</h2><ul class="dn-chips">${chips}</ul></nav>
+    <nav class="dn-related" aria-labelledby="relatedH"><h2 id="relatedH">${esc(Tt("related_h"))}</h2><ul class="dn-chips">${chips}</ul></nav>
     <div class="dn-cross">
       <a class="dn-cross-link" data-tool="home" data-id="${s.id}" hidden>${esc(Tt("cross_home"))}${EXT}</a>
       <a class="dn-cross-link" data-tool="unlock" hidden>${esc(Tt("cross_unlock"))}${EXT}</a>
       <a class="dn-cross-link" data-tool="check" hidden>${esc(Tt("cross_check"))}${EXT}</a>
-    </div>
-    <div class="dn-report"><button class="btn ghost sm" id="reportBtn" type="button" data-ms-report="${esc(Tt("report_prefill"))}" hidden>${esc(Tt("report_result"))}</button></div>`;
+    </div>`;
 }
 
 export async function build() {
@@ -289,6 +299,7 @@ export async function build() {
       .replace("{{repo}}", () => REPO)
       .replace("{{main}}", () => main)
       .replace("{{foot_src}}", () => esc(Tt("foot_src")))
+      .replace("{{js_required}}", () => esc(Tt("js_required")))
       .replace("{{cross_ping}}", () => esc(Tt("cross_ping")))
       .replace("{{cross_reach}}", () => esc(Tt("cross_reach")))
       .replace("{{faq_h}}", () => esc(Tt("faq_h")))
@@ -315,7 +326,7 @@ export async function build() {
     for (const cat of CATS) {
       await writePage({ lang, type: "cat", cat, title: fill(Tt("seo_title_cat"), { cat: catName(Tt, cat) }),
         desc: fill(Tt("seo_desc_cat"), { cat: catName(Tt, cat) }), kw: Tt("seo_kw_home"),
-        main: catMain(Tt, lang, cat), graph: [appSchema(lang, fill(Tt("h1_cat"), { cat: catName(Tt, cat) }) + " · 1ms.dog", SITE + catPath(lang, cat.id), catDesc(Tt, cat))] });
+        main: catMain(Tt, lang, cat), graph: [appSchema(lang, fill(Tt("h1_cat"), { cat: catName(Tt, cat) }) + " · 1ms.dog", SITE + catPath(lang, cat.id), catDesc(Tt, cat, lang))] });
     }
     for (const s of SERVICES) {
       await writePage({ lang, type: "svc", service: s, title: fill(Tt("seo_title_svc"), { name: nameOf(s, lang) }),
