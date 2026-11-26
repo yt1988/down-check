@@ -63,10 +63,10 @@ another service's page.
    `up24`, `up7`, `out`. The probe tries the service's usual URL first and its own `alt` addresses only when that is
    not a definite answer (see above).
 2. `src/worker.js` fetches Los Angeles, Tokyo and Shanghai (`PROBE_LAX_URL`, `PROBE_TOKYO_URL`, `PROBE_SHANGHAI_URL`;
-   no default — set them as secrets in the deployment, never in this repository), trims each with `src/data.mjs`
-   (published ids, last 144 samples only), caches 60 s, and keeps the last good copy for a week. Only when all three
-   are missing does it return 503; a source that is missing alone is `null` in the JSON. `wrangler.toml` sets
-   `keep_vars = true` so a deploy does not delete those secrets. There is no cron and no KV.
+   secrets, set with `wrangler secret put`, never in this repository), trims each with `src/data.mjs` (published ids,
+   last 144 samples only), caches 60 s, and keeps the last good copy for a week. Only when all three are missing does
+   it return 503; a source that is missing alone is `null` in the JSON. Secrets survive a deploy. There is no cron and
+   no KV.
 3. The page fetches `/api/status.json` once and fills the build's placeholders. It never talks to an upstream directly.
 
 The upstream data address never appears in a page (a test checks it). A 403/429 must stay unconfirmed end to end.
@@ -99,7 +99,7 @@ The upstream data address never appears in a page (a test checks it). A 403/429 
 ## Deployment
 
 - Worker `down-check`, `workers_dev = false`, `preview_urls = false`, no custom domain (the shell routes it).
-- `wrangler.toml` has assets + `main` + `keep_vars` only: no cron, no KV, no bindings.
+- `wrangler.toml` has assets + `main` only: no cron, no KV, no bindings.
 - Three probe addresses are the Worker secrets `PROBE_LAX_URL`, `PROBE_TOKYO_URL` and `PROBE_SHANGHAI_URL`, set in the
   deployment (or `wrangler secret put`), never in this repository.
 - `public/` is generated and git-ignored (2,320 pages). Do not commit it.

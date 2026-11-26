@@ -7,9 +7,9 @@ main = "src/worker.js"
 compatibility_date = "2025-10-01"
 workers_dev = false
 preview_urls = false
-# The three probe addresses live in the deployment, as secrets (PROBE_LAX_URL, PROBE_TOKYO_URL, PROBE_SHANGHAI_URL).
-# Without this, `wrangler deploy` would delete every var it does not find in this file before setting its own.
-keep_vars = true
+# The three probe addresses are Worker *secrets* (PROBE_LAX_URL, PROBE_TOKYO_URL, PROBE_SHANGHAI_URL), set with
+# `wrangler secret put`. Secrets survive a deploy; `keep_vars` is for plain vars and is not needed (and an older
+# wrangler in Workers Builds rejects the key).
 
 [assets]
 directory = "./public"
