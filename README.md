@@ -82,6 +82,9 @@ verdict uses only what the two probe machines wrote.
 
 ## Data
 
+`/api/status.json` is `{ v: 4, generated, losangeles, tokyo, shanghai }`; a source the deployment has no address for
+is `null`, and only all three missing is a 503.
+
 `probe/latest.json` (one per machine, three machines): `at`, `every`, `from`, `complete`, and per service `ok`, `unknown`, `ms`,
 `http`, `err`, `t` (this service's own measurement time), `h` (history, 10-minute samples), `up24`, `up7`, `out`.
 The Worker trims it to the published services and the last 144 samples (`h24`) before any browser sees it. Nothing

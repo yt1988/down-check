@@ -62,10 +62,11 @@ another service's page.
 1. `probe/` runs every 10 minutes on each machine and writes `latest.json` (plus `days/`) with per-service `t`, `h`,
    `up24`, `up7`, `out`. The probe tries the service's usual URL first and its own `alt` addresses only when that is
    not a definite answer (see above).
-2. `src/worker.js` fetches Tokyo and Shanghai (`PROBE_TOKYO_URL`, `PROBE_SHANGHAI_URL`; no default — set them in the
-   deployment, never in this repository), trims them with
-   `src/data.mjs` (published ids, last 144 samples only), caches 60 s, and keeps the last good copy for a week. If both
-   are missing it returns 503. There is no cron and no KV.
+2. `src/worker.js` fetches Los Angeles, Tokyo and Shanghai (`PROBE_LAX_URL`, `PROBE_TOKYO_URL`, `PROBE_SHANGHAI_URL`;
+   no default — set them as secrets in the deployment, never in this repository), trims each with `src/data.mjs`
+   (published ids, last 144 samples only), caches 60 s, and keeps the last good copy for a week. Only when all three
+   are missing does it return 503; a source that is missing alone is `null` in the JSON. `wrangler.toml` sets
+   `keep_vars = true` so a deploy does not delete those secrets. There is no cron and no KV.
 3. The page fetches `/api/status.json` once and fills the build's placeholders. It never talks to an upstream directly.
 
 The upstream data address never appears in a page (a test checks it). A 403/429 must stay unconfirmed end to end.
@@ -98,15 +99,17 @@ The upstream data address never appears in a page (a test checks it). A 403/429 
 ## Deployment
 
 - Worker `down-check`, `workers_dev = false`, `preview_urls = false`, no custom domain (the shell routes it).
-- `wrangler.toml` has assets + `main` only: no cron, no KV, no bindings.
+- `wrangler.toml` has assets + `main` + `keep_vars` only: no cron, no KV, no bindings.
+- Three probe addresses are the Worker secrets `PROBE_LAX_URL`, `PROBE_TOKYO_URL` and `PROBE_SHANGHAI_URL`, set in the
+  deployment (or `wrangler secret put`), never in this repository.
 - `public/` is generated and git-ignored (2,320 pages). Do not commit it.
 - After deploying: the shell's `npm run check -- down`, `npm run mobile -- down`; check the live `/api/status.json`
-  has the Tokyo file and, once it exists, the Shanghai file.
+  has all three files (`losangeles`, `tokyo`, `shanghai`) and `v: 4`.
 
 ## Known limits
 
-- Shanghai's file must be published somewhere the Worker can read (`PROBE_SHANGHAI_URL`); until then the Shanghai row
-  says "no data".
+- A probe's file must be published where the Worker can read it (one env var each); a missing source shows as
+  "no data" on that place's row, and the other two still decide.
 - The probe is on a 10-minute timer; a round takes about 48 s and 35 MB (see `probe/README.md`).
 - The service's own status page is a reference link only; it never changes the verdict.
 - The share link is the live page, not an encoded result: the card is a timestamped snapshot, the page shows the

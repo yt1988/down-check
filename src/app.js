@@ -28,6 +28,9 @@ const label = state => state === STATE.OK ? (L.st_online || "ok") : (L["st_" + s
 const cls = state => stateClass(state);
 // "Tokyo and Shanghai", not "Tokyo, Shanghai": the sentence reads "From {places}, X is not answering"
 const places = v => (v.places || []).map(p => L["loc_" + p] || p).join(L.places_sep || L.sep || ", ");
+// The places that got no answer, when at least one did: only then is "online" worth qualifying. A place that was
+// refused or challenged is a different fact ("unconfirmed"), already on its own row, so it is not in this sentence.
+const missText = v => (v.views || []).filter(x => x.present && x.fresh && !x.ok && !x.unknown).map(x => L["loc_" + x.place] || x.place).join(L.places_sep || L.sep || ", ");
 // one line per place, as the place rows show it, for the report dialog's one-tap answers
 const placeText = v => (v.views || []).filter(x => x.kind === "probe" && x.present)
   .map(x => `${L["loc_" + x.place] || x.place}: ${x.ok ? (x.ms != null ? Math.round(x.ms) + " ms" : L.na) : x.unknown ? label(STATE.UNCONFIRMED) : t(errKey(x.err))}`)
@@ -149,7 +152,7 @@ function paintBar(el, h24) {
     i.className = c === "o" ? "ok" : c === "x" ? "bad" : c === "u" ? "unk" : "";
   });
 }
-const PLACES = ["lax", "tokyo", "shanghai"];
+const PLACES = ["losangeles", "tokyo", "shanghai"];
 function probeOf(v, place) { return v.views.find(x => x.kind === "probe" && x.place === place); }
 function bestProbe(v) { return PLACES.map(p => probeOf(v, p)).find(x => x?.present) || null; }
 function newestProbeAt(data) {
@@ -243,7 +246,11 @@ function svcView(data, failed, now) {
     if (st === STATE.LONGFAIL) text = t("v_longfail", { places: places(v), name: nameOf(s), dur: durTxt(duration(now - v.since)) });
     else if (st === STATE.UNREACHABLE) text = t("v_unreachable", { places: places(v), name: nameOf(s) });
     else if (st === STATE.RECOVERED) text = t("v_recovered", { places: places(v), name: nameOf(s) });
-    else if (st === STATE.OK) text = t("v_online", { places: places(v), name: nameOf(s) });
+    else if (st === STATE.OK) {
+      // "one of three cannot reach it" and "all three can" are different answers; the banner says only "online"
+      const miss = missText(v);
+      text = miss ? t("v_online_some", { ok: places(v), bad: miss }) : t("v_online", { places: places(v), name: nameOf(s) });
+    }
     else if (st === STATE.UNCONFIRMED) text = L.v_unconfirmed;
     else if (st === STATE.STALE) text = L.v_stale;
     else text = L.v_nodata;
@@ -301,7 +308,7 @@ function svcView(data, failed, now) {
   if (retry) { retry.hidden = !failed; retry.textContent = L.retry; retry.onclick = load; }
   wireReport(`${nameOf(s)}: ${label(st)} · ${ageLine(data, failed)}`,
     { service: s.id, state: st, at: v.at, places: v.places, up24: v.up24, up7: v.up7,
-      lax: probeOf(v, "lax") && { ok: probeOf(v, "lax").ok, unknown: probeOf(v, "lax").unknown, at: probeOf(v, "lax").at, ms: probeOf(v, "lax").ms, err: probeOf(v, "lax").err },
+      losangeles: probeOf(v, "losangeles") && { ok: probeOf(v, "losangeles").ok, unknown: probeOf(v, "losangeles").unknown, at: probeOf(v, "losangeles").at, ms: probeOf(v, "losangeles").ms, err: probeOf(v, "losangeles").err },
       tokyo: probeOf(v, "tokyo") && { ok: probeOf(v, "tokyo").ok, unknown: probeOf(v, "tokyo").unknown, at: probeOf(v, "tokyo").at, ms: probeOf(v, "tokyo").ms, err: probeOf(v, "tokyo").err },
       shanghai: probeOf(v, "shanghai") && { ok: probeOf(v, "shanghai").ok, unknown: probeOf(v, "shanghai").unknown, at: probeOf(v, "shanghai").at, ms: probeOf(v, "shanghai").ms, err: probeOf(v, "shanghai").err } },
     [label(st), placeText(v), ageLine(data, failed)]);

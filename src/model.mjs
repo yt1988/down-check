@@ -47,7 +47,7 @@ export function probeView(doc, id, now, place = "") {
 }
 
 // The verdict for one service, from our three probes.
-export const PLACES = ["lax", "tokyo", "shanghai"];
+export const PLACES = ["losangeles", "tokyo", "shanghai"];
 export function verdict(service, data, now = Date.now()) {
   const views = PLACES.map(p => probeView(data && data[p], service.id, now, p));
   const present = views.filter(v => v.present);

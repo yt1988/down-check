@@ -24,14 +24,14 @@ export default {
 
 async function status(env) {
   const cache = caches.default;
-  const [lax, tokyo, shanghai] = await Promise.all([
-    source(cache, "lax", env.PROBE_LAX_URL, trimProbe),
+  const [losangeles, tokyo, shanghai] = await Promise.all([
+    source(cache, "losangeles", env.PROBE_LAX_URL, trimProbe),
     source(cache, "tokyo", env.PROBE_TOKYO_URL, trimProbe),
     source(cache, "shanghai", env.PROBE_SHANGHAI_URL, trimProbe),
   ]);
-  if (!lax && !tokyo && !shanghai) return json({ error: "unavailable" }, 503, "no-store");
-  const stale = [lax, tokyo, shanghai].some(d => d && d.stale);
-  return json({ v: 4, generated: new Date().toISOString(), lax, tokyo, shanghai }, 200, stale ? "no-store" : "public, max-age=30");
+  if (!losangeles && !tokyo && !shanghai) return json({ error: "unavailable" }, 503, "no-store");
+  const stale = [losangeles, tokyo, shanghai].some(d => d && d.stale);
+  return json({ v: 4, generated: new Date().toISOString(), losangeles, tokyo, shanghai }, 200, stale ? "no-store" : "public, max-age=30");
 }
 
 async function source(cache, name, url, trim) {

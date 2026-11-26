@@ -8,30 +8,30 @@ const svc = { id: "x", name: "X" };
 
 const probeDoc = (services, { from = "Tokyo, JP", age = 120 } = {}) => ({ at: new Date(NOW - age * 1000).toISOString(), every: 600, from, services });
 const p = (o = {}) => ({ ok: true, unknown: false, ms: 20, http: 200, t: SEC - 120, ok_at: SEC - 120, up24: 100, up7: 100, h24: "o".repeat(144), out: [], ...o });
-const LA = { from: "Los Angeles, US" };
-const data = (tokyo, shanghai, lax = null) => ({ lax, tokyo, shanghai });
+const LOSANGELES = { from: "Los Angeles, US" };
+const data = (tokyo, shanghai, losangeles = null) => ({ losangeles, tokyo, shanghai });
 
 test("all three places answer: ok", () => {
-  const v = verdict(svc, data(probeDoc({ x: p() }), probeDoc({ x: p() }, { from: "Shanghai, CN" }), probeDoc({ x: p() }, LA)), NOW);
+  const v = verdict(svc, data(probeDoc({ x: p() }), probeDoc({ x: p() }, { from: "Shanghai, CN" }), probeDoc({ x: p() }, LOSANGELES)), NOW);
   assert.equal(v.state, STATE.OK);
-  assert.deepEqual(v.places, ["lax", "tokyo", "shanghai"]);
+  assert.deepEqual(v.places, ["losangeles", "tokyo", "shanghai"]);
   assert.equal(v.up24, 100);
 });
 
 test("only Los Angeles answers: online, and that is the place the page names", () => {
-  const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout" }) }), probeDoc({ x: p({ ok: false, err: "timeout" }) }, { from: "Shanghai, CN" }), probeDoc({ x: p() }, LA)), NOW);
+  const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout" }) }), probeDoc({ x: p({ ok: false, err: "timeout" }) }, { from: "Shanghai, CN" }), probeDoc({ x: p() }, LOSANGELES)), NOW);
   assert.equal(v.state, STATE.OK);
-  assert.deepEqual(v.places, ["lax"]);
+  assert.deepEqual(v.places, ["losangeles"]);
 });
 
 test("a third place keeps a service out of the outage state", () => {
-  const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout" }) }), probeDoc({ x: p({ ok: false, err: "reset" }) }, { from: "Shanghai, CN" }), probeDoc({ x: p() }, LA)), NOW);
+  const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout" }) }), probeDoc({ x: p({ ok: false, err: "reset" }) }, { from: "Shanghai, CN" }), probeDoc({ x: p() }, LOSANGELES)), NOW);
   assert.equal(v.state, STATE.OK);
-  assert.deepEqual(v.places, ["lax"]);
+  assert.deepEqual(v.places, ["losangeles"]);
 });
 
 test("one place answers, two do not: still online (some regions cannot reach some services)", () => {
-  const v = verdict(svc, data(probeDoc({ x: p() }), probeDoc({ x: p({ ok: false, err: "timeout" }) }, { from: "Shanghai, CN" }), probeDoc({ x: p({ ok: false, err: "timeout" }) }, LA)), NOW);
+  const v = verdict(svc, data(probeDoc({ x: p() }), probeDoc({ x: p({ ok: false, err: "timeout" }) }, { from: "Shanghai, CN" }), probeDoc({ x: p({ ok: false, err: "timeout" }) }, LOSANGELES)), NOW);
   assert.equal(v.state, STATE.OK);
   assert.deepEqual(v.places, ["tokyo"]);
 });

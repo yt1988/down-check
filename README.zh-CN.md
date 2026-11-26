@@ -74,6 +74,8 @@ Worker 只做两件事：提供静态页面，以及用一个 `/api/status.json`
 
 ## 数据
 
+接口输出是 `{ v: 4, generated, losangeles, tokyo, shanghai }`；部署里没配地址的那份是 `null`，三份都拿不到才返回 503。
+
 `probe/latest.json`（每台机器一份，共三台）：`at`、`every`、`from`、`complete`，以及每个服务的 `ok`、`unknown`、`ms`、
 `http`、`err`、`t`（这个服务自己的测量时间）、`h`（10 分钟一格的历史）、`up24`、`up7`、`out`。Worker 只保留
 已发布的服务和最近 144 格（`h24`）之后才发给浏览器。不收集访客信息：页面只读一个同源 JSON，不设 cookie。
