@@ -11,7 +11,9 @@ status page is a link, not a factor. Never turn a probe failure or a refusal int
 - `403`, `429`, `cf-mitigated: challenge`, a challenge page, a 5xx response → **unconfirmed** (grey dot), not offline.
 - **One place answering is enough: online** (or recovered if the answering place had an interruption in the last 24
   hours). A failure in another place is shown on that place's row, not as a service state — some services genuinely
-  cannot be reached from some regions.
+  cannot be reached from some regions. When some places answered and others could not, the service page's sentence
+  says which (`v_online_some`); a place that was **refused** stays out of that sentence and only its row says
+  "unconfirmed", because that is a different fact.
 - Only when **no place answers**: offline (or offline for days after 24 h); if any place refused, unconfirmed.
 - A service has fallback addresses of its own (`alt` in `probe/services.json`: usually `robots.txt` and the front page,
   or an API host for a few). They are tried only when the usual URL refuses or times out, and any one answering makes
