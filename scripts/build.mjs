@@ -40,12 +40,12 @@ const cells = n => "<i></i>".repeat(n);
 const RUNTIME = new Set(["name", "lang_label", "a_lang", "a_theme", "a_help", "a_close", "a_prev", "a_next",
   "th_system", "th_light", "th_dark", "just_now", "na", "retry", "loading", "sep", "places_sep",
   "sum_all_ok", "sum_some", "sum_unknown", "sum_counts", "k_up24", "k_up7", "updated",
-  "st_online", "st_recovered", "st_partial", "st_unreachable", "st_longfail", "st_fault", "st_unconfirmed", "st_stale", "st_nodata", "st_loading",
-  "v_online", "v_online_some", "v_recovered", "v_partial", "v_official_partial", "v_official_online", "v_official_ok_unreachable", "v_unreachable", "v_longfail", "v_fault", "v_unconfirmed", "v_stale", "v_nodata",
-  "loc_losangeles", "loc_tokyo", "loc_shanghai",
+  "st_online", "st_recovered", "st_unreachable", "st_longfail", "st_unconfirmed", "st_stale", "st_nodata", "st_loading",
+  "v_online", "v_online_some", "v_recovered", "v_unreachable", "v_longfail", "v_unconfirmed", "v_stale", "v_nodata",
+  "loc_losangeles", "loc_tokyo", "loc_shanghai", "loc_fail",
   "official_none", "official_no_api",
   "incidents_none", "incidents_unknown", "incidents_ongoing", "incidents_checks",
-  "err_challenge", "err_timeout", "err_reset", "err_http", "err_eof", "err_dns", "err_tls", "err_refused", "err_unreachable", "err_cancel", "err_other", "chip_official",
+  "err_challenge", "err_timeout", "err_reset", "err_http", "err_eof", "err_dns", "err_tls", "err_refused", "err_unreachable", "err_cancel", "err_other",
   "report_result", "report_prefill", "cross_home", "cross_unlock", "cross_check", "share_foot"]);
 
 async function loadI18n() {

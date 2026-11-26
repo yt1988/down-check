@@ -264,18 +264,26 @@ function svcView(data, failed, now) {
   if ($("#kInc")) $("#kInc").textContent = !p || !p.fresh ? L.na : new Intl.NumberFormat(LANG).format((p.out || []).length);
   paintBar($("#bar24"), p?.h24);
 
+  // Red on a place row only when every place failed; then the rows and the banner agree that nobody reached it.
+  const allDown = st === STATE.UNREACHABLE || st === STATE.LONGFAIL;
   for (const row of $$(".dn-loc[data-kind]")) {
     const view = failed ? null : probeOf(v, row.dataset.kind);
     const dot = row.querySelector(".ic"), val = row.querySelector(".dn-loc-v"), age = row.querySelector(".dn-loc-age");
     if (!view || !view.present) {
       dot.className = "ic"; val.textContent = L.st_nodata; val.className = "dn-loc-v"; age.textContent = ""; continue;
     }
-    const vs = view.fresh ? (view.ok ? STATE.OK : view.unknown ? STATE.UNCONFIRMED : STATE.UNREACHABLE) : STATE.STALE;
-    dot.className = "ic " + cls(vs);
-    if (!view.fresh) { val.textContent = L.st_stale; val.className = "dn-loc-v"; }
-    else if (view.ok) { val.textContent = view.ms != null ? Math.round(view.ms) + " ms" : L.na; val.className = "dn-loc-v ok"; }
-    else if (view.unknown) { val.textContent = label(STATE.UNCONFIRMED); val.className = "dn-loc-v"; }
-    else { val.textContent = L[errKey(view.err)] ?? L.err_other; val.className = "dn-loc-v bad"; }
+    // One place failing is not the service being down: it means we could not reach it from that city. That row is grey
+    // and says so ("timeout · cannot reach it from here"). Red on a row only when every place failed, so the rows and
+    // the banner above agree that nobody reached it.
+    if (!view.fresh) { dot.className = "ic"; val.textContent = L.st_stale; val.className = "dn-loc-v"; }
+    else if (view.ok) { dot.className = "ic ok"; val.textContent = view.ms != null ? Math.round(view.ms) + " ms" : L.na; val.className = "dn-loc-v ok"; }
+    else if (view.unknown) { dot.className = "ic unknown"; val.textContent = label(STATE.UNCONFIRMED); val.className = "dn-loc-v"; }
+    else {
+      dot.className = "ic " + (allDown ? "bad" : "unknown");
+      const err = L[errKey(view.err)] ?? L.err_other;
+      val.textContent = allDown ? err : t("loc_fail", { err });
+      val.className = "dn-loc-v" + (allDown ? " bad" : "");
+    }
     age.textContent = ago(view.at);
   }
 
