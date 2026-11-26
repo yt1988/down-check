@@ -6,7 +6,7 @@
 // name    the brand's own spelling; names holds the ten translations for a brand whose script is not Latin.
 // cat     a key of CATS: seven global groups, then the regions.
 // site    the service's home page (linked from its page).
-// probe   the small same-host URL the 10-minute probe requests from Tokyo and Shanghai.
+// probe   the small same-host URL the 10-minute probe requests from each place (Los Angeles, Tokyo, Shanghai).
 export const CATS = [
   {
     "id": "ai"

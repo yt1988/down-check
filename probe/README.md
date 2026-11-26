@@ -1,7 +1,8 @@
 # down-probe
 
 Measures every service in `services.json` from one machine, one request each, every 10 minutes, and writes
-`latest.json`. Run it once per place: Tokyo and Shanghai each write their own file and the page shows them separately.
+`latest.json`. Run it once per place: Los Angeles, Tokyo and Shanghai each write their own file and the page shows them
+separately.
 It is the measurement side of down.1ms.dog; the page and the Worker are in the parent folder.
 
 ## What it does

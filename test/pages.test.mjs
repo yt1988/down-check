@@ -72,7 +72,7 @@ test("a category page lists its services with a current-state pill and a 24-hour
   assert.ok(html.includes('class="dn-spark"'));
 });
 
-test("a service page has the state first, both places, the official page and the history strip", async () => {
+test("a service page has the state first, every place, the official page and the history strip", async () => {
   const s = SERVICES.find(x => x.id === "chatgpt");
   const html = await readFile(new URL("ai/chatgpt/index.html", pub), "utf8");
   assert.ok(html.includes(s.name));

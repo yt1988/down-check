@@ -36,7 +36,7 @@ test("one place answers, two do not: still online (some regions cannot reach som
   assert.deepEqual(v.places, ["tokyo"]);
 });
 
-test("both places fail for a few hours: unreachable", () => {
+test("every place fails for a few hours: unreachable", () => {
   const since = SEC - 2 * 3600;
   const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout", out: [{ from: since, to: SEC - 120, runs: 12, err: "timeout" }] }) }),
     probeDoc({ x: p({ ok: false, err: "reset", out: [{ from: since, to: SEC - 120, runs: 12, err: "reset" }] }) }, { from: "Shanghai, CN" })), NOW);
@@ -44,7 +44,7 @@ test("both places fail for a few hours: unreachable", () => {
   assert.equal(v.since, since * 1000);
 });
 
-test("both places fail for days: longfail, still not an outage", () => {
+test("every place fails for days: longfail, still not an outage", () => {
   const since = SEC - 50 * 3600;
   const v = verdict(svc, data(probeDoc({ x: p({ ok: false, err: "timeout", out: [{ from: since, to: SEC - 120, runs: 300, err: "timeout" }] }) }),
     probeDoc({ x: p({ ok: false, err: "timeout", out: [{ from: since, to: SEC - 120, runs: 300, err: "timeout" }] }) }, { from: "Shanghai, CN" })), NOW);

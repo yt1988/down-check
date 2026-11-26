@@ -98,7 +98,8 @@ The upstream data address never appears in a page (a test checks it). A 403/429 
   library, no axes.
 - Ten languages, every key and the same `{placeholders}` (`npm test`); no English fallback at runtime. Runtime strings
   are the `RUNTIME` set in `scripts/build.mjs`; everything else is written into the HTML.
-- Wording: conclusion first, short sentences, our machines by city (Tokyo, Shanghai), "your network" not "China".
+- Wording: conclusion first, short sentences, our machines by city (Los Angeles, Tokyo, Shanghai, in that order), "your
+  network" not "China".
 - The brand and the header icons are never red; red means offline.
 
 ## Deployment

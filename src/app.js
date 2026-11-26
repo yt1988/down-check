@@ -26,7 +26,7 @@ const pct = v => v == null ? L.na : (v >= 99.95 ? "100" : v.toFixed(1)) + "%";
 const durTxt = d => d ? new Intl.NumberFormat(LANG, { style: "unit", unit: d.unit, unitDisplay: "long" }).format(d.n) : L.na;
 const label = state => state === STATE.OK ? (L.st_online || "ok") : (L["st_" + state] ?? state);
 const cls = state => stateClass(state);
-// "Tokyo and Shanghai", not "Tokyo, Shanghai": the sentence reads "From {places}, X is not answering"
+// "Los Angeles, Tokyo and Shanghai", not a comma list: the sentence reads "From {places}, X is not answering"
 const places = v => (v.places || []).map(p => L["loc_" + p] || p).join(L.places_sep || L.sep || ", ");
 // The places that got no answer, when at least one did: only then is "online" worth qualifying. A place that was
 // refused or challenged is a different fact ("unconfirmed"), already on its own row, so it is not in this sentence.

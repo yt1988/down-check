@@ -1,5 +1,5 @@
 // The services' own status pages, by id. They are a link on the service page, not a factor in the verdict: the verdict
-// comes only from our probes in Tokyo and Shanghai. Keep this list honest — an entry means the service itself publishes
+// comes only from our probes in Los Angeles, Tokyo and Shanghai. Keep this list honest — an entry means the service itself publishes
 // this page; do not point a service at another service's page.
 export const STATUS = {
   chatgpt: { page: "https://status.openai.com/" },

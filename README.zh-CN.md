@@ -64,7 +64,7 @@ npm run dev
 ## 部署
 
 Worker 只做两件事：提供静态页面，以及用一个 `/api/status.json` 合并两份探测文件、裁成页面需要的字段、缓存
-60 秒，并保留最近一份好数据一周（标记为 `stale`）。没有 cron，也没有 KV：判定只用两台探针写下的东西。
+60 秒，并保留最近一份好数据一周（标记为 `stale`）。没有 cron，也没有 KV：判定只用洛杉矶、东京、上海三台探针写下的东西。
 
 - `public/` 不提交，Workers Builds 跑 `npm ci && npm test` 再 `npx wrangler deploy`；test 会先 build。
 - 不绑自定义域：在 1ms.dog 上由 shell 把域名路由到这个 Worker。
