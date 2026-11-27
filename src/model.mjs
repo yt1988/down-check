@@ -51,7 +51,7 @@ export function probeView(doc, id, now, place = "") {
 // numbers — 24 h, 7 days, interruptions, "recovered" — come from the merged series the Worker built, which is also what
 // the bar draws. Reading one place's numbers next to another place's state is exactly how a page ends up saying
 // "recovered, 100%, no interruptions".
-export const PLACES = ["losangeles", "tokyo", "shanghai"];
+export const PLACES = ["losangeles", "nuremberg", "tokyo", "shanghai"];
 export function verdict(service, data, now = Date.now()) {
   const views = PLACES.map(p => probeView(data && data[p], service.id, now, p));
   const present = views.filter(v => v.present);

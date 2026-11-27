@@ -24,14 +24,16 @@ export default {
 
 async function status(env) {
   const cache = caches.default;
-  const [losangeles, tokyo, shanghai] = await Promise.all([
+  // the keys are the page's column order: Los Angeles, Nuremberg, Tokyo, Shanghai
+  const [losangeles, nuremberg, tokyo, shanghai] = await Promise.all([
     source(cache, "losangeles", env.PROBE_LAX_URL, trimProbe),
+    source(cache, "nuremberg", env.PROBE_NUREMBERG_URL, trimProbe),
     source(cache, "tokyo", env.PROBE_TOKYO_URL, trimProbe),
     source(cache, "shanghai", env.PROBE_SHANGHAI_URL, trimProbe),
   ]);
-  if (!losangeles && !tokyo && !shanghai) return json({ error: "unavailable" }, 503, "no-store");
-  const stale = [losangeles, tokyo, shanghai].some(d => d && d.stale);
-  const body = pagePayload({ losangeles, tokyo, shanghai }, merge({ losangeles, tokyo, shanghai }));
+  if (!losangeles && !nuremberg && !tokyo && !shanghai) return json({ error: "unavailable" }, 503, "no-store");
+  const stale = [losangeles, nuremberg, tokyo, shanghai].some(d => d && d.stale);
+  const body = pagePayload({ losangeles, nuremberg, tokyo, shanghai }, merge({ losangeles, nuremberg, tokyo, shanghai }));
   return json(body, 200, stale ? "no-store" : "public, max-age=30");
 }
 

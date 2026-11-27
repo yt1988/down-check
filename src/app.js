@@ -244,10 +244,10 @@ function paintBar(el, h24, v) {
 const esc2 = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 // the bar holds 144 <i> cells and the hover card; only the cells are cells
 const barCellEls = el => [...el.querySelectorAll(":scope > i")];
-// the same three flags the place rows use, one size down
-const FLAG = { losangeles: "us", tokyo: "jp", shanghai: "cn" };
+// the same flags the place rows use, one size down; the order is the page's (Los Angeles, Nuremberg, Tokyo, Shanghai)
+const FLAG = { losangeles: "us", nuremberg: "de", tokyo: "jp", shanghai: "cn" };
 const flagImg = p => `<img class="dn-tip-f" src="/assets/flags/${FLAG[p]}.svg" alt="" width="14" height="10" loading="lazy">`;
-const PLACES = ["losangeles", "tokyo", "shanghai"];
+const PLACES = ["losangeles", "nuremberg", "tokyo", "shanghai"];
 function probeOf(v, place) { return v.views.find(x => x.kind === "probe" && x.place === place); }
 function newestProbeAt(data) {
   const times = [];
@@ -411,6 +411,7 @@ function svcView(data, failed, now) {
   wireReport(`${nameOf(s)}: ${label(st)} · ${ageLine(data, failed)}`,
     { service: s.id, state: st, at: v.at, places: v.places, up24: v.up24, up7: v.up7,
       losangeles: probeOf(v, "losangeles") && { ok: probeOf(v, "losangeles").ok, unknown: probeOf(v, "losangeles").unknown, at: probeOf(v, "losangeles").at, ms: probeOf(v, "losangeles").ms, err: probeOf(v, "losangeles").err },
+      nuremberg: probeOf(v, "nuremberg") && { ok: probeOf(v, "nuremberg").ok, unknown: probeOf(v, "nuremberg").unknown, at: probeOf(v, "nuremberg").at, ms: probeOf(v, "nuremberg").ms, err: probeOf(v, "nuremberg").err },
       tokyo: probeOf(v, "tokyo") && { ok: probeOf(v, "tokyo").ok, unknown: probeOf(v, "tokyo").unknown, at: probeOf(v, "tokyo").at, ms: probeOf(v, "tokyo").ms, err: probeOf(v, "tokyo").err },
       shanghai: probeOf(v, "shanghai") && { ok: probeOf(v, "shanghai").ok, unknown: probeOf(v, "shanghai").unknown, at: probeOf(v, "shanghai").at, ms: probeOf(v, "shanghai").ms, err: probeOf(v, "shanghai").err } },
     [label(st), placeText(v), ageLine(data, failed)]);

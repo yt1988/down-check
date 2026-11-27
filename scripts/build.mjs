@@ -119,8 +119,8 @@ const nameOf = (s, lang) => (s.names && s.names[lang]) || s.name;
 const crumbs = (items, Tt) => `<nav class="dn-crumbs" aria-label="${esc(Tt("a_crumbs"))}">${items.map((x, i) => (i ? '<span class="dn-sep" aria-hidden="true">›</span>' : "") + x).join("")}</nav>`;
 
 
-// the two probe places: a flag, then the city in the page's language. The flags are the same SVGs the other tools use.
-const PLACE_FLAG = { losangeles: "us", tokyo: "jp", shanghai: "cn" };
+// the probe places: a flag, then the city in the page's language. The flags are the same SVGs the other tools use.
+const PLACE_FLAG = { losangeles: "us", nuremberg: "de", tokyo: "jp", shanghai: "cn" };
 const placeFlag = p => `<img class="dn-flag" src="/assets/flags/${PLACE_FLAG[p]}.svg" alt="" width="18" height="13" loading="lazy">`;
 const reportBtn = Tt => `<button class="btn sm dn-report-btn" id="reportBtn" type="button" data-ms-report="${esc(Tt("report_prefill"))}" hidden>${esc(Tt("report_result"))}</button>`;
 
@@ -218,6 +218,7 @@ function svcMain(Tt, lang, s) {
     <section class="card card-pad">
       <h2>${esc(Tt("loc_h"))}</h2>
       <div class="dn-loc" data-kind="losangeles"><span class="ic"></span><b>${placeFlag("losangeles")}${esc(Tt("loc_losangeles"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
+      <div class="dn-loc" data-kind="nuremberg"><span class="ic"></span><b>${placeFlag("nuremberg")}${esc(Tt("loc_nuremberg"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
       <div class="dn-loc" data-kind="tokyo"><span class="ic"></span><b>${placeFlag("tokyo")}${esc(Tt("loc_tokyo"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
       <div class="dn-loc" data-kind="shanghai"><span class="ic"></span><b>${placeFlag("shanghai")}${esc(Tt("loc_shanghai"))}</b><span class="dn-loc-v">—</span><span class="dn-loc-age"></span></div>
     </section>

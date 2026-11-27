@@ -17,6 +17,7 @@ const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=
   ".woff2": "font/woff2", ".txt": "text/plain; charset=utf-8", ".xml": "application/xml; charset=utf-8" };
 
 const DEFAULT_LOSANGELES = fileURLToPath(new URL("../probe/out/la/latest.json", import.meta.url));
+const DEFAULT_NUREMBERG = fileURLToPath(new URL("../probe/out/nue/latest.json", import.meta.url));
 const DEFAULT_TOKYO = fileURLToPath(new URL("../probe/out/latest.json", import.meta.url));
 const DEFAULT_SH = fileURLToPath(new URL("../probe/out/sh/latest.json", import.meta.url));
 
@@ -66,9 +67,9 @@ async function enrich(doc) {
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, "http://localhost");
   if (url.pathname === "/api/status.json") {
-    const [losangeles, tokyo, shanghai] = await Promise.all([probe("DOWN_PROBE_LAX", DEFAULT_LOSANGELES), probe("DOWN_PROBE_TOKYO", DEFAULT_TOKYO), probe("DOWN_PROBE_SHANGHAI", DEFAULT_SH)]);
-    const any = losangeles || tokyo || shanghai;
-    const body = pagePayload({ losangeles, tokyo, shanghai }, merge({ losangeles, tokyo, shanghai }));
+    const [losangeles, nuremberg, tokyo, shanghai] = await Promise.all([probe("DOWN_PROBE_LAX", DEFAULT_LOSANGELES), probe("DOWN_PROBE_NUREMBERG", DEFAULT_NUREMBERG), probe("DOWN_PROBE_TOKYO", DEFAULT_TOKYO), probe("DOWN_PROBE_SHANGHAI", DEFAULT_SH)]);
+    const any = losangeles || nuremberg || tokyo || shanghai;
+    const body = pagePayload({ losangeles, nuremberg, tokyo, shanghai }, merge({ losangeles, nuremberg, tokyo, shanghai }));
     res.writeHead(any ? 200 : 503, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
     res.end(JSON.stringify(any ? body : { error: "unavailable" }));
     return;
