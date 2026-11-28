@@ -15,6 +15,7 @@ import { build as bundle } from "esbuild";
 import { LANGS, SITE, REPO } from "../src/config.mjs";
 import { CATS, SERVICES, byCat } from "../src/services.mjs";
 import { STATUS } from "../src/status-sources.mjs";
+import { RUNTIME } from "../src/runtime-keys.mjs";
 
 const pub = new URL("../public/", import.meta.url), src = new URL("../src/", import.meta.url), stat = new URL("../static/", import.meta.url);
 const t0 = Date.now();
@@ -35,20 +36,6 @@ const T = (I, lang, key) => I[lang][key] ?? I.en[key] ?? key;
 const EXT = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg>';
 const GLOBAL = new Set(["ai", "video", "social", "dev", "game", "web", "cdn"]);
 const cells = n => "<i></i>".repeat(n);
-
-// What the browser needs at runtime; everything else is written into the page at build time.
-const RUNTIME = new Set(["name", "lang_label", "a_lang", "a_theme", "a_help", "a_close", "a_prev", "a_next",
-  "th_system", "th_light", "th_dark", "just_now", "na", "retry", "loading", "sep", "places_sep",
-  "sum_all_ok", "sum_some", "sum_unknown", "sum_counts", "k_up24", "k_up7", "updated",
-  "st_online", "st_recovered", "st_unreachable", "st_longfail", "st_unconfirmed", "st_stale", "st_nodata", "st_loading",
-  "v_online", "v_online_some", "v_recovered", "v_unreachable", "v_longfail", "v_unconfirmed", "v_stale", "v_nodata",
-  "loc_losangeles", "loc_tokyo", "loc_shanghai", "loc_fail",
-  "bar_label", "tip_head", "tip_merged", "tip_ok", "tip_refused", "tip_none", "tip_notmeasured", "tip_incident",
-  "tip_hint", "refresh_ready", "refresh_next", "refresh_paused", "refresh_failed", "refreshed_now", "refresh_title",
-  "official_none", "official_no_api",
-  "incidents_none", "incidents_unknown", "incidents_ongoing", "incidents_checks",
-  "err_challenge", "err_timeout", "err_reset", "err_http", "err_eof", "err_dns", "err_tls", "err_refused", "err_unreachable", "err_cancel", "err_other",
-  "report_result", "report_prefill", "cross_home", "cross_unlock", "cross_check", "share_foot"]);
 
 async function loadI18n() {
   const out = {};

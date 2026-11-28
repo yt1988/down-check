@@ -25,6 +25,19 @@ test("every language has every key, and no empty string", async () => {
   }
 });
 
+// The other direction: a place in PLACES without its loc_* in RUNTIME ships a raw key ("nuremberg") to the browser,
+// because assets/l.*.js only carries what RUNTIME lists. Nuremberg shipped that way once. `loc_h` is the heading the
+// build writes into the page, so it is the one loc_* the browser never asks for.
+test("every place and loc_* string the page looks up is in RUNTIME", async () => {
+  const I = await load();
+  const { RUNTIME } = await import("../src/runtime-keys.mjs");
+  const { PLACES } = await import("../src/model.mjs");
+  for (const p of PLACES) assert.ok(RUNTIME.has("loc_" + p), `loc_${p} missing from RUNTIME`);
+  const missing = Object.keys(I.en).filter(k => k.startsWith("loc_") && k !== "loc_h" && !RUNTIME.has(k));
+  assert.deepEqual(missing, [], "loc_* strings the browser asks for but the build does not ship");
+  for (const k of RUNTIME) assert.ok(k in I.en, `RUNTIME key missing from en: ${k}`);
+});
+
 test("the same placeholders in every language", async () => {
   const I = await load();
   for (const k of Object.keys(I.en)) {
