@@ -1,9 +1,10 @@
-// The only thing this Worker does: one small JSON for the pages, merged from the three probe files (Los Angeles,
-// Tokyo, Shanghai) and cut down to the services this site publishes. Every page is a static asset and never reaches
-// this code.
+// The only thing this Worker does: one small JSON for the pages, merged from the four probe files (Los Angeles,
+// Nuremberg, Tokyo, Shanghai) and cut down to the services this site publishes. Every page is a static asset and never
+// reaches this code.
 //
-// The upstream addresses come from the deployment (`PROBE_LAX_URL`, `PROBE_TOKYO_URL`, `PROBE_SHANGHAI_URL`); they are
-// deliberately not in this repository. Without them the page says it cannot read the data.
+// The upstream addresses come from the deployment (`PROBE_LAX_URL`, `PROBE_NUREMBERG_URL`, `PROBE_TOKYO_URL`,
+// `PROBE_SHANGHAI_URL`); they are deliberately not in this repository. Without them the page says it cannot read the
+// data.
 //
 // The verdict comes from these probes only; the service's own status page is a link on the page, not a factor.
 // If a probe machine is down, the last good copy keeps being served for a week (marked `stale`), so a page can say

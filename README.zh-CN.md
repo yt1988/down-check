@@ -3,7 +3,7 @@
 [English](README.md) · **简体中文**
 
 ChatGPT、GitHub、Discord、Cloudflare、Netflix、Steam 现在挂了吗？挂了吗盯着 210 个大家在故障时最常搜的服务，
-从**洛杉矶、东京和上海**三台自己的探针每 10 分钟各测一次。每页先给当前状态，再给 24 小时在线条和最近 7 天的中断。
+从**洛杉矶、纽伦堡、东京和上海**四台自己的探针每 10 分钟各测一次。每页先给当前状态，再给 24 小时在线条和最近 7 天的中断。
 
 **线上地址：** https://down.1ms.dog
 
@@ -31,10 +31,10 @@ ChatGPT、GitHub、Discord、Cloudflare、Netflix、Steam 现在挂了吗？挂�
 
 | 状态 | 含义 |
 |---|---|
-| 在线 | 洛杉矶、东京、上海只要有一个探针有回应就算在线。有些服务在某些地区就是连不上，那个地点的行会自己标出来。 |
+| 在线 | 洛杉矶、纽伦堡、东京、上海只要有一个探针有回应就算在线。有些服务在某些地区就是连不上，那个地点的行会自己标出来。 |
 | 已恢复 | 现在有回应，但最近 24 小时内有过中断。 |
 | 无法确认 | 所有回应都是 403/429、5xx 或验证页，判断不了。 |
-| 离线 | 三个地点现在都没有回应，也没有一个是被拒绝的，持续不到一天。 |
+| 离线 | 四个地点现在都没有回应，也没有一个是被拒绝的，持续不到一天。 |
 | 离线多日 | 超过一天没有回应：更可能是我们的检查出了问题。 |
 | 数据过期 / 没有数据 | 数据超过 20 分钟，或者根本没有数据。灰色，不是红色。 |
 
@@ -55,31 +55,31 @@ cd probe && go build -o ../../down-probe . && cd ..
 npm run dev
 ```
 
-`npm run dev` 会读 `probe/out/la/latest.json`（洛杉矶）、`probe/out/latest.json`（东京）和
-`probe/out/sh/latest.json`（上海），都可以缺。没有探测文件时
+`npm run dev` 会读 `probe/out/la/latest.json`（洛杉矶）、`probe/out/nue/latest.json`（纽伦堡）、
+`probe/out/latest.json`（东京）和 `probe/out/sh/latest.json`（上海），都可以缺。没有探测文件时
 页面显示「没有数据」，这是正确的降级状态，不是报错。本地做设计时，`scripts/dev.mjs` 可以用现有小时级汇总的
 真实历史补齐 24 小时条的前半段；把 `DOWN_BASELINE_URL` 设成那份 JSON（地址不在这个仓库里）。线上不这么做，
 跑满一天后就是探针自己的 10 分钟一格。
 
 ## 部署
 
-Worker 只做两件事：提供静态页面，以及用一个 `/api/status.json` 合并两份探测文件、裁成页面需要的字段、缓存
-60 秒，并保留最近一份好数据一周（标记为 `stale`）。没有 cron，也没有 KV：判定只用洛杉矶、东京、上海三台探针写下的东西。
+Worker 只做两件事：提供静态页面，以及用一个 `/api/status.json` 合并四份探测文件、裁成页面需要的字段、缓存
+60 秒，并保留最近一份好数据一周（标记为 `stale`）。没有 cron，也没有 KV：判定只用洛杉矶、纽伦堡、东京、上海四台探针写下的东西。
 
 - `public/` 不提交，Workers Builds 跑 `npm ci && npm test` 再 `npx wrangler deploy`；test 会先 build。
 - 不绑自定义域：在 1ms.dog 上由 shell 把域名路由到这个 Worker。
-- 上游地址不在这个仓库里：部署时用 Cloudflare 的 Worker 变量 `PROBE_LAX_URL` / `PROBE_TOKYO_URL` /
-  `PROBE_SHANGHAI_URL` 指向发布出来的探针文件。没有设置时页面会显示「读不到数据」。本地 `npm run dev` 的可选历史补齐用
+- 上游地址不在这个仓库里：部署时用 Cloudflare 的 Worker 变量 `PROBE_LAX_URL` / `PROBE_NUREMBERG_URL` /
+  `PROBE_TOKYO_URL` / `PROBE_SHANGHAI_URL` 指向发布出来的探针文件。没有设置时页面会显示「读不到数据」。本地 `npm run dev` 的可选历史补齐用
   `DOWN_BASELINE_URL`，同样不在仓库里。
 
 ## 数据
 
-接口输出是 `{ v: 5, generated, losangeles, tokyo, shanghai, merged }`。每个地点带当前样本和最近 24 小时（`h24`）；
-`merged` 是 `src/series.mjs` 把三个地点合成的一条时间线：同一个 10 分钟里只要有一个地点有回应就算在线，三个地点都没有
+接口输出是 `{ v: 5, generated, losangeles, nuremberg, tokyo, shanghai, merged }`。每个地点带当前样本和最近 24 小时（`h24`）；
+`merged` 是 `src/series.mjs` 把四个地点合成的一条时间线：同一个 10 分钟里只要有一个地点有回应就算在线，四个地点都没有
 回应才算一次中断。条形图、24 小时和 7 天在线率、中断列表、「在线 / 已恢复」全部来自这一条序列，所以不会互相矛盾。
-部署里没配地址的那份是 `null`，三份都拿不到才返回 503。
+部署里没配地址的那份是 `null`，四份都拿不到才返回 503。
 
-`probe/latest.json`（每台机器一份，共三台）：`at`、`every`、`from`、`complete`，以及每个服务的 `ok`、`unknown`、`ms`、
+`probe/latest.json`（每台机器一份，共四台）：`at`、`every`、`from`、`complete`，以及每个服务的 `ok`、`unknown`、`ms`、
 `http`、`err`、`t`（这个服务自己的测量时间）、`h`（10 分钟一格的历史）、`up24`、`up7`、`out`。Worker 只保留
 已发布的服务，保留 7 天历史用于合并；浏览器拿到的是每个地点最近 144 格和合并序列。不收集访客信息：页面只读一个同源 JSON，不设 cookie。
 
@@ -106,5 +106,5 @@ static/assets/share/    公共分享组件，从 shell 原样复制（不要在�
 
 ## 许可
 
-MIT。服务名称和图标归各自的所有者，这里只用来标识被检测的服务。`static/assets/flags/` 里的两面国旗来自
+MIT。服务名称和图标归各自的所有者，这里只用来标识被检测的服务。`static/assets/flags/` 里的四面国旗来自
 [flag-icons](https://github.com/lipis/flag-icons)，MIT。

@@ -47,7 +47,7 @@ export function pagePayload(docs, merged, generated = new Date().toISOString()) 
 }
 
 // The merged view: for every published service, one timeline built from all places, and the figures that come from it.
-// A place with no data for a service contributes nothing; two of three is still a verdict.
+// A place with no data for a service contributes nothing; one place of four is still a verdict.
 export function merge(docs) {
   const places = Object.keys(docs);
   const ids = new Set();

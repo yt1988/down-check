@@ -1,5 +1,5 @@
-// The page fills what the build drew: the summary, every tile, the current state, the 24-hour strip, the two probe
-// rows and the official status. It never invents a state: if the data cannot be loaded, everything says so and the
+// The page fills what the build drew: the summary, every tile, the current state, the 24-hour strip, the probe rows
+// and the official status. It never invents a state: if the data cannot be loaded, everything says so and the
 // verdict stays "cannot judge".
 import { verdict, summary, STATE, stateClass, duration, errKey } from "./model.mjs";
 import { SERVICES, byId, byCat } from "./services.mjs";
@@ -148,7 +148,7 @@ function paintSpark(el, h24) {
   [...el.children].forEach((i, k) => { i.className = cs[k] || ""; });
 }
 // The 24-hour bar: 144 merged cells, one per ten minutes. Each cell also carries what each place saw in that window, so
-// the reader can ask "why is this one red?" and get the three places, not a guess.
+// the reader can ask "why is this one red?" and get what each place saw, not a guess.
 const barTip = () => $("#barTip");
 let barCells = [];        // { from, to, merged, places } for the service currently drawn
 function paintBar(el, h24, v) {
@@ -339,7 +339,7 @@ function svcView(data, failed, now) {
     else if (st === STATE.UNREACHABLE) text = t("v_unreachable", { places: places(v), name: nameOf(s) });
     else if (st === STATE.RECOVERED) text = t("v_recovered", { places: places(v), name: nameOf(s) });
     else if (st === STATE.OK) {
-      // "one of three cannot reach it" and "all three can" are different answers; the banner says only "online"
+      // "only some places can reach it" and "all of them can" are different answers; the banner says only "online"
       const miss = missText(v);
       text = miss ? t("v_online_some", { ok: places(v), bad: miss }) : t("v_online", { places: places(v), name: nameOf(s) });
     }

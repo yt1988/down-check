@@ -45,7 +45,7 @@ export function probeView(doc, id, now, place = "") {
   return v;
 }
 
-// The verdict for one service, from our three probes.
+// The verdict for one service, from our probes.
 //
 // The current state is decided per place (a place answering now, a place refusing, a place with no answer), and the
 // numbers — 24 h, 7 days, interruptions, "recovered" — come from the merged series the Worker built, which is also what

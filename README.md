@@ -5,8 +5,8 @@
 **Live:** https://down.1ms.dog
 
 Which services are down right now? Down Check watches 210 services people search for during an outage — ChatGPT,
-GitHub, Discord, Cloudflare, Netflix, Steam and the rest — from three places: our own probes in Los Angeles, Tokyo and
-Shanghai, every 10 minutes. Each page shows the current state first, the last 24 hours as a strip, and the interruptions of the last
+GitHub, Discord, Cloudflare, Netflix, Steam and the rest — from four places: our own probes in Los Angeles, Nuremberg,
+Tokyo and Shanghai, every 10 minutes. Each page shows the current state first, the last 24 hours as a strip, and the interruptions of the last
 7 days.
 
 - **Current state first.** A large online / recovered / offline / unconfirmed state, then the history. Every service
@@ -38,7 +38,7 @@ Shanghai, every 10 minutes. Each page shows the current state first, the last 24
 
 | State | What it means |
 |---|---|
-| Online | At least one probe (Los Angeles, Tokyo or Shanghai) answered. One place answering is enough: some services genuinely cannot be reached from some regions, and that place's own row shows it. |
+| Online | At least one probe (Los Angeles, Nuremberg, Tokyo or Shanghai) answered. One place answering is enough: some services genuinely cannot be reached from some regions, and that place's own row shows it. |
 | Recovered | Answering now; there was an interruption in the last 24 hours. |
 | Unconfirmed | Every answer was a refusal (403/429), a 5xx or a challenge page: no way to say either way. |
 | Offline | No place answers now, and no place refused: for less than a day. |
@@ -62,34 +62,34 @@ cd probe && go build -o ../../down-probe . && cd ..
 npm run dev
 ```
 
-`npm run dev` reads `probe/out/la/latest.json` (Los Angeles), `probe/out/latest.json` (Tokyo) and
-`probe/out/sh/latest.json` (Shanghai); each is optional. With no probe
+`npm run dev` reads `probe/out/la/latest.json` (Los Angeles), `probe/out/nue/latest.json` (Nuremberg),
+`probe/out/latest.json` (Tokyo) and `probe/out/sh/latest.json` (Shanghai); each is optional. With no probe
 file the rows say "no data" — the correct degraded state, not an error. For local design work, `scripts/dev.mjs` fills
 the part of the 24-hour strip the probe does not have yet from the existing hourly summary; set `DOWN_BASELINE_URL`
 to that JSON (the address is not in this repository). Production does not do that.
 
 ## Deploy
 
-The Worker serves static assets and one endpoint (`/api/status.json`) that merges the two probe files, trims them to
+The Worker serves static assets and one endpoint (`/api/status.json`) that merges the four probe files, trims them to
 what a page shows, caches 60 s, and keeps the last good copy for a week (marked `stale`). No cron and no KV: the
-verdict uses only what the two probe machines wrote.
+verdict uses only what the four probe machines wrote.
 
 - `public/` is not committed: Workers Builds runs `npm ci && npm test` and then `npx wrangler deploy`; the test builds
   the site first.
 - No custom domain: on 1ms.dog the shell routes the hostname to this Worker.
-- The upstream addresses are not in this repository: set `PROBE_LAX_URL`, `PROBE_TOKYO_URL` and `PROBE_SHANGHAI_URL` in
-  the deployment (Cloudflare Worker variables) to the published probe files. Without them the page says it cannot read the data.
+- The upstream addresses are not in this repository: set `PROBE_LAX_URL`, `PROBE_NUREMBERG_URL`, `PROBE_TOKYO_URL` and
+  `PROBE_SHANGHAI_URL` in the deployment (Cloudflare Worker variables) to the published probe files. Without them the page says it cannot read the data.
 
 ## Data
 
-`/api/status.json` is `{ v: 5, generated, losangeles, tokyo, shanghai, merged }`. Each place carries its current sample
-and its last 24 hours (`h24`); `merged` is one timeline per service, built from all three places by
+`/api/status.json` is `{ v: 5, generated, losangeles, nuremberg, tokyo, shanghai, merged }`. Each place carries its current sample
+and its last 24 hours (`h24`); `merged` is one timeline per service, built from all four places by
 `src/series.mjs` — a ten-minute bucket counts as answered if any place answered, and only a bucket where nobody
 answered is an interruption. The bar, the 24-hour and 7-day figures, the interruption list and "online / recovered"
 all come from that one series, so they cannot disagree. A place the deployment has no address for is `null`; only all
-three missing is a 503.
+four missing is a 503.
 
-`probe/latest.json` (one per machine, three machines): `at`, `every`, `from`, `complete`, and per service `ok`, `unknown`, `ms`,
+`probe/latest.json` (one per machine, four machines): `at`, `every`, `from`, `complete`, and per service `ok`, `unknown`, `ms`,
 `http`, `err`, `t` (this service's own measurement time), `h` (history, 10-minute samples), `up24`, `up7`, `out`.
 The Worker trims it to the published services and keeps 7 days of history for the merge; a browser gets each place's
 last 144 samples and the merged series. Nothing
@@ -122,5 +122,5 @@ not a frozen result; the card shows the state and the measurement date at share 
 
 ## License
 
-MIT. The service names and icons belong to their owners; this page uses them to identify the services it checks. The two
+MIT. The service names and icons belong to their owners; this page uses them to identify the services it checks. The four
 place flags in `static/assets/flags/` come from [flag-icons](https://github.com/lipis/flag-icons), MIT.

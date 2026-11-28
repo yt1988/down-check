@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// Local preview: serves public/ and answers /api/status.json from the three probe files.
-// By default it reads probe/out/la/latest.json (Los Angeles), probe/out/latest.json (Tokyo) and
-// probe/out/sh/latest.json (Shanghai) if they exist; set DOWN_PROBE_LAX / DOWN_PROBE_TOKYO / DOWN_PROBE_SHANGHAI to
-// another path or URL. Usage: npm run dev, open http://localhost:8791/
+// Local preview: serves public/ and answers /api/status.json from the four probe files.
+// By default it reads probe/out/la/latest.json (Los Angeles), probe/out/nue/latest.json (Nuremberg),
+// probe/out/latest.json (Tokyo) and probe/out/sh/latest.json (Shanghai) if they exist; set DOWN_PROBE_LAX /
+// DOWN_PROBE_NUREMBERG / DOWN_PROBE_TOKYO / DOWN_PROBE_SHANGHAI to another path or URL. Usage: npm run dev, open http://localhost:8791/
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { existsSync } from "node:fs";

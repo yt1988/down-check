@@ -2,7 +2,7 @@
   "name": "down-check",
   "private": true,
   "type": "module",
-  "description": "Is ChatGPT, GitHub, Discord or Cloudflare down right now? An hourly check from our own server in Tokyo, with the last 7 days of interruptions and each service's official status page.",
+  "description": "Is ChatGPT, GitHub, Discord or Cloudflare down right now? Our probes in Los Angeles, Nuremberg, Tokyo and Shanghai check 210 services every 10 minutes, with the last 7 days of interruptions.",
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node scripts/build.mjs && node --test \"test/*.test.mjs\"",

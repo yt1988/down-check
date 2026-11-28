@@ -1,4 +1,4 @@
-// One timeline for the three places. The Worker merges with it, the page reads its rules for the bar's tooltip, and the
+// One timeline for all the places. The Worker merges with it, the page reads its rules for the bar's tooltip, and the
 // tests use it directly — so the bar, the uptime numbers, the incident count and the verdict cannot disagree.
 //
 // Every place writes its history every ten minutes. A service's own `t` is when *it* was measured inside a round (a
